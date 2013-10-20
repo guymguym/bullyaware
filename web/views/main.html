@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app="bullyalert_app">
+
+<head>
+	<?# def.include('common_head.html') ?>
+</head>
+
+<body ng-controller="BullyCtrl">
+
+	<div class="container">
+		<div class="jumbotron">
+			<h1>BULLY ALERT</h1>
+			<div class="text-center" style="width: 70%">
+				<div class="input-group">
+					<input type="text" class="form-control"
+						placeholder="Enter Query to Analyze for Bully Alert"
+						ng-model="query"/>
+					<div class="input-group-btn">
+						<button type="button" 
+							class="btn btn-default dropdown-toggle" 
+							data-toggle="dropdown">
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu pull-right">
+							<li><a ng-click="query='@MileyCyrus'">MileyCyrus</a></li>
+							<li><a ng-click="query='@jenny_sad'">jenny_sad</a></li>
+							<li><a ng-click="query='@yahoomail'">yahoomail</a></li>
+							<li><a ng-click="query='@KarenGravanoVH1'">KarenGravanoVH1</a></li>
+							<li><a ng-click="query='@elizabeth_tice'">elizabeth_tice</a></li>
+							<li><a ng-click="query='@rihanna'">rihanna</a></li>
+						</ul>
+					</div>
+				</div>
+				<button class="btn btn-danger"
+					ng-click="analyze()">
+					Check for Bully-ness
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div ng-show="!!last_query || !!last_result"
+		class="container text-center">
+		<div class="jumbotron">
+			<div ng-show="!last_result">
+				<i class="icon-spin icon-spinner" style="font-size: 40px"></i>
+			</div>
+			<div ng-show="last_result">
+				<h3>{{ last_query }} - LEVEL <b>{{ last_result.level }}</b></h3>
+				<div id="graph"></div>
+				<ul class="text-left">
+					<li ng-repeat="user in last_result.users">
+						<b>{{ user.info.name }} - LEVEL {{ user.level }}</b>
+						<div ng-repeat="msg in user.messages">
+							{{ msg.text }} - LEVEL {{ msg.level }}
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<?# def.include('common_scripts.html') ?>
+	<script src="/public/js/d3.v3.min.js" charset="utf-8"></script>
+</body>
+
+</html>

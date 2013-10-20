@@ -1,0 +1,56 @@
+{
+	"name": "BullyAlert",
+	"version": "0.0.1",
+	"engines": {
+		"node": "0.10.17",
+		"npm": "1.3.x"
+	},
+	"scripts": {
+		"postinstall": "./node_modules/.bin/grunt"
+	},
+	"dependencies": {
+		"underscore": "1.5.1",
+		"util": "0.4.9",
+		"string":"1.6.0",
+		"underscore.string": "2.3.3",
+		"express": "3.3.4",
+		"dot": "1.0.1",
+		"dot-emc": "0.1.2",
+		"supervisor": "0.5.3",
+		"async": "0.2.9",
+		"bower": "1.0.2",
+		"grunt": "0.4.1",
+		"grunt-cli": "0.1.9",
+		"grunt-contrib-jshint": "0.6.1",
+		"grunt-contrib-concat": "0.3.0",
+		"grunt-contrib-uglify": "0.2.2",
+		"twitter": "0.2.3",
+		"grunt-contrib-nodeunit": "0.2.0"
+	},
+	"//": {
+		"mime": "1.2.11",
+		"facebook-api": "0.1.2",
+		"backbone": "1.0.0",
+		"moment": "2.1.0",
+		"winston": "0.7.2",
+		"blueimp-file-upload": "8.6.1",
+		"filesize": "1.10.0",
+		"bowser": "0.3.1",
+		"nodetime": "0.8.13",
+		"passport": "0.1.17",
+		"passport-facebook": "0.1.5",
+		"passport-google-oauth": "0.1.5",
+		"googleapis": "0.4.5",
+		"mongoose": "3.6.15",
+		"nodemailer": "0.5.2",
+		"email-templates": "0.1.0",
+		"mailgun-js" : "0.2.1",
+		"node-mandrill" : "1.0.1",
+		"aws-sdk": "1.6.0",
+		"nedb": "0.8.5",
+		"grunt-bower-task": "0.2.3",
+		"grunt-contrib-nodeunit": "0.2.0",
+		"grunt-contrib-requirejs": "0.4.1",
+		"memjs": "0.7.2"
+	}
+}
