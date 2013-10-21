@@ -1,25 +1,52 @@
 (function() {
 
 	// define the angular module
-	var bullyalert_app = angular.module('bullyalert_app', []);
+	var bullyaware_app = angular.module('bullyaware_app', []);
 
 
-	bullyalert_app.controller('BullyCtrl', [
+	bullyaware_app.controller('BullyCtrl', [
 		'$scope', '$http', '$location', BullyCtrl
 	]);
 
 	function BullyCtrl($scope, $http, $location) {
 		$scope.location = $location;
 
-		// $scope.query = '@elizabeth_tice';
-		// $scope.query = '@yahoomail';
-		$scope.query = '@KarenGravanoVH1';
-		// $scope.query = '@jenny_sad';
-		// $scope.query = '@MileyCyrus';
+		$scope.account_providers = [{
+			name: 'Twitter',
+			icon: 'icon-twitter-sign',
+			color: '#7af'
+		}, {
+			name: 'Facebook',
+			icon: 'icon-facebook-sign',
+			color: '#66b'
+		}, {
+			name: 'Tumblr',
+			icon: 'icon-tumblr-sign',
+			color: '#33b'
+		}, {
+			name: 'flickr',
+			icon: 'icon-flickr',
+			color: '#b3b'
+		}, {
+			name: 'pinterest',
+			icon: 'icon-pinterest-sign',
+			color: '#b33'
+		}];
+		$scope.choose_provider = function(provider) {
+			$scope.account_provider = provider;
+		}
+		$scope.account_provider = $scope.account_providers[0];
+
+
+		// $scope.account_name = 'elizabeth_tice';
+		// $scope.account_name = 'yahoomail';
+		$scope.account_name = 'KarenGravanoVH1';
+		// $scope.account_name = 'jenny_sad';
+		// $scope.account_name = 'MileyCyrus';
 
 		$scope.analyze = function() {
 			d3.select("#graph").select("svg").remove();
-			$scope.last_query = $scope.query;
+			$scope.last_query = '@' + $scope.account_name;
 			$scope.last_result = '';
 			$scope.last_error = null;
 			$http({
@@ -30,7 +57,8 @@
 				}
 			}).then(function(res) {
 				$scope.last_result = res.data;
-				var width = 900;
+				$scope.$apply();
+				var width = $("#graph").innerWidth();
 				var height = 300;
 				var pad = 25;
 				var messages = res.data.messages;

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html ng-app="bullyalert_app">
+<html ng-app="bullyaware_app">
 
 <head>
-	<?# def.include('common_head.html') ?>
+	<?# def.include( 'common_head.html') ?>
 </head>
 
 <body>
@@ -10,10 +10,12 @@
 		<div class="container">
 			<h1>OOPS</h1>
 			<h3>an error has occured</h3>
-			<div class="lead"> <?! JSON.stringify(it.err) ?> </div> 
+			<div class="lead">
+				<?! JSON.stringify(it.err) ?>
+			</div>
 		</div>
 	</div>
-	<?# def.include('common_scripts.html') ?>
+	<?# def.include( 'common_scripts.html') ?>
 </body>
 
 </html>

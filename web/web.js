@@ -99,7 +99,7 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieSession({
 	// no need for secret since its signed by cookieParser
-	key: 'bullyalert_session',
+	key: 'bullyaware_session',
 	cookie: {
 		maxAge: 356 * 24 * 60 * 60 * 1000 // 1 year
 	}

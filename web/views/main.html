@@ -1,52 +1,90 @@
 <!DOCTYPE html>
-<html ng-app="bullyalert_app">
+<html ng-app="bullyaware_app">
 
 <head>
-	<?# def.include('common_head.html') ?>
+	<?# def.include( 'common_head.html') ?>
+
+		<style type="text/css">
+		body {
+			background: url('/public/img/5907015_l.jpg') no-repeat center center fixed;
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
+		h1, h2, h3, h4, h5, h6, p {
+			font-family: ubuntu !important;
+		}
+		.bglight {
+			background-color: rgba(255, 255, 255, 0.7);
+			border: 1px solid black;
+			border-radius: 10px;
+		}
+		</style>
 </head>
 
-<body ng-controller="BullyCtrl">
+<body ng-controller="BullyCtrl" ng-cloak>
 
-	<div class="container">
-		<div class="jumbotron">
-			<h1>BULLY ALERT</h1>
-			<div class="text-center" style="width: 70%">
-				<div class="input-group">
-					<input type="text" class="form-control"
-						placeholder="Enter Query to Analyze for Bully Alert"
-						ng-model="query"/>
+	<div class="container" style="margin-top: 40px">
+		<div class="col-sm-5 text-center bglight" style="padding-bottom: 40px">
+
+			<h1>Is your child a target of cyber bullying?</h1>
+			<br/>
+
+			<div role="form">
+
+				<div class="input-group input-group-lg">
 					<div class="input-group-btn">
-						<button type="button" 
-							class="btn btn-default dropdown-toggle" 
-							data-toggle="dropdown">
+						<button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown">
+							<i class="{{account_provider.icon}} icon-large icon-fixed-width" style="color: {{account_provider.color}}"></i>
 							<span class="caret"></span>
 						</button>
-						<ul class="dropdown-menu pull-right">
-							<li><a ng-click="query='@MileyCyrus'">MileyCyrus</a></li>
-							<li><a ng-click="query='@jenny_sad'">jenny_sad</a></li>
-							<li><a ng-click="query='@yahoomail'">yahoomail</a></li>
-							<li><a ng-click="query='@KarenGravanoVH1'">KarenGravanoVH1</a></li>
-							<li><a ng-click="query='@elizabeth_tice'">elizabeth_tice</a></li>
-							<li><a ng-click="query='@rihanna'">rihanna</a></li>
+						<ul class="dropdown-menu text-left">
+							<li ng-repeat="provider in account_providers">
+								<a href="#" ng-click="choose_provider(provider)">
+									<i class="{{provider.icon}} icon-2x icon-fixed-width" style="color: {{provider.color}}"></i>
+									{{provider.name}}
+								</a>
+							</li>
 						</ul>
 					</div>
+					<input ng-model="account_name" type="text" class="form-control input-lg" placeholder="Account to check" />
 				</div>
-				<button class="btn btn-danger"
-					ng-click="analyze()">
-					Check for Bully-ness
-				</button>
+
+				<p class="help-block">
+					<a href="#">
+						We can help you to find the account name
+					</a>
+				</p>
+
+				<div class="input-group input-group-lg">
+					<div class="input-group-btn" title="Your email address">
+						<button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown">
+							<i class="icon-envelope-alt icon-large icon-fixed-width"></i>
+							<span class="caret" style="visibility: hidden"></span>
+						</button>
+					</div>
+					<input ng-model="contact_email" type="email" class="form-control input-lg" placeholder="Your email address" />
+				</div>
+
+				<br/>
+				<div>
+					<button class="btn btn-lg btn-primary" ng-click="analyze()">
+						Check
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<div ng-show="!!last_query || !!last_result"
-		class="container text-center">
-		<div class="jumbotron">
+	<div class="container" style="margin-top: 40px" ng-show="!!last_query || !!last_result">
+		<div class="col-xs-12 bglight text-center">
 			<div ng-show="!last_result">
 				<i class="icon-spin icon-spinner" style="font-size: 40px"></i>
 			</div>
 			<div ng-show="last_result">
-				<h3>{{ last_query }} - LEVEL <b>{{ last_result.level }}</b></h3>
+				<h3>{{ last_query }} - LEVEL <b>{{ last_result.level }}</b>
+				</h3>
 				<div id="graph"></div>
 				<ul class="text-left">
 					<li ng-repeat="user in last_result.users">
@@ -60,8 +98,10 @@
 		</div>
 	</div>
 
-	<?# def.include('common_scripts.html') ?>
-	<script src="/public/js/d3.v3.min.js" charset="utf-8"></script>
+
+
+	<?# def.include( 'common_scripts.html') ?>
+		<script src="/public/js/d3.v3.min.js" charset="utf-8"></script>
 </body>
 
 </html>
