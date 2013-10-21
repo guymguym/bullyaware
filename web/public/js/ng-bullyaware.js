@@ -34,7 +34,7 @@
 		}];
 		$scope.choose_provider = function(provider) {
 			$scope.account_provider = provider;
-		}
+		};
 		$scope.account_provider = $scope.account_providers[0];
 
 
