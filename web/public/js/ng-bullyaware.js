@@ -80,11 +80,11 @@
 			icon: 'icon-tumblr-sign',
 			color: '#33b'
 		}, {
-			name: 'flickr',
+			name: 'Flickr',
 			icon: 'icon-flickr',
 			color: '#b3b'
 		}, {
-			name: 'pinterest',
+			name: 'Pinterest',
 			icon: 'icon-pinterest-sign',
 			color: '#b33'
 		}];
