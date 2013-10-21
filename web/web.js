@@ -197,8 +197,10 @@ function error_501(req, res, next) {
 ////////////
 
 var engine = require('./lib/engine');
+var users = require('./lib/users');
 
 app.post('/api/analyze', engine.analyze_api);
+app.post('/api/signup', users.signup);
 
 app.get('/', function(req, res) {
 	return res.render('main.html');

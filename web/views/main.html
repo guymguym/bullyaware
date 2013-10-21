@@ -16,7 +16,7 @@
 			font-family: ubuntu !important;
 		}
 		.bglight {
-			background-color: rgba(255, 255, 255, 0.7);
+			background-color: rgba(255, 255, 255, 0.75);
 			border: 1px solid black;
 			border-radius: 10px;
 		}
@@ -33,43 +33,43 @@
 
 			<div role="form">
 
-				<div class="input-group input-group-lg">
+				<div class="form-group input-group input-group-lg">
 					<div class="input-group-btn">
 						<button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown">
-							<i class="{{account_provider.icon}} icon-large icon-fixed-width" style="color: {{account_provider.color}}"></i>
+							<i class="{{account_type.icon}} icon-large icon-fixed-width" style="color: {{account_type.color}}"></i>
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu text-left">
-							<li ng-repeat="provider in account_providers">
-								<a href="#" ng-click="choose_provider(provider)">
-									<i class="{{provider.icon}} icon-2x icon-fixed-width" style="color: {{provider.color}}"></i>
-									{{provider.name}}
+							<li ng-repeat="type in account_types">
+								<a href="#" ng-click="choose_account_type(type)">
+									<i class="{{type.icon}} icon-2x icon-fixed-width" style="color: {{type.color}}"></i>
+									{{type.name}}
 								</a>
 							</li>
 						</ul>
 					</div>
-					<input ng-model="account_name" type="text" class="form-control input-lg" placeholder="Account to check" />
+					<input id="target_account" ng-model="target_account" type="text" class="form-control input-lg" placeholder="Account to check" autocomplete="on" />
 				</div>
 
 				<p class="help-block">
 					<a href="#">
-						We can help you to find the account name
+						If you don't know the account name we can help out
 					</a>
 				</p>
 
-				<div class="input-group input-group-lg">
+				<div class="form-group input-group input-group-lg">
 					<div class="input-group-btn" title="Your email address">
 						<button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown">
 							<i class="icon-envelope-alt icon-large icon-fixed-width"></i>
 							<span class="caret" style="visibility: hidden"></span>
 						</button>
 					</div>
-					<input ng-model="contact_email" type="email" class="form-control input-lg" placeholder="Your email address" />
+					<input id="user_email" ng-model="user_email" type="email" class="form-control input-lg" placeholder="Your email address" autocomplete="on" />
 				</div>
 
 				<br/>
 				<div>
-					<button class="btn btn-lg btn-primary" ng-click="analyze()">
+					<button class="btn btn-lg btn-primary" ng-click="check()">
 						Check
 					</button>
 				</div>

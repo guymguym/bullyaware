@@ -4,14 +4,70 @@
 	var bullyaware_app = angular.module('bullyaware_app', []);
 
 
+	// safe apply handles cases when apply may fail with:
+	// "$apply already in progress" error
+
+	function safe_apply(func) {
+		/* jshint validthis:true */
+		var phase = this.$root.$$phase;
+		if (phase == '$apply' || phase == '$digest') {
+			return this.$eval(func);
+		} else {
+			return this.$apply(func);
+		}
+	}
+
+	// safe_callback returns a function callback that performs the safe_apply
+	// while propagating arguments to the given func.
+
+	function safe_callback(func) {
+		/* jshint validthis:true */
+		var me = this;
+		return function() {
+			// build the args array to have null for 'this'
+			// and rest is taken from the callback arguments
+			var args = new Array(arguments.length + 1);
+			args[0] = null;
+			for (var i = 0; i < arguments.length; i++) {
+				args[i + 1] = arguments[i];
+			}
+			// the following is in fact calling func.bind(null, a1, a2, ...)
+			var fn = Function.prototype.bind.apply(func, args);
+			return me.safe_apply(fn);
+		};
+	}
+
+
+	// initializations - setup functions on globalScope
+	// which will be propagated to any other scope, and easily visible
+	bullyaware_app.run(function($rootScope) {
+		$rootScope.safe_apply = safe_apply;
+		$rootScope.safe_callback = safe_callback;
+
+		jQuery.fn.redraw = function() {
+			$(this).each(function() {
+				var redraw = this.offsetHeight;
+			});
+			return this;
+		};
+		jQuery.fn.focusWithoutScrolling = function() {
+			var x = window.scrollX;
+			var y = window.scrollY;
+			this.focus();
+			window.scrollTo(x, y);
+			return this;
+		};
+	});
+
+
 	bullyaware_app.controller('BullyCtrl', [
-		'$scope', '$http', '$location', BullyCtrl
+		'$scope', '$http', '$q', '$location', BullyCtrl
 	]);
 
-	function BullyCtrl($scope, $http, $location) {
+	function BullyCtrl($scope, $http, $q, $location) {
 		$scope.location = $location;
 
-		$scope.account_providers = [{
+		$scope.account_types = [{
 			name: 'Twitter',
 			icon: 'icon-twitter-sign',
 			color: '#7af'
@@ -32,24 +88,52 @@
 			icon: 'icon-pinterest-sign',
 			color: '#b33'
 		}];
-		$scope.choose_provider = function(provider) {
-			$scope.account_provider = provider;
+		$scope.choose_account_type = function(type) {
+			$scope.account_type = type;
 		};
-		$scope.account_provider = $scope.account_providers[0];
+		$scope.account_type = $scope.account_types[0];
 
 
-		// $scope.account_name = 'elizabeth_tice';
-		// $scope.account_name = 'yahoomail';
-		$scope.account_name = 'KarenGravanoVH1';
-		// $scope.account_name = 'jenny_sad';
-		// $scope.account_name = 'MileyCyrus';
+		// $scope.target_account = 'elizabeth_tice';
+		// $scope.target_account = 'yahoomail';
+		// $scope.target_account = 'KarenGravanoVH1';
+		// $scope.target_account = 'jenny_sad';
+		// $scope.target_account = 'MileyCyrus';
 
-		$scope.analyze = function() {
+
+		$scope.check = function() {
+			if (!$scope.target_account) {
+				$("#target_account").effect('highlight', 1000).focus().parent().addClass('has-error');
+				return;
+			}
+			$("#target_account").parent().removeClass('has-error');
+
+			if (!$scope.user_email) {
+				$("#user_email").effect('highlight', 1000).focus().parent().addClass('has-error');
+				return;
+			}
+			$("#user_email").parent().removeClass('has-error');
+
+			$q.when(signup()).then(analyze);
+		};
+
+
+		function signup() {
+			return $http({
+				method: 'POST',
+				url: '/api/signup',
+				data: {
+					email: $scope.user_email
+				}
+			});
+		}
+
+		function analyze() {
 			d3.select("#graph").select("svg").remove();
-			$scope.last_query = '@' + $scope.account_name;
+			$scope.last_query = '@' + $scope.target_account;
 			$scope.last_result = '';
 			$scope.last_error = null;
-			$http({
+			return $http({
 				method: 'POST',
 				url: '/api/analyze',
 				data: {
@@ -57,8 +141,8 @@
 				}
 			}).then(function(res) {
 				$scope.last_result = res.data;
-				$scope.$apply();
-				var width = $("#graph").innerWidth();
+				$scope.safe_apply();
+				var width = $("#graph").parent().parent().width() - 40;
 				var height = 300;
 				var pad = 25;
 				var messages = res.data.messages;
@@ -119,7 +203,7 @@
 			}, function(err) {
 				$scope.last_error = err;
 			});
-		};
+		}
 
 		$scope.stringify = function(o) {
 			return JSON.stringify(o);
