@@ -87,9 +87,9 @@ app.use(function(req, res, next) {
 	// var fwd_port = req.get('X-Forwarded-Port');
 	// var fwd_from = req.get('X-Forwarded-For');
 	// var fwd_start = req.get('X-Request-Start');
-	if (fwd_proto === 'http') {
+	if (fwd_proto === 'https') {
 		var host = req.get('Host');
-		return res.redirect('https://' + host + req.url);
+		return res.redirect('http://' + host + req.url);
 	}
 	return next();
 });
