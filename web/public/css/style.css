@@ -1,10 +1,17 @@
-.axis path,
-.axis line {
-    fill: none;
-    stroke: black;
-    shape-rendering: crispEdges;
+.axis path, .axis line {
+	fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
 }
 .axis text {
-    font-family: sans-serif;
-    font-size: 11px;
+	font-family: sans-serif;
+	font-size: 11px;
+}
+/*
+	Allow angular.js to be loaded in body, hiding cloaked elements until 
+	templates compile.  The !important is important given that there may be 
+	other selectors that are more specific or come later and might alter display.  
+*/
+[ng\:cloak], [ng-cloak], .ng-cloak {
+	display: none !important;
 }

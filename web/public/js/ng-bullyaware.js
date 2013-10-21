@@ -59,13 +59,136 @@
 		};
 	});
 
-
-	bullyaware_app.controller('BullyCtrl', [
-		'$scope', '$http', '$q', '$location', BullyCtrl
+	bullyaware_app.directive('nbEffectToggle', ['$timeout',
+		function($timeout) {
+			return {
+				restrict: 'A', // use as attribute
+				link: function(scope, element, attrs) {
+					var opt = scope.$eval(attrs.nbEffectOptions);
+					var jqelement = angular.element(element);
+					var last = {};
+					scope.$watch(attrs.nbEffectToggle, function(value) {
+						if (last.value === undefined) {
+							if (value) {
+								jqelement.show();
+							} else {
+								jqelement.hide();
+							}
+							last.value = value;
+						} else if (last.value !== value) {
+							last.value = value;
+							if (value) {
+								jqelement.show(opt);
+							} else {
+								jqelement.hide(opt);
+							}
+						}
+					});
+				}
+			};
+		}
 	]);
 
-	function BullyCtrl($scope, $http, $q, $location) {
+	bullyaware_app.directive('nbEffectSwitchClass', function($parse) {
+		return {
+			restrict: 'A', // use as attribute
+			link: function(scope, element, attrs) {
+				var opt = scope.$eval(attrs.nbEffectOptions);
+				var jqelement = angular.element(element);
+				if (opt.complete) {
+					var complete_apply = function() {
+						scope.safe_apply(opt.complete);
+					};
+				}
+				var first = true;
+				scope.$watch(attrs.nbEffectSwitchClass, function(value) {
+					var duration = opt.duration;
+					if (first) {
+						first = false;
+						duration = 0;
+					}
+					if (value) {
+						jqelement.switchClass(
+							opt.from, opt.to,
+							duration, opt.easing, complete_apply);
+					} else {
+						jqelement.switchClass(
+							opt.to, opt.from,
+							duration, opt.easing, complete_apply);
+					}
+				});
+			}
+		};
+	});
+
+
+
+	bullyaware_app.controller('BullyCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$location', BullyCtrl
+	]);
+
+	function BullyCtrl($scope, $http, $q, $timeout, $location) {
 		$scope.location = $location;
+
+		var box_effect = {
+			effect: 'fade',
+			duration: 2000,
+		};
+
+		$('#bg').fadeIn({
+			duration: 2000
+		});
+		$timeout(function() {
+			$('#box1').show(box_effect);
+		}, 1000);
+		$timeout(function() {
+			$('#box2').show(box_effect);
+		}, 2000);
+		$timeout(function() {
+			$('#box3').show(box_effect);
+		}, 3000);
+
+		$scope.set_user_role = function(role) {
+			$scope.user_role = role;
+			$('#box4').show(box_effect);
+		}
+
+		$scope.user = null;
+
+		$scope.signup = function() {
+			if (!$scope.user_email) {
+				$("#user_email").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
+			return $http({
+				method: 'POST',
+				url: '/api/signup',
+				data: {
+					email: $scope.user_email
+				}
+			}).then(function(res) {
+				console.log('USER CREATED', res);
+				$scope.user = res.data;
+				$('#box1 .shrinkme').hide({
+					effect: 'blind',
+					duration: 700
+				});
+				$('#box2').show({
+					effect: 'blind',
+					duration: 700
+				})
+			}, function(err) {
+				console.error('USER CREATE FAILED', err);
+			});
+		};
+
+
+
+
 
 		$scope.account_types = [{
 			name: 'Twitter',
@@ -103,32 +226,13 @@
 
 		$scope.check = function() {
 			if (!$scope.target_account) {
-				$("#target_account").effect('highlight', 1000).focus().parent().addClass('has-error');
+				$("#target_account").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
 				return;
 			}
-			$("#target_account").parent().removeClass('has-error');
-
-			if (!$scope.user_email) {
-				$("#user_email").effect('highlight', 1000).focus().parent().addClass('has-error');
-				return;
-			}
-			$("#user_email").parent().removeClass('has-error');
-
-			$q.when(signup()).then(analyze);
-		};
-
-
-		function signup() {
-			return $http({
-				method: 'POST',
-				url: '/api/signup',
-				data: {
-					email: $scope.user_email
-				}
-			});
-		}
-
-		function analyze() {
 			d3.select("#graph").select("svg").remove();
 			$scope.last_query = '@' + $scope.target_account;
 			$scope.last_result = '';
