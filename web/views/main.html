@@ -36,6 +36,9 @@
 			border-radius: 10px;
 			padding: 10px 20px 10px 20px;
 		}
+		.bgx-top {
+			min-height: 220px;
+		}
 		.lights-on .bgx {
 			background-color: #f0f0f0;
 			border: 2px solid #e0e0e0;
@@ -52,6 +55,12 @@
 		}
 		body {
 			padding-bottom: 70px;
+		}
+		.css-form input.ng-invalid.ng-dirty {
+			background-color: rgba(250, 150, 150, 0.3);
+		}
+		.css-form input.ng-valid.ng-dirty {
+			background-color: rgba(150, 200, 250, 0.3);
 		}
 		</style>
 </head>
@@ -93,36 +102,58 @@
 				</div>
 
 				<div id="box_description" class="bx">
-					<div class="bgx">
-						<h4>
-							In an age of blurred communcation, BullyAware help you to monitor cyber-bullying, abusive and offensive messages on the social network. Sign up to protect your loved ones.
-						</h4>
+					<div class="bgx bgx-top">
+						<p class="lead">
+							In an age of blurred communcation BullyAware allows you to monitor cyber-bullying, and get notified on abusive and offensive social messages.
+						</p>
+						<p class="lead">
+							Sign up to protect your loved ones.
+						</p>
 					</div>
 				</div>
 
-				<div id="box_results" class="bx">
+				<div id="box_signup" class="bx">
 					<div class="bgx">
-						<div ng-show="!last_result">
-							<i class="icon-spin icon-spinner" style="font-size: 40px"></i>
-						</div>
-						<div ng-show="last_result">
-							<h3>{{ last_query }} - LEVEL <b>{{ last_result.level }}</b>
-							</h3>
-							<div id="graph"></div>
-							<div class="text-left">
-								<div ng-repeat="user in last_result.users | limitTo:3">
-									<b>{{ user.info.name }} - LEVEL {{ user.level }}</b>
-									<div ng-repeat="msg in user.messages | limitTo:3">
-										{{ msg.text }} - LEVEL {{ msg.level }}
-									</div>
-									<div ng-show="user.messages.length > 3">
-										...
-									</div>
-								</div>
-								<div ng-show="last_result.users.length > 3">
-									...
-								</div>
+						<form id="signup_form" name="form" role="form" novalidate class="css-form">
+							<h3>Subscribe</h3>
+							<h5>Get automatic alerts on up to 10 social media users.</h5>
+
+							<div class="form-group">
+								<select class="form-control" required ng-model="user_role" ng-change="on_user_role()">
+									<option value="" disabled>You're a ...</option>
+									<option value="parent">Parent</option>
+									<option value="teenager">Teenager</option>
+									<option value="other">Other</option>
+								</select>
 							</div>
+
+							<div class="form-group">
+								<input id="user_email" required ng-model="user_email" type="email" class="form-control" placeholder="Your email address" autocomplete="off" ng-readonly="user" name="email" />
+							</div>
+
+							<div class="form-group">
+								<input id="user_password" required ng-model="user_password" type="password" class="form-control" placeholder="Choose password" ng-readonly="user" name="password" />
+							</div>
+
+							<div class="form-group">
+								<input id="user_password2" required ng-model="user_password2" type="password" class="form-control" placeholder="Retype password" ng-readonly="user" name="password2" />
+							</div>
+
+							<div class="form-group">
+								<button class="btn btn-primary form-control" ng-click="signup()">
+									Sign Up
+								</button>
+							</div>
+
+						</form>
+
+						<div id="thanks" style="display: none">
+							<h3>Thank you!</h3>
+							<h5>We will contact you as soon as possible to this address:</h5>
+							<h5>
+								<b>{{ user && user.email || 'HOLDER' }}</b>
+								<a href="/user/logout"><small>logout</small></a>
+							</h5>
 						</div>
 					</div>
 				</div>
@@ -131,48 +162,13 @@
 
 			<div class="col-sm-6">
 
-				<div id="box_signup" class="bx">
-					<div class="bgx">
-						<h3>Subscribe</h3>
-						<h5>Get automatic alerts on up to 10 social media users.</h5>
-						<div role="form">
-							<div class="form-group input-group">
-								<label>You're a</label>
-								<div class="text-center btn-group">
-									<button class="btn btn-{{ user_role=='parent' && 'primary' || 'default'}}" ng-click="set_user_role('parent')">Parent</button>
-									<button class="btn btn-{{ user_role=='teenager' && 'primary' || 'default'}}" ng-click="set_user_role('teenager')">Teenager</button>
-									<button class="btn btn-{{ user_role=='other' && 'primary' || 'default'}}" ng-click="set_user_role('other')">Other</button>
-								</div>
-							</div>
-							<input ng-model="user_email" type="email" class="form-control" placeholder="Your email address" autocomplete="on" ng-readonly="user" />
-							<input ng-model="user_password" type="password" class="form-control" placeholder="Choose password" ng-readonly="user" />
-							<input ng-model="user_password2" type="password" class="form-control" placeholder="Retype password" ng-readonly="user" />
-							<div class="text-center">
-								<button class="btn btn-primary" ng-click="signup()">
-									Sign Up
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-				<div id="box_thanks" class="bx">
-					<div class="bgx">
-						<h3>Thanks you!</h3>
-						<h5>We will contact you as soon as possible to this address:</h5>
-						<h5><b>{{ user && user.email || 'HOLDER' }}</b>
-						</h5>
-					</div>
-				</div>
-
 				<div id="box_check" class="bx">
-					<div class="bgx">
+					<div class="bgx bgx-top">
 						<h3>Try it</h3>
 						<h5>Enter another Twitter account to check now:</h5>
 						<div class="form-group input-group">
 							<div class="input-group-btn">
-								<button type="button" class="btn btn-default TODO-dropdown-toggle" data-toggle="TODO-dropdown">
+								<button type="button" class="btn btn-default TODO-dropdown-toggle" data-toggle="TODO-dropdown" ng-click="on_change_account_type()">
 									<i class="{{account_type.icon}} icon-large icon-fixed-width" style="color: {{account_type.color}}"></i>
 									<span ng-show="false" class="caret"></span>
 								</button>
@@ -196,9 +192,36 @@
 						</div>
 					</div>
 				</div>
+
+				<div id="box_results" class="bx">
+					<div class="bgx">
+						<h3>Distress level analysis</h3>
+						<div ng-show="!last_result" class="text-center">
+							<i class="icon-spin icon-spinner" style="font-size: 40px"></i>
+						</div>
+						<div ng-show="last_result">
+							<b>{{ last_query }}</b> - LEVEL {{ last_result.level }}
+							<div id="graph"></div>
+							<div class="text-left">
+								<div ng-repeat="user in last_result.users | limitTo:3">
+									<b>{{ user.info.name }}</b> - LEVEL {{ user.level }}
+									<div ng-repeat="msg in user.messages | limitTo:3">
+										{{ msg.text }} - LEVEL {{ msg.level }}
+									</div>
+									<div ng-show="user.messages.length > 3">
+										...
+									</div>
+								</div>
+								<div ng-show="last_result.users.length > 3">
+									...
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
-
 	</div>
 
 	<div id="footer">
@@ -208,7 +231,7 @@
 					<div style="margin-left: 10px">
 						<b>BullyAware.co</b>
 						&nbsp;
-						<a href="mailto:info@bullyaware.co" target="_blank">
+						<a href="mailto:info@bullyaware.co" target="_blank" ng-click="on_contact_us()">
 							<i class="icon-envelope-alt icon-large icon-fixed-width"></i>
 							Contact us
 						</a>
@@ -219,8 +242,15 @@
 	</div>
 
 
+	<!-- server data is safely embedded in a JSON type script -->
+	<script id="server_data" type="application/json">
+	<?= JSON.stringify(it) ?>
+	</script>
+
 	<?# def.include( 'common_scripts.html') ?>
 		<script src="/public/js/d3.v3.min.js" charset="utf-8"></script>
+
+
 </body>
 
 </html>

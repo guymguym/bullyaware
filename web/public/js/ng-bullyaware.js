@@ -137,6 +137,21 @@
 
 	function BullyCtrl($scope, $http, $q, $timeout, $location) {
 		$scope.location = $location;
+		$scope.server_data = JSON.parse($('#server_data').html());
+		set_user($scope.server_data.user);
+
+		function set_user(user) {
+			$scope.user = user;
+			if (user) {
+				$.when($('#signup_form').fadeOut(1000)).then(function() {
+					return $('#thanks').fadeIn();
+				});
+			} else {
+				$.when($('#thanks').fadeOut(1000)).then(function() {
+					return $('#signup_form').fadeIn();
+				});
+			}
+		}
 
 		// start animations on page load
 		$('#bg, #box_welcome, #box_example').fadeIn(1000);
@@ -157,14 +172,10 @@
 			});
 		}
 
-		$scope.user = null;
-
 		// on page load log the load action
 		action_log({
 			load_page: $location.absUrl()
 		});
-
-
 
 
 
@@ -189,10 +200,32 @@
 			icon: 'icon-pinterest-sign',
 			color: '#b33'
 		}];
+		$scope.account_type = $scope.account_types[0];
+
 		$scope.choose_account_type = function(type) {
 			$scope.account_type = type;
 		};
-		$scope.account_type = $scope.account_types[0];
+
+		$scope.on_change_account_type = function() {
+			action_log({
+				try_account_type: true
+			});
+		};
+
+		$scope.on_contact_us = function() {
+			action_log({
+				contact_us: true
+			});
+		};
+
+		$scope.on_user_role = function() {
+			action_log({
+				user_role: $scope.user_role
+			});
+		};
+
+
+
 
 		// $scope.target_account = 'elizabeth_tice';
 		// $scope.target_account = 'yahoomail';
@@ -200,7 +233,7 @@
 		// $scope.target_account = 'jenny_sad';
 		// $scope.target_account = 'MileyCyrus';
 
-		var DEMO_ACCOUNT = 'KarenGravanoVH1';
+		var DEMO_ACCOUNT = 'MileyCyrus';
 
 		$scope.check = function() {
 			if (!$scope.target_account || $scope.target_account === DEMO_ACCOUNT) {
@@ -221,22 +254,21 @@
 			$scope.last_result = '';
 			$scope.last_error = null;
 
-			var duration = 1000;
-			var duration_hide = 2000;
+			var duration = 500;
 			$.when(
-				$('body').switchClass('lights-off', 'lights-on', duration_hide),
-				$('#bg, #box_example, #box_welcome').fadeOut(duration_hide)
+				$('body').switchClass('lights-off', 'lights-on', duration),
+				$('#bg, #box_example, #box_welcome').fadeOut(duration)
 			).then(function() {
 				return $('#box_header').fadeIn(duration);
 			}).then(function() {
 				return $('#box_description').fadeIn(duration);
 			}).then(function() {
-				fill_graph();
-				return $('#box_results').fadeIn(duration);
-			}).then(function() {
 				return $('#box_signup').fadeIn(duration);
 			}).then(function() {
 				return $('#box_check').fadeIn(duration);
+			}).then(function() {
+				fill_graph();
+				return $('#box_results').fadeIn(duration);
 			});
 
 			return $http({
@@ -253,6 +285,53 @@
 				$scope.last_error = err;
 			});
 		};
+
+
+		$scope.signup = function() {
+			if ($scope.user) {
+				return;
+			}
+			if (!$scope.user_email) {
+				$("#user_email").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
+			if (!$scope.user_password) {
+				$("#user_password").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
+			if (!$scope.user_password2 || $scope.user_password2 !== $scope.user_password) {
+				$("#user_password2").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
+			return $http({
+				method: 'POST',
+				url: '/user/signup',
+				data: {
+					email: $scope.user_email,
+					password: $scope.user_password,
+					role: $scope.user_role
+				}
+			}).then(function(res) {
+				console.log('USER CREATED', res);
+				set_user(res.data);
+			}, function(err) {
+				console.error('USER CREATE FAILED', err);
+			});
+		};
+
+
 
 		function fill_graph() {
 			if (!$scope.last_result) {
@@ -321,50 +400,6 @@
 					'% Retweeted ' + msg.retweet_count + ') ' + msg.text);
 			});
 		}
-
-
-
-
-		$scope.set_user_role = function(role) {
-			if ($scope.user_role === role) {
-				return;
-			}
-			action_log({
-				user_role: role
-			}).then(function() {
-				$scope.user_role = role;
-			});
-		};
-
-
-		$scope.signup = function() {
-			if ($scope.user) {
-				return;
-			}
-			if (!$scope.user_email) {
-				$("#user_email").effect({
-					effect: 'highlight',
-					color: '#07d',
-					duration: 1000
-				}).focus();
-				return;
-			}
-			return $http({
-				method: 'POST',
-				url: '/user/signup',
-				data: {
-					email: $scope.user_email
-				}
-			}).then(function(res) {
-				console.log('USER CREATED', res);
-				$scope.user = res.data;
-			}, function(err) {
-				console.error('USER CREATE FAILED', err);
-			});
-		};
-
-
-
 
 	}
 

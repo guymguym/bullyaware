@@ -11,7 +11,9 @@ var types = mongoose.Schema.Types;
 // schemas
 
 var user_schema = new mongoose.Schema({
-	email: String
+	email: String,
+	password: String,
+	role: String
 });
 var session_schema = new mongoose.Schema({
 	user: types.ObjectId,
@@ -77,14 +79,16 @@ exports.action_log = function(req, res) {
 	// session_id is always created before this route by mk_session
 	act.session = req.session.session_id;
 	// user_id is not always available, but save when it does
-	if (req.session.user_id) {
-		act.user = req.session.user_id;
+	if (req.session.user) {
+		act.user = req.session.user.id;
 	}
 	// pick only expected fields
 	act.data = _.pick(req.body,
 		'load_page',
 		'check_demo',
 		'check_try',
+		'try_account_type',
+		'contact_us',
 		'user_role'
 	);
 	// saving request headers in case they will become valuable
@@ -104,6 +108,8 @@ exports.signup = function(req, res) {
 	console.log('SIGNUP', req.body);
 	var user = new User();
 	user.email = req.body.email;
+	user.password = req.body.password;
+	user.role = req.body.role;
 
 	// TODO check for duplicate email?
 
@@ -129,12 +135,21 @@ exports.signup = function(req, res) {
 
 		function(next) {
 			// save the user id into cookie session
-			req.session.user_id = user.id;
+			req.session.user = {
+				id: user.id,
+				email: user.email
+			};
 			// send the user as reply
-			return next(null, user);
+			return next(null, _.omit(user, 'password'));
 		}
 
 	], common.reply_callback(req, res, 'SIGNUP ' + req.body.email));
+};
+
+
+exports.logout = function(req, res) {
+	delete req.session.user;
+	res.redirect('/');
 };
 
 exports.fetch_all = function(callback) {

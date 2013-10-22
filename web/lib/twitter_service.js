@@ -28,7 +28,7 @@ var twit = new twitter({
 
 exports.tweet_search = function(search_expression, callback) {
 	var max_id;
-	var results = new Array(300);
+	var results = new Array(100);
 	var user_map = {};
 	var num = 0;
 	var done = false;

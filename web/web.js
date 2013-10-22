@@ -199,6 +199,7 @@ function error_501(req, res, next) {
 var users = require('./lib/users');
 app.post('/user/action_log', users.mk_session, users.action_log);
 app.post('/user/signup', users.mk_session, users.signup);
+app.get('/user/logout', users.mk_session, users.logout);
 
 // admin route
 var admin_auth = express.basicAuth(function(user, pass, callback) {
@@ -219,8 +220,11 @@ var engine = require('./lib/engine');
 app.post('/engine/analyze', users.mk_session, engine.analyze_api);
 
 app.get('/', users.mk_session, function(req, res) {
-	return res.render('main.html');
+	return res.render('main.html', {
+		user: req.session.user
+	});
 });
+
 
 // start http server
 var server = http.createServer(app);
