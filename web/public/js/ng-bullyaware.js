@@ -139,30 +139,14 @@
 		$scope.location = $location;
 
 		// start animations on page load
-		var box_effect = {
-			effect: 'fade',
-			duration: 2000,
-		};
-		$('#bg').fadeIn({
-			duration: 2000
-		});
-		$timeout(function() {
-			$('#box1').show(box_effect);
-		}, 700);
-		$timeout(function() {
-			$('#box2').show(box_effect);
-		}, 1400);
-		$timeout(function() {
-			$('#box3').show(box_effect);
-		}, 2100);
-
+		$('#bg, #box_welcome, #box_example').fadeIn(1000);
 
 		// general action log to save operations info
 
 		function action_log(data) {
 			return $http({
 				method: 'POST',
-				url: '/api/action_log',
+				url: '/user/action_log',
 				data: data
 			}).then(function(res) {
 				console.log('ACTION LOGGED', data);
@@ -180,51 +164,6 @@
 			load_page: $location.absUrl()
 		});
 
-		$scope.set_user_role = function(role) {
-			if ($scope.user_role === role) {
-				return;
-			}
-			action_log({
-				user_role: role
-			}).then(function() {
-				$('#box4').show(box_effect);
-				$scope.user_role = role;
-			});
-		};
-
-		$scope.signup = function() {
-			if ($scope.user) {
-				return;
-			}
-			if (!$scope.user_email) {
-				$("#user_email").effect({
-					effect: 'highlight',
-					color: '#07d',
-					duration: 1000
-				}).focus();
-				return;
-			}
-			return $http({
-				method: 'POST',
-				url: '/api/signup',
-				data: {
-					email: $scope.user_email
-				}
-			}).then(function(res) {
-				console.log('USER CREATED', res);
-				$scope.user = res.data;
-				$('#box3, #box4').hide({
-					effect: 'blind',
-					duration: 1000
-				});
-				$('#box5').show({
-					effect: 'blind',
-					duration: 1000
-				});
-			}, function(err) {
-				console.error('USER CREATE FAILED', err);
-			});
-		};
 
 
 
@@ -263,88 +202,158 @@
 
 		$scope.check = function() {
 			if (!$scope.target_account) {
-				$("#target_account").effect({
-					effect: 'highlight',
-					color: '#07d',
-					duration: 1000
-				}).focus();
-				return;
+				$scope.target_account = 'KarenGravanoVH1';
 			}
-			d3.select("#graph").select("svg").remove();
-			$scope.last_query = '@' + $scope.target_account;
+			if ($scope.target_account[0] === '@') {
+				$scope.last_query = $scope.target_account;
+			} else {
+				$scope.last_query = '@' + $scope.target_account;
+			}
 			$scope.last_result = '';
 			$scope.last_error = null;
+
+			var duration = 1000;
+			var duration_hide = 2000;
+			$.when(
+				$('body').switchClass('lights-off', 'lights-on', duration_hide),
+				$('#bg, #box_example, #box_welcome').fadeOut(duration_hide)
+			).then(function() {
+				return $('#box_header').fadeIn(duration);
+			}).then(function() {
+				return $('#box_description').fadeIn(duration);
+			}).then(function() {
+				fill_graph();
+				return $('#box_results').fadeIn(duration);
+			}).then(function() {
+				return $('#box_signup').fadeIn(duration);
+			}).then(function() {
+				return $('#box_check').fadeIn(duration);
+			});
+
 			return $http({
 				method: 'POST',
-				url: '/api/analyze',
+				url: '/engine/analyze',
 				data: {
 					query: $scope.last_query
 				}
 			}).then(function(res) {
 				$scope.last_result = res.data;
 				$scope.safe_apply();
-				var width = $("#graph").parent().parent().width() - 40;
-				var height = 300;
-				var pad = 25;
-				var messages = res.data.messages;
-				var first_id = messages[0].id;
-				var last_id = messages[messages.length - 1].id;
-
-				var svg = d3.select("#graph")
-					.append("svg")
-					.attr("width", width)
-					.attr("height", height)
-					.style('border', 'solid 1px black');
-
-				var xscale = d3.scale.linear()
-					.domain([first_id, last_id])
-					.range([pad, width - pad - pad]);
-				var xAxis = d3.svg.axis()
-					.scale(xscale)
-					.orient("bottom")
-					.ticks(4)
-					.tickFormat(function(x) {
-						return '';
-					});
-				svg.append("g")
-					.attr("class", "axis")
-					.attr("transform", "translate(0," + (height - pad) + ")")
-					.call(xAxis);
-
-				var yscale = d3.scale.linear()
-					.domain([1, 0])
-					.range([pad, height - pad - pad]);
-
-				var radius = function(msg) {
-					return msg.retweet_count >= 10 ? 50 : ((msg.retweet_count + 1) * 50 / 10);
-				};
-				var circles = svg.selectAll("circle")
-					.data(messages)
-					.enter()
-					.append("circle");
-				circles.attr("cx", function(msg, i) {
-					return xscale(msg.id);
-				});
-				circles.attr("r", radius);
-				circles.attr("fill", function(msg) {
-					return "rgba(" + (msg.level * 250) + ", 150, 220, 0.8)";
-				});
-				circles.attr("stroke", "rgba(100, 220, 50, 0.40)");
-				circles.attr("stroke-width", function(msg) {
-					return radius(msg) / 2;
-				});
-				var y0 = yscale(0);
-				circles.attr("cy", y0).transition().attr("cy", function(msg, i) {
-					return yscale(msg.level);
-				}).duration(2000).delay(750);
-				circles.on('click', function(msg) {
-					alert('(Bully-level ' + (msg.level * 100).toFixed(0) +
-						'% Retweeted ' + msg.retweet_count + ') ' + msg.text);
-				});
+				fill_graph();
 			}, function(err) {
 				$scope.last_error = err;
 			});
 		};
+
+		function fill_graph() {
+			if (!$scope.last_result) {
+				return;
+			}
+			d3.select("#graph").select("svg").remove();
+			var width = $("#graph").parent().parent().parent().parent().width() - 80;
+			var height = 300;
+			var pad = 25;
+			var messages = $scope.last_result.messages;
+			var first_id = messages[0].id;
+			var last_id = messages[messages.length - 1].id;
+
+			var svg = d3.select("#graph")
+				.append("svg")
+				.attr("width", width)
+				.attr("height", height)
+				.style('border', 'solid 1px black');
+
+			var xscale = d3.scale.linear()
+				.domain([first_id, last_id])
+				.range([pad, width - pad - pad]);
+			var xAxis = d3.svg.axis()
+				.scale(xscale)
+				.orient("bottom")
+				.ticks(4)
+				.tickFormat(function(x) {
+					return '';
+				});
+			svg.append("g")
+				.attr("class", "axis")
+				.attr("transform", "translate(0," + (height - pad) + ")")
+				.call(xAxis);
+
+			var yscale = d3.scale.linear()
+				.domain([1, 0])
+				.range([pad, height - pad - pad]);
+
+			var radius = function(msg) {
+				return msg.retweet_count >= 10 ? 50 : ((msg.retweet_count + 1) * 50 / 10);
+			};
+			var circles = svg.selectAll("circle")
+				.data(messages)
+				.enter()
+				.append("circle");
+			circles.attr("cx", function(msg, i) {
+				return xscale(msg.id);
+			});
+			circles.attr("r", radius);
+			circles.attr("fill", function(msg) {
+				return "rgba(" + (msg.level * 250) + ", 150, 220, 0.8)";
+			});
+			circles.attr("stroke", "rgba(100, 220, 50, 0.40)");
+			circles.attr("stroke-width", function(msg) {
+				return radius(msg) / 2;
+			});
+			var y0 = yscale(0);
+			circles.attr("cy", y0).transition().attr("cy", function(msg, i) {
+				return yscale(msg.level);
+			}).duration(2000).delay(750);
+			circles.on('click', function(msg) {
+				alert('(Bully-level ' + (msg.level * 100).toFixed(0) +
+					'% Retweeted ' + msg.retweet_count + ') ' + msg.text);
+			});
+		}
+
+
+
+
+		$scope.set_user_role = function(role) {
+			if ($scope.user_role === role) {
+				return;
+			}
+			action_log({
+				user_role: role
+			}).then(function() {
+				$scope.user_role = role;
+			});
+		};
+
+
+		$scope.signup = function() {
+			if ($scope.user) {
+				return;
+			}
+			if (!$scope.user_email) {
+				$("#user_email").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
+			return $http({
+				method: 'POST',
+				url: '/user/signup',
+				data: {
+					email: $scope.user_email
+				}
+			}).then(function(res) {
+				console.log('USER CREATED', res);
+				$scope.user = res.data;
+			}, function(err) {
+				console.error('USER CREATE FAILED', err);
+			});
+		};
+
+
+
+
 	}
 
 })();

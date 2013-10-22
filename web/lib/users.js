@@ -131,3 +131,19 @@ exports.signup = function(req, res) {
 
 	], common.reply_callback(req, res, 'SIGNUP ' + req.body.email));
 };
+
+exports.fetch_all = function(callback) {
+	async.parallel({
+		users: function(next) {
+			return User.find(next);
+		},
+		sessions: function(next) {
+			return Session.find(next);
+		},
+		actions: function(next) {
+			return Action.find({}, {
+				req: 0
+			}, next);
+		}
+	}, callback);
+};

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html ng-app="bullyaware_app">
+
+<head>
+	<?# def.include( 'common_head.html') ?>
+
+		<style type="text/css">
+		body {
+			background-color: black;
+			color: white;
+		}
+		</style>
+</head>
+
+<body ng-controller="AdminCtrl" ng-cloak>
+
+	<div id="bg" style="display: none"></div>
+
+	<div class="container" style="margin-top: 20px">
+		<table class="table">
+			<thead>
+				<th>#</th>
+				<th>Session</th>
+				<th>User</th>
+				<th>Email</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="session in data.sessions | orderBy:'_id':true">
+					<td>{{ data.sessions.length-$index }}</td>
+					<td>{{ session._id }}</td>
+					<td>{{ session.user }}</td>
+					<td>{{ users[session.user].email }}</td>
+					<td colspan="4">
+					<div ng-repeat="action in actions[session._id]">
+						{{ stringify(action.data) }}
+					</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<?# def.include( 'common_scripts.html') ?>
+		<!-- <script src="/public/js/d3.v3.min.js" charset="utf-8"></script> -->
+
+
+		<!-- server data is safely embedded in a JSON type script -->
+		<script id="server_data" type="application/json">
+		<?= JSON.stringify(it) ?>
+		</script>
+
+		<script type="text/javascript">
+		(function() {
+			'use strict';
+			var bullyaware_app = angular.module('bullyaware_app');
+			bullyaware_app.controller('AdminCtrl', ['$scope', AdminCtrl]);
+
+			function AdminCtrl($scope) {
+				$scope.data = JSON.parse($('#server_data').html());
+				$scope.data.sessions.reverse();
+				$scope.users = _.indexBy($scope.data.users, '_id');
+				$scope.sessions = _.indexBy($scope.data.sessions, '_id');
+				$scope.actions = _.groupBy($scope.data.actions, 'session');
+			}
+		})();
+		</script>
+</body>
+
+</html>

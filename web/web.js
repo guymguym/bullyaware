@@ -197,11 +197,26 @@ function error_501(req, res, next) {
 ////////////
 
 var users = require('./lib/users');
-app.post('/api/action_log', users.mk_session, users.action_log);
-app.post('/api/signup', users.mk_session, users.signup);
+app.post('/user/action_log', users.mk_session, users.action_log);
+app.post('/user/signup', users.mk_session, users.signup);
+
+// admin route
+var admin_auth = express.basicAuth(function(user, pass, callback) {
+	var result = (user === 'noobaa' && pass === 'batyam');
+	return callback(null, result);
+});
+app.get('/admin', admin_auth, function(req, res, next) {
+	users.fetch_all(function(err, results) {
+		if (err) {
+			return next(err);
+		}
+		return res.render('admin.html', results);
+	});
+});
+
 
 var engine = require('./lib/engine');
-app.post('/api/analyze', users.mk_session, engine.analyze_api);
+app.post('/engine/analyze', users.mk_session, engine.analyze_api);
 
 app.get('/', users.mk_session, function(req, res) {
 	return res.render('main.html');
