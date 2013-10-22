@@ -200,9 +200,18 @@
 		// $scope.target_account = 'jenny_sad';
 		// $scope.target_account = 'MileyCyrus';
 
+		var DEMO_ACCOUNT = 'KarenGravanoVH1';
+
 		$scope.check = function() {
-			if (!$scope.target_account) {
-				$scope.target_account = 'KarenGravanoVH1';
+			if (!$scope.target_account || $scope.target_account === DEMO_ACCOUNT) {
+				action_log({
+					check_demo: DEMO_ACCOUNT
+				});
+				$scope.target_account = DEMO_ACCOUNT;
+			} else {
+				action_log({
+					check_try: $scope.target_account
+				});
 			}
 			if ($scope.target_account[0] === '@') {
 				$scope.last_query = $scope.target_account;
@@ -254,6 +263,9 @@
 			var height = 300;
 			var pad = 25;
 			var messages = $scope.last_result.messages;
+			if (!messages || !messages.length) {
+				return;
+			}
 			var first_id = messages[0].id;
 			var last_id = messages[messages.length - 1].id;
 

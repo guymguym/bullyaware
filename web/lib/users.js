@@ -81,7 +81,12 @@ exports.action_log = function(req, res) {
 		act.user = req.session.user_id;
 	}
 	// pick only expected fields
-	act.data = _.pick(req.body, 'user_role', 'load_page');
+	act.data = _.pick(req.body,
+		'load_page',
+		'check_demo',
+		'check_try',
+		'user_role'
+	);
 	// saving request headers in case they will become valuable
 	act.req = {
 		headers: _.clone(req.headers)
