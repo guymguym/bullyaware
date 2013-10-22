@@ -1,3 +1,7 @@
+/* jshint node:true */
+/* jshint -W099 */
+'use strict';
+
 var async = require('async');
 var _ = require('underscore');
 var afinn = require('./afinn');

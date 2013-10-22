@@ -1,4 +1,7 @@
+/* jshint node:true */
 /* jshint -W099 */
+'use strict';
+
 var async = require('async');
 var twitter = require('twitter');
 var _ = require('underscore');

@@ -1,4 +1,9 @@
+/* jshint browser:true, jquery:true, devel:true */
+/* global angular:false */
+/* global _:false */
+/* global Backbone:false */
 (function() {
+	'use strict';
 
 	// define the angular module
 	var bullyaware_app = angular.module('bullyaware_app', []);
@@ -43,6 +48,9 @@
 	bullyaware_app.run(function($rootScope) {
 		$rootScope.safe_apply = safe_apply;
 		$rootScope.safe_callback = safe_callback;
+		$rootScope.stringify = function(o) {
+			return JSON.stringify(o);
+		};
 
 		jQuery.fn.redraw = function() {
 			$(this).each(function() {
@@ -130,32 +138,64 @@
 	function BullyCtrl($scope, $http, $q, $timeout, $location) {
 		$scope.location = $location;
 
+		// start animations on page load
 		var box_effect = {
 			effect: 'fade',
 			duration: 2000,
 		};
-
 		$('#bg').fadeIn({
 			duration: 2000
 		});
 		$timeout(function() {
 			$('#box1').show(box_effect);
-		}, 1000);
+		}, 700);
 		$timeout(function() {
 			$('#box2').show(box_effect);
-		}, 2000);
+		}, 1400);
 		$timeout(function() {
 			$('#box3').show(box_effect);
-		}, 3000);
+		}, 2100);
 
-		$scope.set_user_role = function(role) {
-			$scope.user_role = role;
-			$('#box4').show(box_effect);
+
+		// general action log to save operations info
+
+		function action_log(data) {
+			return $http({
+				method: 'POST',
+				url: '/api/action_log',
+				data: data
+			}).then(function(res) {
+				console.log('ACTION LOGGED', data);
+				return res;
+			}, function(err) {
+				console.error('ACTION LOG FAILED', err);
+				throw err;
+			});
 		}
 
 		$scope.user = null;
 
+		// on page load log the load action
+		action_log({
+			load_page: $location.absUrl()
+		});
+
+		$scope.set_user_role = function(role) {
+			if ($scope.user_role === role) {
+				return;
+			}
+			action_log({
+				user_role: role
+			}).then(function() {
+				$('#box4').show(box_effect);
+				$scope.user_role = role;
+			});
+		};
+
 		$scope.signup = function() {
+			if ($scope.user) {
+				return;
+			}
 			if (!$scope.user_email) {
 				$("#user_email").effect({
 					effect: 'highlight',
@@ -173,19 +213,18 @@
 			}).then(function(res) {
 				console.log('USER CREATED', res);
 				$scope.user = res.data;
-				$('#box1 .shrinkme').hide({
+				$('#box3, #box4').hide({
 					effect: 'blind',
-					duration: 700
+					duration: 1000
 				});
-				$('#box2').show({
+				$('#box5').show({
 					effect: 'blind',
-					duration: 700
-				})
+					duration: 1000
+				});
 			}, function(err) {
 				console.error('USER CREATE FAILED', err);
 			});
 		};
-
 
 
 
@@ -216,13 +255,11 @@
 		};
 		$scope.account_type = $scope.account_types[0];
 
-
 		// $scope.target_account = 'elizabeth_tice';
 		// $scope.target_account = 'yahoomail';
 		// $scope.target_account = 'KarenGravanoVH1';
 		// $scope.target_account = 'jenny_sad';
 		// $scope.target_account = 'MileyCyrus';
-
 
 		$scope.check = function() {
 			if (!$scope.target_account) {
@@ -307,12 +344,7 @@
 			}, function(err) {
 				$scope.last_error = err;
 			});
-		}
-
-		$scope.stringify = function(o) {
-			return JSON.stringify(o);
 		};
-
 	}
 
 })();

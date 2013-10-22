@@ -1,3 +1,7 @@
+/* jshint node:true */
+/* jshint -W099 */
+'use strict';
+
 var fs = require('fs');
 var path = require('path');
 

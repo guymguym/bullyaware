@@ -20,12 +20,12 @@ var dot = require('dot');
 var dot_emc = require('dot-emc');
 var express = require('express');
 // var passport = require('passport');
-// var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 // connect to the database
-// if (process.env.MONGOHQ_URL) {
-// 	mongoose.connect(process.env.MONGOHQ_URL);
-// }
+if (process.env.MONGOHQ_URL) {
+	mongoose.connect(process.env.MONGOHQ_URL);
+}
 
 // create express app
 var app = express();
@@ -114,7 +114,7 @@ var allowCrossDomain = function(req, res, next) {
 	res.header('Access-Control-Allow-Headers', 'Content-Type');
 	next();
 };
-app.use(allowCrossDomain);
+// app.use(allowCrossDomain);
 
 // using router before static files is optimized
 // since we have less routes then files, and the routes are in memory.
@@ -196,13 +196,14 @@ function error_501(req, res, next) {
 // ROUTES //
 ////////////
 
-var engine = require('./lib/engine');
 var users = require('./lib/users');
+app.post('/api/action_log', users.mk_session, users.action_log);
+app.post('/api/signup', users.mk_session, users.signup);
 
-app.post('/api/analyze', engine.analyze_api);
-app.post('/api/signup', users.signup);
+var engine = require('./lib/engine');
+app.post('/api/analyze', users.mk_session, engine.analyze_api);
 
-app.get('/', function(req, res) {
+app.get('/', users.mk_session, function(req, res) {
 	return res.render('main.html');
 });
 
