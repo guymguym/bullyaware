@@ -9,6 +9,7 @@
 		"postinstall": "./node_modules/.bin/grunt"
 	},
 	"dependencies": {
+		"nodetime": "0.8.13",
 		"underscore": "1.5.1",
 		"util": "0.4.9",
 		"string": "1.6.0",
@@ -37,7 +38,6 @@
 		"blueimp-file-upload": "8.6.1",
 		"filesize": "1.10.0",
 		"bowser": "0.3.1",
-		"nodetime": "0.8.13",
 		"passport": "0.1.17",
 		"passport-facebook": "0.1.5",
 		"passport-google-oauth": "0.1.5",

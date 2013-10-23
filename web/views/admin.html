@@ -19,6 +19,24 @@
 	<div id="bg" style="display: none"></div>
 
 	<div class="container" style="margin-top: 20px">
+
+
+		<div>
+			<h1>Stats</h1>
+			<div class="row">
+				<div class="col-xs-6"># Sessions</div>
+				<div class="col-xs-6">{{data.sessions.length}}</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6"># Users</div>
+				<div class="col-xs-6">{{data.users.length}}</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6"># Actions</div>
+				<div class="col-xs-6">{{data.actions.length}}</div>
+			</div>
+		</div>
+
 		<div class="row" ng-repeat="session in data.sessions | orderBy:'_id':true">
 			<div class="row hdr">
 				<div class="col-xs-1">Session</div>
