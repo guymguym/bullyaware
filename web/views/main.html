@@ -68,17 +68,7 @@
 
 	<div class="container" style="margin-top: 0px">
 
-		<div class="row">
-			<div class="col-xs-12">
-				<div id="box_header" class="bx">
-					<div class="bgx">
-						<h3>BullyAware. Always vigilant.</h3>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
+		<div id="welcome_view" class="row">
 			<div class="col-sm-6">
 
 				<div id="box_welcome" class="bx">
@@ -89,12 +79,23 @@
 
 				<div id="box_example" class="bx">
 					<div class="bgx">
-						<h5>
+						<h4>
 							Click for a distress-level analysis example &nbsp;
-							<button class="btn btn-primary" ng-click="check()">
+							<button class="btn btn-primary" ng-click="analyze()">
 								<i class="icon-arrow-right"></i>	
 							</button>
-						</h5>
+						</h4>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="main_view" class="row">
+			<div class="col-sm-6">
+
+				<div id="box_header" class="bx">
+					<div class="bgx">
+						<h3>BullyAware. Always vigilant.</h3>
 					</div>
 				</div>
 
@@ -102,7 +103,13 @@
 					<div class="bgx">
 						<!-- <h3 id="about_us">About</h3> -->
 						<p class="lead">
-							In an age of fast and blurry communication BullyAware allows you to monitor cyber-bullying, and get notified on abusive and offensive social messages - Sign up to protect your loved ones.
+							Parents are always the last to know. In an age of fast and blurry communication BullyAware allows you to monitor and get notified on abusive and offensive social messages.
+						</p>
+						<p class="lead">
+							Protect your loved ones &nbsp;
+							<button class="btn btn-primary" ng-click="open_signup()">
+								Sign up
+							</button>
 						</p>
 					</div>
 				</div>
@@ -126,22 +133,6 @@
 							</div>
 
 							<div class="form-group">
-								<select class="form-control" required ng-model="user_role" ng-change="on_user_role()">
-									<option value="" disabled>You are a...</option>
-									<option value="parent">Parent</option>
-									<option value="teenager">Teenager</option>
-									<option value="other">Other</option>
-								</select>
-							</div>
-
-							<div class="form-group">
-								<label>Interested in:</label>&nbsp;
-								<span ng-repeat="type in account_types" title="{{type.name}}" ng-click="on_click_account_type(type)" style="cursor: pointer">
-									<i style="color: {{type.checked && type.color || '#d0d0d0'}}" class="{{type.icon}} icon-2x icon-fixed-width"></i>
-								</span>
-							</div>
-
-							<div class="form-group">
 								<button class="btn btn-primary form-control" ng-click="signup()">
 									Sign Up
 								</button>
@@ -152,13 +143,37 @@
 						<div id="thanks" style="display: none">
 							<h3>Thank you!</h3>
 							<h5>We will contact you as soon as possible to this email address:</h5>
-							<h5>
+							<p>
 								<b>{{ user && user.email || 'HOLDER' }}</b>
 								<a href="/user/logout">
 									<small>logout</small>
 								</a>
-							</h5>
+							</p>
+							<br/>
+
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<label class="col-sm-3 control-label">You are a:</label>
+									<div class="col-sm-9">
+										<select class="form-control" ng-model="user_role" ng-change="on_user_role()">
+											<option value="" disabled></option>
+											<option value="parent">Parent</option>
+											<option value="teenager">Teenager</option>
+											<option value="other">Other</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">Interested in:</label>
+									<div class="col-sm-9">
+										<span ng-repeat="type in account_types" title="{{type.name}}" ng-click="on_click_account_type(type, $event)" style="cursor: pointer">
+											<i style="color: {{(type.checked || type.hover) && type.color || '#d0d0d0'}}" class="{{type.icon}} icon-2x icon-fixed-width" ng-mouseenter="type.hover = true" ng-mouseleave="type.hover = false"></i>
+										</span>
+									</div>
+								</div>
+							</form>
 						</div>
+
 					</div>
 				</div>
 
@@ -167,12 +182,41 @@
 
 			<div class="col-sm-6">
 
-				<div id="box_results" class="bx">
+				<div id="box_analyze" class="bx">
 					<div class="bgx">
 						<h3>Distress level analysis</h3>
+
+						<h5>Enter a Twitter account to perform live analysis:</h5>
+						<div class="form-group input-group">
+							<div class="input-group-btn">
+								<!-- UNUSED DROPDOWN -->
+								<button type="button" class="btn btn-default TODO-dropdown-toggle" data-toggle="TODO-dropdown" ng-click="on_tryit_account_type()">
+									<i class="{{account_type.icon}} icon-large icon-fixed-width" style="color: {{account_type.color}}"></i>
+									<span ng-show="false" class="caret"></span>
+								</button>
+								<ul class="dropdown-menu text-left">
+									<li ng-repeat="type in account_types">
+										<a href="#" ng-click="choose_account_type(type)">
+											<i class="{{type.icon}} icon-2x icon-fixed-width" style="color: {{type.color}}"></i>
+											{{type.name}}
+										</a>
+									</li>
+								</ul>
+							</div>
+
+							<input id="target_account" ng-model="target_account" type="text" class="form-control" placeholder="Enter {{account_type.name}} account" autocomplete="on" />
+
+							<div class="input-group-btn">
+								<button type="button" class="btn btn-primary" ng-click="analyze()">
+									<i class="icon-arrow-right icon-large icon-fixed-width"></i>
+								</button>
+							</div>
+						</div>
+
 						<div ng-show="!last_result" class="text-center">
 							<i class="icon-spin icon-spinner" style="font-size: 40pxl line-height: 60px"></i>
 						</div>
+
 						<div ng-show="last_result">
 
 							<h4>Summary</h4>
@@ -203,12 +247,16 @@
 								</li>
 							</ul>
 
+							<h4>Timeline</h4>
+							<p>Click on the points to see the related message</p>
+							<div id="graph"></div>
+
 							<h4>Top Priority</h4>
 							<ul class="icons-ul" style="margin-left: 0">
 								<li ng-repeat="user in last_result.users | limitTo:3" style="padding:0">
 									<a ng-href="//twitter.com/{{user.info.screen_name}}" target="_blank" style="color: black">
-										<!-- <img ng-src="{{user.info.profile_image_url}}" width="40" height="40" style="border: solid 2px white"/> -->
-										<i class="icon-li icon-user icon-fixed-width"></i>
+										<img ng-src="{{user.info.profile_image_url}}" width="30" height="30" style="border: solid 2px white" />
+										<!-- <i class="icon-li icon-user icon-fixed-width"></i> -->
 										<b>{{ user.info.name }}</b>
 									</a>
 									<ul class="icons-ul" style="margin-left: 0">
@@ -219,45 +267,10 @@
 									</ul>
 								</li>
 							</ul>
-
-							<h4>Timeline</h4>
-							<p>Click on the points to see the related message</p>
-							<div id="graph"></div>
 						</div>
 					</div>
 				</div>
 
-				<div id="box_check" class="bx">
-					<div class="bgx">
-						<h3>Try it</h3>
-						<h5>Enter another Twitter account to check now:</h5>
-						<div class="form-group input-group">
-							<div class="input-group-btn">
-								<!-- UNUSED DROPDOWN -->
-								<button type="button" class="btn btn-default TODO-dropdown-toggle" data-toggle="TODO-dropdown" ng-click="on_tryit_account_type()">
-									<i class="{{account_type.icon}} icon-large icon-fixed-width" style="color: {{account_type.color}}"></i>
-									<span ng-show="false" class="caret"></span>
-								</button>
-								<ul class="dropdown-menu text-left">
-									<li ng-repeat="type in account_types">
-										<a href="#" ng-click="choose_account_type(type)">
-											<i class="{{type.icon}} icon-2x icon-fixed-width" style="color: {{type.color}}"></i>
-											{{type.name}}
-										</a>
-									</li>
-								</ul>
-							</div>
-
-							<input id="target_account" ng-model="target_account" type="text" class="form-control" placeholder="Enter {{account_type.name}} account" autocomplete="on" />
-
-							<div class="input-group-btn">
-								<button type="button" class="btn btn-primary" ng-click="check()">
-									<i class="icon-arrow-right icon-large icon-fixed-width"></i>
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
 
 			</div>
 		</div>

@@ -87,8 +87,8 @@ exports.action_log = function(req, res) {
 	/* TODO: validity needed?
 	_.pick(req.body,
 		'load_page',
-		'check_demo',
-		'check_try',
+		'analyze_demo',
+		'analyze_try',
 		'try_account_type',
 		'contact_us',
 		'about_us',

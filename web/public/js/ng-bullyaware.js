@@ -229,7 +229,11 @@
 			});
 		};
 
-		$scope.on_click_account_type = function(type) {
+		$scope.on_click_account_type = function(type, event) {
+			$(event.target).effect({
+				effect: 'pulsate',
+				times: 2
+			});
 			type.checked = !type.checked;
 			if (type.checked) {
 				action_log({
@@ -260,6 +264,13 @@
 			});
 		};
 
+		$scope.open_signup = function() {
+			$('#box_signup').fadeIn(1000);
+			action_log({
+				open_signup: true
+			});
+		};
+
 		$scope.on_user_role = function() {
 			action_log({
 				user_role: $scope.user_role
@@ -277,15 +288,15 @@
 
 		var DEMO_ACCOUNT = 'MileyCyrus';
 
-		$scope.check = function() {
+		$scope.analyze = function() {
 			if (!$scope.target_account || $scope.target_account === DEMO_ACCOUNT) {
 				action_log({
-					check_demo: DEMO_ACCOUNT
+					analyze_demo: DEMO_ACCOUNT
 				});
 				$scope.target_account = DEMO_ACCOUNT;
 			} else {
 				action_log({
-					check_try: $scope.target_account
+					analyze_try: $scope.target_account
 				});
 			}
 			if ($scope.target_account[0] === '@') {
@@ -299,18 +310,18 @@
 			var duration = 1000;
 			$.when(
 				$('body').switchClass('lights-off', 'lights-on', duration),
-				$('#bg, #box_example, #box_welcome').fadeOut(duration)
+				$('#bg, #welcome_view').fadeOut(duration)
 			).then(function() {
 				return $('#box_header').fadeIn(duration);
 			}).then(function() {
 				return $('#box_description').fadeIn(duration);
 			}).then(function() {
-				return $('#box_signup').fadeIn(duration);
+				if ($scope.user) {
+					return $('#box_signup').fadeIn(1000);
+				}
 			}).then(function() {
 				fill_graph();
-				return $('#box_results').fadeIn(duration);
-			}).then(function() {
-				return $('#box_check').fadeIn(duration);
+				return $('#box_analyze').fadeIn(duration);
 			});
 
 			return $http({
