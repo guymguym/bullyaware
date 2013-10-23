@@ -230,7 +230,7 @@
 		};
 
 		$scope.on_click_account_type = function(type) {
-			type.checked = !type.checked
+			type.checked = !type.checked;
 			if (type.checked) {
 				action_log({
 					account_type_set: type.name
