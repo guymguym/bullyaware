@@ -83,7 +83,9 @@ exports.action_log = function(req, res) {
 		act.user = req.session.user.id;
 	}
 	// pick only expected fields
-	act.data = _.pick(req.body,
+	act.data = req.body;
+	/* TODO: validity needed?
+	_.pick(req.body,
 		'load_page',
 		'check_demo',
 		'check_try',
@@ -93,6 +95,7 @@ exports.action_log = function(req, res) {
 		'support_call',
 		'user_role'
 	);
+	*/
 	// saving request headers in case they will become valuable
 	act.req = {
 		headers: _.clone(req.headers)

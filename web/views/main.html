@@ -90,7 +90,7 @@
 				<div id="box_example" class="bx">
 					<div class="bgx">
 						<h5>
-							Click for a distress-level analysis example
+							Click for a distress-level analysis example &nbsp;
 							<button class="btn btn-primary" ng-click="check()">
 								<i class="icon-arrow-right"></i>	
 							</button>
@@ -114,15 +114,6 @@
 							<h5>Get personal monitoring and alerts on up to 10 social media users.</h5>
 
 							<div class="form-group">
-								<select class="form-control" required ng-model="user_role" ng-change="on_user_role()">
-									<option value="" disabled>You're a ...</option>
-									<option value="parent">Parent</option>
-									<option value="teenager">Teenager</option>
-									<option value="other">Other</option>
-								</select>
-							</div>
-
-							<div class="form-group">
 								<input id="user_email" required ng-model="user_email" type="email" class="form-control" placeholder="Your email address" autocomplete="off" ng-readonly="user" name="email" />
 							</div>
 
@@ -132,6 +123,22 @@
 
 							<div class="form-group">
 								<input id="user_password2" required ng-model="user_password2" type="password" class="form-control" placeholder="Retype password" ng-readonly="user" name="password2" />
+							</div>
+
+							<div class="form-group">
+								<select class="form-control" required ng-model="user_role" ng-change="on_user_role()">
+									<option value="" disabled>You are a...</option>
+									<option value="parent">Parent</option>
+									<option value="teenager">Teenager</option>
+									<option value="other">Other</option>
+								</select>
+							</div>
+
+							<div class="form-group">
+								<label>Interested in:</label>&nbsp;
+								<span ng-repeat="type in account_types" title="{{type.name}}" ng-click="on_click_account_type(type)" style="cursor: pointer">
+									<i style="color: {{type.checked && type.color || '#d0d0d0'}}" class="{{type.icon}} icon-2x icon-fixed-width"></i>
+								</span>
 							</div>
 
 							<div class="form-group">
@@ -226,9 +233,10 @@
 						<h5>Enter another Twitter account to check now:</h5>
 						<div class="form-group input-group">
 							<div class="input-group-btn">
-								<button type="button" class="btn btn-default TODO-dropdown-toggle" data-toggle="TODO-dropdown" ng-click="on_change_account_type()">
+								<!-- UNUSED DROPDOWN -->
+								<button type="button" class="btn btn-default TODO-dropdown-toggle" data-toggle="TODO-dropdown" ng-click="on_tryit_account_type()">
 									<i class="{{account_type.icon}} icon-large icon-fixed-width" style="color: {{account_type.color}}"></i>
-									<span class="caret"></span>
+									<span ng-show="false" class="caret"></span>
 								</button>
 								<ul class="dropdown-menu text-left">
 									<li ng-repeat="type in account_types">

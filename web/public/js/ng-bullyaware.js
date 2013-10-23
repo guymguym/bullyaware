@@ -189,6 +189,18 @@
 			icon: 'icon-facebook-sign',
 			color: '#66b'
 		}, {
+			name: 'Google+',
+			icon: 'icon-google-plus-sign',
+			color: '#c33'
+		}, {
+			name: 'Youtube',
+			icon: 'icon-youtube-sign',
+			color: '#a66'
+		}, {
+			name: 'Instagram',
+			icon: 'icon-instagram',
+			color: '#881'
+		}, {
 			name: 'Tumblr',
 			icon: 'icon-tumblr-sign',
 			color: '#33b'
@@ -200,17 +212,34 @@
 			name: 'Pinterest',
 			icon: 'icon-pinterest-sign',
 			color: '#b33'
+		}, {
+			name: 'Other',
+			icon: 'icon-question-sign',
+			color: '#777'
 		}];
-		$scope.account_type = $scope.account_types[0];
 
+		$scope.account_type = $scope.account_types[0];
 		$scope.choose_account_type = function(type) {
 			$scope.account_type = type;
 		};
 
-		$scope.on_change_account_type = function() {
+		$scope.on_tryit_account_type = function() {
 			action_log({
-				try_account_type: true
+				account_type_tryit: true
 			});
+		};
+
+		$scope.on_click_account_type = function(type) {
+			type.checked = !type.checked
+			if (type.checked) {
+				action_log({
+					account_type_set: type.name
+				});
+			} else {
+				action_log({
+					account_type_unset: type.name
+				});
+			}
 		};
 
 		$scope.on_contact_us = function() {
@@ -267,7 +296,7 @@
 			$scope.last_result = '';
 			$scope.last_error = null;
 
-			var duration = 500;
+			var duration = 1000;
 			$.when(
 				$('body').switchClass('lights-off', 'lights-on', duration),
 				$('#bg, #box_example, #box_welcome').fadeOut(duration)
@@ -355,11 +384,11 @@
 		};
 		$scope.level_to_color = function(level) {
 			if ($scope.is_level_low(level)) {
-				return "rgb(50, 200, 50)";
+				return "rgb(80, 170, 80)";
 			} else if ($scope.is_level_high(level)) {
-				return "rgb(200, 50, 50)";
+				return "rgb(170, 80, 80)";
 			} else {
-				return "rgb(200, 200, 50)";
+				return "rgb(170, 170, 80)";
 			}
 		};
 
@@ -424,6 +453,9 @@
 				return yscale(msg.level);
 			}).duration(2000).delay(750);
 			circles.on('click', function(msg) {
+				action_log({
+					timeline_details: msg
+				});
 				alert('[Level ' + (msg.level * 100).toFixed(0) +
 					'%] [Retweeted ' + msg.retweet_count + '] ' + msg.text);
 			});
