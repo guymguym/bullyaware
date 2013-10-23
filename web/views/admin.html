@@ -5,9 +5,11 @@
 	<?# def.include( 'common_head.html') ?>
 
 		<style type="text/css">
-		body {
-			background-color: black;
-			color: white;
+		.hdr {
+			background-color: #f0f0f0;
+			border: 2px solid #e0e0e0;
+			border-radius: 10px;
+			padding: 10px;
 		}
 		</style>
 </head>
@@ -17,27 +19,24 @@
 	<div id="bg" style="display: none"></div>
 
 	<div class="container" style="margin-top: 20px">
-		<table class="table">
-			<thead>
-				<th>#</th>
-				<th>Session</th>
-				<th>User</th>
-				<th>Email</th>
-			</thead>
-			<tbody>
-				<tr ng-repeat="session in data.sessions | orderBy:'_id':true">
-					<td>{{ data.sessions.length-$index }}</td>
-					<td>{{ session._id }}</td>
-					<td>{{ session.user }}</td>
-					<td>{{ users[session.user].email }}</td>
-					<td colspan="4">
-					<div ng-repeat="action in actions[session._id]">
-						{{ stringify(action.data) }}
+		<div class="row" ng-repeat="session in data.sessions | orderBy:'_id':true">
+			<div class="row hdr">
+				<div class="col-xs-1">Session</div>
+				<div class="col-xs-1">#{{ data.sessions.length-$index }}</div>
+				<div class="col-sm-5">{{ users[session.user].email }}</div>
+				<div class="col-sm-5">({{ session._id }},{{ session.user }})</div>
+			</div>
+			<div class="row">
+				<div ng-repeat="action in actions[session._id]">
+					<div class="col-xs-1"></div>
+					<div class="col-xs-1">#{{data.sessions.length - $parent.$index}} . {{$index}}</div>
+					<div class="col-xs-10">
+						<span ng-repeat="(key,val) in action.data">{{key}}: {{val}}{{!$last && ','||''}}</span>
+						&nbsp;
 					</div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<?# def.include( 'common_scripts.html') ?>

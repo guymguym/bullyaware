@@ -221,6 +221,7 @@ app.post('/engine/analyze', users.mk_session, engine.analyze_api);
 
 app.get('/', users.mk_session, function(req, res) {
 	return res.render('main.html', {
+		session: req.session.session_id,
 		user: req.session.user
 	});
 });

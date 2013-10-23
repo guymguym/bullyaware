@@ -36,9 +36,6 @@
 			border-radius: 10px;
 			padding: 10px 20px 10px 20px;
 		}
-		.bgx-top {
-			min-height: 200px;
-		}
 		.lights-on .bgx {
 			background-color: #f0f0f0;
 			border: 2px solid #e0e0e0;
@@ -54,7 +51,7 @@
 			border: solid 1px black;
 		}
 		body {
-			padding-bottom: 70px;
+			padding-bottom: 100px;
 		}
 		.css-form input.ng-invalid.ng-dirty {
 			background-color: rgba(250, 150, 150, 0.3);
@@ -102,12 +99,10 @@
 				</div>
 
 				<div id="box_description" class="bx">
-					<div class="bgx bgx-top">
+					<div class="bgx">
+						<!-- <h3 id="about_us">About</h3> -->
 						<p class="lead">
-							In an age of blurred communcation BullyAware allows you to monitor cyber-bullying, and get notified on abusive and offensive social messages.
-						</p>
-						<p class="lead">
-							Sign up to protect your loved ones.
+							In an age of fast and blurry communication BullyAware allows you to monitor cyber-bullying, and get notified on abusive and offensive social messages - Sign up to protect your loved ones.
 						</p>
 					</div>
 				</div>
@@ -116,7 +111,7 @@
 					<div class="bgx">
 						<form id="signup_form" name="form" role="form" novalidate class="css-form">
 							<h3>Subscribe</h3>
-							<h5>Get automatic alerts on up to 10 social media users.</h5>
+							<h5>Get personal monitoring and alerts on up to 10 social media users.</h5>
 
 							<div class="form-group">
 								<select class="form-control" required ng-model="user_role" ng-change="on_user_role()">
@@ -160,19 +155,80 @@
 					</div>
 				</div>
 
+
 			</div>
 
 			<div class="col-sm-6">
 
+				<div id="box_results" class="bx">
+					<div class="bgx">
+						<h3>Distress level analysis</h3>
+						<div ng-show="!last_result" class="text-center">
+							<i class="icon-spin icon-spinner" style="font-size: 40pxl line-height: 60px"></i>
+						</div>
+						<div ng-show="last_result">
+
+							<h4>Summary</h4>
+							<ul class="icons-ul" style="margin-left: 0; color: {{level_to_color(last_result.level)}}">
+								<li>
+									<i class="icon-li icon-ok"></i>
+									Analyzed Twitter account {{last_query}}
+								</li>
+								<li>
+									<i class="icon-li icon-ok"></i>
+									Performed text processing on last {{last_result.messages.length}} messages
+								</li>
+								<li ng-show="is_level_low(last_result.level)">
+									<i class="icon-li icon-ok"></i>
+									The current status seems to be fine
+								</li>
+								<li ng-show="is_level_med(last_result.level)">
+									<i class="icon-li icon-ok"></i>
+									The current status seems to require some attention
+								</li>
+								<li ng-show="is_level_high(last_result.level)">
+									<i class="icon-li icon-ok"></i>
+									The current status seems to be problematic and requires serious attention
+								</li>
+								<li>
+									<i class="icon-li icon-ok"></i>
+									Monitoring is advised
+								</li>
+							</ul>
+
+							<h4>Top Priority</h4>
+							<ul class="icons-ul" style="margin-left: 0">
+								<li ng-repeat="user in last_result.users | limitTo:3" style="padding:0">
+									<a ng-href="//twitter.com/{{user.info.screen_name}}" target="_blank" style="color: black">
+										<!-- <img ng-src="{{user.info.profile_image_url}}" width="40" height="40" style="border: solid 2px white"/> -->
+										<i class="icon-li icon-user icon-fixed-width"></i>
+										<b>{{ user.info.name }}</b>
+									</a>
+									<ul class="icons-ul" style="margin-left: 0">
+										<li ng-repeat="msg in user.messages | limitTo:3" style="padding:0">
+											<i class="icon-li icon-twitter icon-fixed-width" style="color: {{level_to_color(msg.level)}}"></i>
+											{{ msg.text }}
+										</li>
+									</ul>
+								</li>
+							</ul>
+
+							<h4>Timeline</h4>
+							<p>Click on the points to see the related message</p>
+							<div id="graph"></div>
+						</div>
+					</div>
+				</div>
+
 				<div id="box_check" class="bx">
-					<div class="bgx bgx-top">
+					<div class="bgx">
 						<h3>Try it</h3>
 						<h5>Enter another Twitter account to check now:</h5>
 						<div class="form-group input-group">
 							<div class="input-group-btn">
 								<button type="button" class="btn btn-default TODO-dropdown-toggle" data-toggle="TODO-dropdown" ng-click="on_change_account_type()">
 									<i class="{{account_type.icon}} icon-large icon-fixed-width" style="color: {{account_type.color}}"></i>
-									<span ng-show="false" class="caret"></span>
+									<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu text-left">
 									<li ng-repeat="type in account_types">
@@ -195,33 +251,6 @@
 					</div>
 				</div>
 
-				<div id="box_results" class="bx">
-					<div class="bgx">
-						<h3>Distress level analysis</h3>
-						<div ng-show="!last_result" class="text-center">
-							<i class="icon-spin icon-spinner" style="font-size: 40px"></i>
-						</div>
-						<div ng-show="last_result">
-							<b>{{ last_query }}</b> - LEVEL {{ last_result.level }}
-							<div id="graph"></div>
-							<div class="text-left">
-								<div ng-repeat="user in last_result.users | limitTo:3">
-									<b>{{ user.info.name }}</b> - LEVEL {{ user.level }}
-									<div ng-repeat="msg in user.messages | limitTo:3">
-										{{ msg.text }} - LEVEL {{ msg.level }}
-									</div>
-									<div ng-show="user.messages.length > 3">
-										...
-									</div>
-								</div>
-								<div ng-show="last_result.users.length > 3">
-									...
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
 			</div>
 		</div>
 	</div>
@@ -233,9 +262,19 @@
 					<div style="margin-left: 10px">
 						<b>BullyAware.co</b>
 						&nbsp;
-						<a href="mailto:info@bullyaware.co" target="_blank" ng-click="on_contact_us()">
-							<i class="icon-envelope-alt icon-large icon-fixed-width"></i>
+						<a href="#about_us" ng-click="on_about_us()">
+							<i class="icon-info-sign icon-large icon-fixed-width"></i>
+							About us
+						</a>
+						&nbsp;
+						<a ng-href="mailto:info@bullyaware.co?subject=Hi There   (id {{session_id}},{{user._id}})" target="_blank" ng-click="on_contact_us()">
+							<i class="icon-envelope icon-large icon-fixed-width"></i>
 							Contact us
+						</a>
+						&nbsp;
+						<a ng-href="mailto:info@bullyaware.co?subject=Support Call   (id {{session_id}},{{user._id}})" target="_blank" ng-click="on_support()">
+							<i class="icon-question-sign icon-large icon-fixed-width"></i>
+							Support
 						</a>
 					</div>
 				</div>

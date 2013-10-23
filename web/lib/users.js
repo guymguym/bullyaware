@@ -89,6 +89,8 @@ exports.action_log = function(req, res) {
 		'check_try',
 		'try_account_type',
 		'contact_us',
+		'about_us',
+		'support_call',
 		'user_role'
 	);
 	// saving request headers in case they will become valuable

@@ -138,6 +138,7 @@
 	function BullyCtrl($scope, $http, $q, $timeout, $location) {
 		$scope.location = $location;
 		$scope.server_data = JSON.parse($('#server_data').html());
+		$scope.session_id = $scope.server_data.session;
 		set_user($scope.server_data.user);
 
 		function set_user(user) {
@@ -218,6 +219,18 @@
 			});
 		};
 
+		$scope.on_about_us = function() {
+			action_log({
+				about_us: true
+			});
+		};
+
+		$scope.on_support_call = function() {
+			action_log({
+				support_call: true
+			});
+		};
+
 		$scope.on_user_role = function() {
 			action_log({
 				user_role: $scope.user_role
@@ -265,10 +278,10 @@
 			}).then(function() {
 				return $('#box_signup').fadeIn(duration);
 			}).then(function() {
-				return $('#box_check').fadeIn(duration);
-			}).then(function() {
 				fill_graph();
 				return $('#box_results').fadeIn(duration);
+			}).then(function() {
+				return $('#box_check').fadeIn(duration);
 			});
 
 			return $http({
@@ -331,15 +344,32 @@
 			});
 		};
 
-
+		$scope.is_level_low = function(level) {
+			return level < 0.4;
+		};
+		$scope.is_level_med = function(level) {
+			return level >= 0.4 && level < 0.7;
+		};
+		$scope.is_level_high = function(level) {
+			return level >= 0.7;
+		};
+		$scope.level_to_color = function(level) {
+			if ($scope.is_level_low(level)) {
+				return "rgb(50, 200, 50)";
+			} else if ($scope.is_level_high(level)) {
+				return "rgb(200, 50, 50)";
+			} else {
+				return "rgb(200, 200, 50)";
+			}
+		};
 
 		function fill_graph() {
 			if (!$scope.last_result) {
 				return;
 			}
 			d3.select("#graph").select("svg").remove();
-			var width = $("#graph").parent().parent().parent().parent().width() - 80;
-			var height = 300;
+			var width = $("#graph").parent().parent().parent().parent().width() - 50;
+			var height = 200;
 			var pad = 25;
 			var messages = $scope.last_result.messages;
 			if (!messages || !messages.length) {
@@ -374,7 +404,7 @@
 				.range([pad, height - pad - pad]);
 
 			var radius = function(msg) {
-				return msg.retweet_count >= 10 ? 50 : ((msg.retweet_count + 1) * 50 / 10);
+				return 7 + Math.min(msg.retweet_count, 5) * 2;
 			};
 			var circles = svg.selectAll("circle")
 				.data(messages)
@@ -385,19 +415,17 @@
 			});
 			circles.attr("r", radius);
 			circles.attr("fill", function(msg) {
-				return "rgba(" + (msg.level * 250) + ", 150, 220, 0.8)";
+				return $scope.level_to_color(msg.level);
 			});
-			circles.attr("stroke", "rgba(100, 220, 50, 0.40)");
-			circles.attr("stroke-width", function(msg) {
-				return radius(msg) / 2;
-			});
+			circles.attr("stroke", "rgba(255,255,255,0.5)");
+			circles.attr("stroke-width", '2px');
 			var y0 = yscale(0);
 			circles.attr("cy", y0).transition().attr("cy", function(msg, i) {
 				return yscale(msg.level);
 			}).duration(2000).delay(750);
 			circles.on('click', function(msg) {
-				alert('(Bully-level ' + (msg.level * 100).toFixed(0) +
-					'% Retweeted ' + msg.retweet_count + ') ' + msg.text);
+				alert('[Level ' + (msg.level * 100).toFixed(0) +
+					'%] [Retweeted ' + msg.retweet_count + '] ' + msg.text);
 			});
 		}
 
