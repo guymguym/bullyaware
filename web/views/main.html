@@ -5,60 +5,7 @@
 	<?# def.include( 'common_head.html') ?>
 
 		<style type="text/css">
-		h1, h2, h3, h4, h5, h6, p, a, span, div {
-			/*font-family:'Open Sans', sans-serif !important;*/
-		}
-		.lights-off {
-			background-color: black;
-		}
-		.lights-on {
-			background-color: white;
-		}
-		#bg {
-			position: fixed;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			background: url('/public/img/5907015_l.jpg') no-repeat center center fixed;
-			-webkit-background-size: cover;
-			-moz-background-size: cover;
-			-o-background-size: cover;
-			background-size: cover;
-		}
-		.bx {
-			display: none;
-			padding-top: 30px;
-		}
-		.bgx {
-			background-color: rgba(255, 255, 255, 0.75);
-			border: 2px solid rgba(255, 255, 255, 0.95);
-			border-radius: 10px;
-			padding: 10px 20px 10px 20px;
-		}
-		.lights-on .bgx {
-			background-color: #f0f0f0;
-			border: 2px solid #e0e0e0;
-		}
-		#footer {
-			position: fixed;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background-color: white;
-			padding: 20px;
-			margin-top: 20px;
-			border: solid 1px black;
-		}
-		body {
-			padding-bottom: 100px;
-		}
-		.css-form input.ng-invalid.ng-dirty {
-			background-color: rgba(250, 150, 150, 0.3);
-		}
-		.css-form input.ng-valid.ng-dirty {
-			background-color: rgba(150, 200, 250, 0.3);
-		}
+		
 		</style>
 </head>
 
@@ -68,27 +15,29 @@
 
 	<div class="container" style="margin-top: 0px">
 
+
 		<div id="welcome_view" class="row">
 			<div class="col-sm-6">
-
-				<div id="box_welcome" class="bx">
+				<div id="welcome_header" class="bx">
 					<div class="bgx">
 						<h3>Someone you know might be the target of cyber-bullying</h3>
 					</div>
 				</div>
-
-				<div id="box_example" class="bx">
+				<div id="welcome_action" class="bx">
 					<div class="bgx">
 						<h4>
-							Click for a distress-level analysis example &nbsp;
-							<button class="btn btn-primary" ng-click="analyze()">
-								<i class="icon-arrow-right"></i>	
-							</button>
+							With our technology you can change that &nbsp;
 						</h4>
+						<div class="text-right">
+							<button class="btn btn-lg btn-primary" ng-click="analyze()">
+								Learn More
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
 
 		<div id="main_view" class="row">
 			<div class="col-sm-6">
@@ -100,16 +49,9 @@
 				</div>
 
 				<div id="box_description" class="bx">
-					<div class="bgx">
-						<!-- <h3 id="about_us">About</h3> -->
+					<div id="about_us" class="bgx">
 						<p class="lead">
 							Parents are always the last to know. In an age of fast and blurry communication BullyAware allows you to monitor and get notified on abusive and offensive social messages.
-						</p>
-						<p class="lead">
-							Protect your loved ones &nbsp;
-							<button class="btn btn-primary" ng-click="open_signup()">
-								Sign up
-							</button>
 						</p>
 					</div>
 				</div>
@@ -117,24 +59,33 @@
 				<div id="box_signup" class="bx">
 					<div class="bgx">
 						<form id="signup_form" name="form" role="form" novalidate class="css-form">
-							<h3>Subscribe</h3>
-							<h5>Get personal monitoring and alerts on up to 10 social media users.</h5>
+							<h4>
+								Sign Up
+							</h4>
+							<p>
+								If you are interested in our technology and would like to use it please let us know by signing up with you email. We won't spam.
+							</p>
 
-							<div class="form-group">
+							<div class="form-group input-group">
 								<input id="user_email" required ng-model="user_email" type="email" class="form-control" placeholder="Your email address" autocomplete="off" ng-readonly="user" name="email" />
+								<div class="input-group-btn">
+									<button class="btn btn-primary form-control" ng-click="signup()">
+										<i class="icon-arrow-right icon-large icon-fixed-width"></i>
+									</button>
+								</div>
 							</div>
 
-							<div class="form-group">
+							<div ng-show="false" class="form-group">
 								<input id="user_password" required ng-model="user_password" type="password" class="form-control" placeholder="Choose password" ng-readonly="user" name="password" />
 							</div>
 
-							<div class="form-group">
+							<div ng-show="false" class="form-group">
 								<input id="user_password2" required ng-model="user_password2" type="password" class="form-control" placeholder="Retype password" ng-readonly="user" name="password2" />
 							</div>
 
-							<div class="form-group">
+							<div ng-show="false" class="form-group">
 								<button class="btn btn-primary form-control" ng-click="signup()">
-									Sign Up
+									<i class="icon-arrow-right icon-large icon-fixed-width"></i>
 								</button>
 							</div>
 
@@ -145,9 +96,11 @@
 							<h5>We will contact you as soon as possible to this email address:</h5>
 							<p>
 								<b>{{ user && user.email || 'HOLDER' }}</b>
-								<a href="/user/logout">
-									<small>logout</small>
+								<!--
+ 								<a href="/user/logout">
+									<small>not me</small>
 								</a>
+								-->
 							</p>
 							<br/>
 
@@ -276,42 +229,18 @@
 		</div>
 	</div>
 
-	<div id="footer">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12">
-					<div style="margin-left: 10px">
-						<b>BullyAware.co</b>
-						&nbsp;
-						<a href="#about_us" ng-click="on_about_us()">
-							<i class="icon-info-sign icon-large icon-fixed-width"></i>
-							About us
-						</a>
-						&nbsp;
-						<a ng-href="mailto:info@bullyaware.co?subject=Hi There   (id {{session_id}},{{user._id}})" target="_blank" ng-click="on_contact_us()">
-							<i class="icon-envelope icon-large icon-fixed-width"></i>
-							Contact us
-						</a>
-						&nbsp;
-						<a ng-href="mailto:info@bullyaware.co?subject=Support Call   (id {{session_id}},{{user._id}})" target="_blank" ng-click="on_support()">
-							<i class="icon-question-sign icon-large icon-fixed-width"></i>
-							Support
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+
+	<?# def.include( 'common_menu.html') ?>
 
 
-	<!-- server data is safely embedded in a JSON type script -->
-	<script id="server_data" type="application/json">
-	<?= JSON.stringify(it) ?>
-	</script>
+		<!-- server data is safely embedded in a JSON type script -->
+		<script id="server_data" type="application/json">
+		<?= JSON.stringify(it) ?>
+		</script>
 
-	<?# def.include( 'common_scripts.html') ?>
-		<script src="/public/js/d3.v3.min.js" charset="utf-8"></script>
+		<?# def.include( 'common_scripts.html') ?>
 
+			<script src="/public/js/d3.v3.min.js" charset="utf-8"></script>
 
 </body>
 

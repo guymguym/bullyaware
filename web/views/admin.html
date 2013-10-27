@@ -75,6 +75,7 @@
 			function AdminCtrl($scope) {
 				$scope.data = JSON.parse($('#server_data').html());
 				$scope.data.sessions.reverse();
+
 				$scope.users = _.indexBy($scope.data.users, '_id');
 				$scope.sessions = _.indexBy($scope.data.sessions, '_id');
 				$scope.actions = _.groupBy($scope.data.actions, 'session');

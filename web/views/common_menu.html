@@ -1,0 +1,44 @@
+<style type="text/css">
+#footer {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: white;
+	padding: 20px;
+	margin-top: 20px;
+	border: solid 1px black;
+}
+body {
+	padding-bottom: 100px;
+}
+</style>
+
+<div id="footer" ng-controller="MenuCtrl">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<div style="margin-left: 10px">
+					<a href="/" style="color: black">
+						<b>BullyAware.co</b>
+					</a>
+					&nbsp;
+					<a href="/about">
+						<i class="icon-info-sign icon-large icon-fixed-width"></i>
+						About us
+					</a>
+					&nbsp;
+					<a ng-href="mailto:info@bullyaware.co?subject=Request for info   (id {{session_id}},{{user._id}})" target="_blank" ng-click="on_contact_us()">
+						<i class="icon-envelope icon-large icon-fixed-width"></i>
+						Contact us
+					</a>
+					&nbsp;
+					<a ng-href="mailto:info@bullyaware.co?subject=Support Call   (id {{session_id}},{{user._id}})" target="_blank" ng-click="on_support()">
+						<i class="icon-question-sign icon-large icon-fixed-width"></i>
+						Support
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

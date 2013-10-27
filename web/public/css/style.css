@@ -1,3 +1,45 @@
+h1, h2, h3, h4, h5, h6, p, a, span, div {
+	/*font-family:'Open Sans', sans-serif !important;*/
+}
+.lights-off {
+	background-color: black;
+}
+.lights-on {
+	background-color: white;
+}
+#bg {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: url('/public/img/5907015_l.jpg') no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.bx {
+	display: none;
+	padding-top: 30px;
+}
+.bgx {
+	background-color: rgba(255, 255, 255, 0.85);
+	border: 2px solid rgba(255, 255, 255, 0.95);
+	border-radius: 10px;
+	padding: 10px 20px 10px 20px;
+}
+.lights-on .bgx {
+	background-color: #f2f2f2;
+	/* #f0f0f0; */
+	border: 2px solid #e0e0e0;
+}
+.css-form input.ng-invalid.ng-dirty {
+	background-color: rgba(250, 150, 150, 0.3);
+}
+.css-form input.ng-valid.ng-dirty {
+	background-color: rgba(150, 200, 250, 0.3);
+}
 .axis path, .axis line {
 	fill: none;
 	stroke: black;
@@ -8,9 +50,9 @@
 	font-size: 11px;
 }
 /*
-	Allow angular.js to be loaded in body, hiding cloaked elements until 
-	templates compile.  The !important is important given that there may be 
-	other selectors that are more specific or come later and might alter display.  
+Allow angular.js to be loaded in body, hiding cloaked elements until 
+templates compile.  The !important is important given that there may be 
+other selectors that are more specific or come later and might alter display.  
 */
 [ng\:cloak], [ng-cloak], .ng-cloak {
 	display: none !important;

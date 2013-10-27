@@ -129,17 +129,58 @@
 		};
 	});
 
+	/*
+	bullyaware_app.directive('baSignup', ['$http', '$timeout',
+		function($http, $timeout) {
+			return {
+				restrict: 'E',
+				transclude: true,
+				scope: {},
+				controller: function($scope) {
+
+				},
+				template: [
+					'<div>',
+					'	<',
+					'</div'
+				].join('\n')
+			};
+		}
+	]);
+	*/
+
+	// general action log to save operations info
+	bullyaware_app.factory('action_log', ['$http',
+		function($http) {
+			return function action_log(data) {
+				return $http({
+					method: 'POST',
+					url: '/user/action_log',
+					data: data
+				}).then(function(res) {
+					console.log('ACTION LOGGED', data);
+					return res;
+				}, function(err) {
+					console.error('ACTION LOG FAILED', err);
+					throw err;
+				});
+			};
+		}
+	]);
+
 
 
 	bullyaware_app.controller('BullyCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$location', BullyCtrl
+		'$scope', '$http', '$q', '$timeout', '$location', 'action_log', BullyCtrl
 	]);
 
-	function BullyCtrl($scope, $http, $q, $timeout, $location) {
+	function BullyCtrl($scope, $http, $q, $timeout, $location, action_log) {
 		$scope.location = $location;
-		$scope.server_data = JSON.parse($('#server_data').html());
+		var server_data_raw = $('#server_data').html();
+		$scope.server_data = server_data_raw ? JSON.parse(server_data_raw) : {};
 		$scope.session_id = $scope.server_data.session;
-		set_user($scope.server_data.user);
+
+		// set_user($scope.server_data.user);
 
 		function set_user(user) {
 			$scope.user = user;
@@ -154,31 +195,14 @@
 			}
 		}
 
-		// start animations on page load
-		$('#bg, #box_welcome, #box_example').fadeIn(1000);
-
-		// general action log to save operations info
-
-		function action_log(data) {
-			return $http({
-				method: 'POST',
-				url: '/user/action_log',
-				data: data
-			}).then(function(res) {
-				console.log('ACTION LOGGED', data);
-				return res;
-			}, function(err) {
-				console.error('ACTION LOG FAILED', err);
-				throw err;
-			});
-		}
 
 		// on page load log the load action
 		action_log({
 			load_page: $location.absUrl()
 		});
 
-
+		// start animations on page load
+		$('#bg, #welcome_header, #welcome_action').fadeIn(1000);
 
 		$scope.account_types = [{
 			name: 'Twitter',
@@ -246,24 +270,6 @@
 			}
 		};
 
-		$scope.on_contact_us = function() {
-			action_log({
-				contact_us: true
-			});
-		};
-
-		$scope.on_about_us = function() {
-			action_log({
-				about_us: true
-			});
-		};
-
-		$scope.on_support_call = function() {
-			action_log({
-				support_call: true
-			});
-		};
-
 		$scope.open_signup = function() {
 			$('#box_signup').fadeIn(1000);
 			action_log({
@@ -316,9 +322,9 @@
 			}).then(function() {
 				return $('#box_description').fadeIn(duration);
 			}).then(function() {
-				if ($scope.user) {
-					return $('#box_signup').fadeIn(1000);
-				}
+				// if ($scope.user) {
+				return $('#box_signup').fadeIn(duration);
+				// }
 			}).then(function() {
 				fill_graph();
 				return $('#box_analyze').fadeIn(duration);
@@ -352,6 +358,7 @@
 				}).focus();
 				return;
 			}
+			/*
 			if (!$scope.user_password) {
 				$("#user_password").effect({
 					effect: 'highlight',
@@ -368,6 +375,7 @@
 				}).focus();
 				return;
 			}
+			*/
 			return $http({
 				method: 'POST',
 				url: '/user/signup',
@@ -473,5 +481,43 @@
 		}
 
 	}
+
+
+
+
+	bullyaware_app.controller('AboutCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$location', 'action_log', AboutCtrl
+	]);
+
+	function AboutCtrl($scope, $http, $q, $timeout, $location, action_log) {
+		// on page load log the load action
+		action_log({
+			load_page: $location.absUrl()
+		});
+
+		$.when($('#about_head').fadeIn(1000)).then(function() {
+			return $('#about_content').fadeIn(1000);
+		});
+	}
+
+
+
+	bullyaware_app.controller('MenuCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$location', 'action_log', MenuCtrl
+	]);
+
+	function MenuCtrl($scope, $http, $q, $timeout, $location, action_log) {
+		$scope.on_contact_us = function() {
+			action_log({
+				contact_us: true
+			});
+		};
+		$scope.on_support_call = function() {
+			action_log({
+				support_call: true
+			});
+		};
+	}
+
 
 })();

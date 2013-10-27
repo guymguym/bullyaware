@@ -219,11 +219,20 @@ app.get('/admin', admin_auth, function(req, res, next) {
 var engine = require('./lib/engine');
 app.post('/engine/analyze', users.mk_session, engine.analyze_api);
 
-app.get('/', users.mk_session, function(req, res) {
-	return res.render('main.html', {
+
+function page_context(req) {
+	return {
 		session: req.session.session_id,
 		user: req.session.user
-	});
+	};
+}
+
+app.get('/', users.mk_session, function(req, res) {
+	return res.render('main.html', page_context(req));
+});
+
+app.get('/about', users.mk_session, function(req, res) {
+	return res.render('about.html', page_context(req));
 });
 
 

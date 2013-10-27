@@ -5,17 +5,17 @@
 	<?# def.include( 'common_head.html') ?>
 </head>
 
-<body>
+<body ng-controller="BullyCtrl">
 	<div class="jumbotron">
 		<div class="container">
-			<h1>OOPS</h1>
-			<h3>an error has occured</h3>
-			<div class="lead">
+			<h3>We're getting reports that this page cannot be found. Stay tuned as this crisis unfolds.</h3>
+			<div ng-show="false" class="lead">
 				<?! JSON.stringify(it.err) ?>
 			</div>
 		</div>
 	</div>
-	<?# def.include( 'common_scripts.html') ?>
+	<?# def.include( 'common_menu.html') ?>
+		<?# def.include( 'common_scripts.html') ?>
 </body>
 
 </html>
