@@ -57,7 +57,7 @@
 				<div class="hdr">
 					<span>Session #{{ data.sessions.length-$index }}</span>
 					&nbsp;
-					<span>EMAIL {{ users[session.user].email }}</span>
+					<span>{{ users[session.user].email && ('EMAIL ' + users[session.user].email) || ''}}</span>
 					&nbsp;
 					<span>({{ session._id }},{{ session.user }})</span>
 				</div>
