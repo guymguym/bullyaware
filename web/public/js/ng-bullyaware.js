@@ -376,13 +376,17 @@
 				return;
 			}
 			*/
+			// send action log async
+			action_log({
+				signup: $scope.user_email
+			});
 			return $http({
 				method: 'POST',
 				url: '/user/signup',
 				data: {
 					email: $scope.user_email,
-					password: $scope.user_password,
-					role: $scope.user_role
+					// password: $scope.user_password,
+					// role: $scope.user_role
 				}
 			}).then(function(res) {
 				console.log('USER CREATED', res);

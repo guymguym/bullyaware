@@ -20,35 +20,51 @@
 
 	<div class="container" style="margin-top: 20px">
 
-
-		<div>
-			<h1>Stats</h1>
-			<div class="row">
-				<div class="col-xs-6"># Sessions</div>
-				<div class="col-xs-6">{{data.sessions.length}}</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-6"># Users</div>
-				<div class="col-xs-6">{{data.users.length}}</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-6"># Actions</div>
-				<div class="col-xs-6">{{data.actions.length}}</div>
+		<a data-toggle="collapse" href="#combinations">
+			<h3>Action Combinations Stats</h3>
+		</a>
+		<div id="combinations" class="collapse">
+			<div ng-repeat="(actions,count) in stats">
+				{{ count }} sessions ==> {{ actions }}
 			</div>
 		</div>
 
-		<div class="row" ng-repeat="session in data.sessions | orderBy:'_id':true">
-			<div class="row hdr">
-				<div class="col-xs-1">Session</div>
-				<div class="col-xs-1">#{{ data.sessions.length-$index }}</div>
-				<div class="col-sm-5">{{ users[session.user].email }}</div>
-				<div class="col-sm-5">({{ session._id }},{{ session.user }})</div>
+		<a data-toggle="collapse" href="#users_list">
+			<h3>Users - total {{data.users.length}}</h3>
+		</a>
+		<div id="users_list" class="collapse">
+			<div ng-repeat="user in data.users | orderBy:'_id':true">
+				USER {{stringify(user)}}
 			</div>
-			<div class="row">
-				<div ng-repeat="action in actions[session._id]">
-					<div class="col-xs-1"></div>
-					<div class="col-xs-1">#{{data.sessions.length - $parent.$index}} . {{$index}}</div>
-					<div class="col-xs-10">
+		</div>
+
+		<a data-toggle="collapse" href="#actions_list">
+			<h3>Actions - total {{data.actions.length}}</h3>
+		</a>
+		<div id="actions_list" class="collapse">
+			<div ng-repeat="action in data.actions | orderBy:'_id':true">
+				<span>Session {{action.session}}</span>
+				&nbsp;
+				<span ng-repeat="(key,val) in action.data">{{key}}: {{val}}{{!$last && ','||''}}</span>
+			</div>
+		</div>
+
+		<a data-toggle="collapse" href="#sessions_list">
+			<h3>Sessions - total {{data.sessions.length}}</h3>
+		</a>
+		<div id="sessions_list" class="collapse">
+			<div ng-repeat="session in data.sessions | orderBy:'_id':true">
+				<div class="hdr">
+					<span>Session #{{ data.sessions.length-$index }}</span>
+					&nbsp;
+					<span>EMAIL {{ users[session.user].email }}</span>
+					&nbsp;
+					<span>({{ session._id }},{{ session.user }})</span>
+				</div>
+				<div>
+					<div ng-repeat="action in actions[session._id] | orderBy:'_id':true">
+						<span>#{{data.sessions.length - $parent.$index}}.{{actions[session._id].length - $index}}</span>
+						&nbsp;
 						<span ng-repeat="(key,val) in action.data">{{key}}: {{val}}{{!$last && ','||''}}</span>
 						&nbsp;
 					</div>
@@ -79,6 +95,22 @@
 				$scope.users = _.indexBy($scope.data.users, '_id');
 				$scope.sessions = _.indexBy($scope.data.sessions, '_id');
 				$scope.actions = _.groupBy($scope.data.actions, 'session');
+
+				$scope.stats = {};
+				_.each($scope.actions, function(actions, session_id) {
+					var actions_desc = {};
+					_.each(actions, function(action) {
+						_.each(action.data, function(value, key) {
+							actions_desc[key] = true;
+						});
+					});
+					var actions_str = _.keys(actions_desc).sort().join(', ');
+					if (actions_str in $scope.stats) {
+						$scope.stats[actions_str]++;
+					} else {
+						$scope.stats[actions_str] = 1;
+					}
+				});
 			}
 		})();
 		</script>
