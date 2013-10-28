@@ -153,17 +153,17 @@
 	function init_common_links($scope, $window, action_log) {
 		if (!$scope.on_whatis) {
 			$scope.on_whatis = function() {
-				$window.location = '/whatis'
+				$window.location = '/whatis';
 			};
 		}
 		if (!$scope.on_signin) {
 			$scope.on_signin = function() {
-				$window.location = '/signin'
+				$window.location = '/signin';
 			};
 		}
 		if (!$scope.on_getstarted) {
 			$scope.on_getstarted = function() {
-				$window.location = '/getstarted'
+				$window.location = '/getstarted';
 			};
 		}
 		if (!$scope.on_contact_us) {
