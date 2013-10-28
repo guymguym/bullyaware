@@ -151,55 +151,48 @@
 
 
 	function init_common_links($scope, $window, action_log) {
-		if (!$scope.on_whatis) {
-			$scope.on_whatis = function() {
-				$window.location = '/whatis';
-			};
-		}
-		if (!$scope.on_signin) {
-			$scope.on_signin = function() {
-				$window.location = '/signin';
-			};
-		}
-		if (!$scope.on_getstarted) {
-			$scope.on_getstarted = function() {
-				$window.location = '/getstarted';
-			};
-		}
-		if (!$scope.on_contact_us) {
-			$scope.on_contact_us = function() {
-				action_log({
-					contact_us: true
+		function make_redirect(path) {
+			return function() {
+				$.when($('body').children().not('.stable').fadeOut(300)).then(function() {
+					$window.location = path;
 				});
-				var url = 'mailto:info@bullyaware.co?subject=Request for info';
-				$window.open(url, '_blank');
 			};
 		}
-		if (!$scope.on_support_call) {
-			$scope.on_support_call = function() {
-				action_log({
-					support_call: true
-				});
-				var url = 'mailto:info@bullyaware.co?subject=Support call';
-				$window.open(url, '_blank');
-			};
-		}
-		if (!$scope.on_terms_of_use) {
-			$scope.on_terms_of_use = function() {
-				action_log({
-					terms_of_use: true
-				});
-				alert('The terms of use are being finalized and will soon be available');
-			};
-		}
-		if (!$scope.on_privacy_policy) {
-			$scope.on_privacy_policy = function() {
-				action_log({
-					privacy_policy: true
-				});
-				alert('The privacy policy is being finalized and will soon be available');
-			};
-		}
+		$scope.on_main = $scope.on_main || make_redirect('/');
+		$scope.on_whatis = $scope.on_whatis || make_redirect('/whatis');
+		$scope.on_about = $scope.on_about || make_redirect('/about');
+		$scope.on_signin = $scope.on_signin || make_redirect('/signin');
+		$scope.on_getstarted = $scope.on_getstarted || make_redirect('/getstarted');
+
+		$scope.on_contact_us = $scope.on_contact_us || function() {
+			action_log({
+				contact_us: true
+			});
+			var url = 'mailto:info@bullyaware.co?subject=Request for info';
+			$window.open(url, '_blank');
+		};
+
+		$scope.on_support_call = $scope.on_support_call || function() {
+			action_log({
+				support_call: true
+			});
+			var url = 'mailto:info@bullyaware.co?subject=Support call';
+			$window.open(url, '_blank');
+		};
+
+		$scope.on_terms_of_use = $scope.on_terms_of_use || function() {
+			action_log({
+				terms_of_use: true
+			});
+			alert('The terms of use are being finalized and will soon be available');
+		};
+
+		$scope.on_privacy_policy = $scope.on_privacy_policy || function() {
+			action_log({
+				privacy_policy: true
+			});
+			alert('The privacy policy is being finalized and will soon be available');
+		};
 	}
 
 	function init_server_data($scope) {
@@ -279,12 +272,8 @@
 			load_page_about: $location.absUrl()
 		});
 
-		$.when($('#about_head').fadeIn(1000)).then(function() {
-			return $('#about_content').fadeIn(1000);
-		});
+		$('#about_content').fadeIn(1000);
 	}
-
-
 
 
 
