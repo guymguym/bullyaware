@@ -343,7 +343,7 @@
 
 		$('#getstarted_content').fadeIn(1000);
 
-		$scope.step = 2;
+		$scope.step = 0;
 
 		$scope.steps = [{
 			name: 'Role'
