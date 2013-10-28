@@ -15,7 +15,83 @@
 		<div style="padding: 30px 0 30px 0;">
 			<h1>Get Started</h1>
 			<hr/>
+			<ol class="breadcrumb">
+				<li>Steps:</li>
+				<li ng-repeat="st in steps" ng-show="$index <= step">
+					<a href="#" ng-class="(step == $index) && 'active' || ''" ng-click="goto_step($index)">{{st.name}}</a>
+				</li>
+			</ol>
 		</div>
+
+		<div ng-show="step==0" class="text-center">
+			<h1>You are a</h1>
+			<br/>
+			<div class="col-sm-6 text-center">
+				<button class="btn btn-lg btn-warning" style="width: 200px; height: 200px" ng-click="on_user_role('teenager')">
+					<h1>Teenager</h1>
+				</button>
+			</div>
+			<div class="col-sm-6 text-center">
+				<button class="btn btn-lg btn-primary" style="width: 200px; height: 200px" ng-click="on_user_role('parent')">
+					<h1>Parent</h1>
+				</button>
+			</div>
+		</div>
+
+		<div ng-show="step==1" class="text-center">
+			<h1>Your Email</h1>
+			<br/>
+			<form id="signup_form" name="form" role="form" novalidate class="css-form col-sm-offset-3 col-sm-6">
+				<div class="form-group">
+					<input id="user_email" required ng-model="user_email" auto-fill-sync type="email" class="form-control" placeholder="Your email address" autocomplete="off" name="email" />
+				</div>
+				<div class="form-group">
+					<input id="user_password" required ng-model="user_password" auto-fill-sync type="password" class="form-control" placeholder="Choose password" name="password" />
+				</div>
+				<div class="form-group">
+					<input id="user_password2" required ng-model="user_password2" auto-fill-sync type="password" class="form-control" placeholder="Retype password" name="password2" />
+				</div>
+				<div class="form-group">
+					<button class="btn btn-primary form-control" ng-click="do_signup()">
+						<i class="icon-arrow-right icon-large icon-fixed-width"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+
+		<div ng-show="step==2" class="text-center">
+			<h1>Thank you!</h1>
+			<h4>We will contact you using this email address:</h4>
+			<p class="lead">
+				<b>{{ user_email || 'HOLDER' }}</b>
+			</p>
+			<form class="form-horizontal" role="form">
+				<!-- 
+				<div class="form-group">
+					<label class="col-sm-3 control-label">You are a:</label>
+					<div class="col-sm-9">
+						<select class="form-control" ng-model="user_role" ng-change="on_user_role()">
+							<option value="" disabled></option>
+							<option value="parent">Parent</option>
+							<option value="teenager">Teenager</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+				</div>
+				-->
+				<div class="form-group">
+					<h4>
+						Click on the social networks that you are interested to monitor:
+					</h4>
+					<div>
+						<span ng-repeat="type in account_types" title="{{type.name}}" ng-click="on_click_account_type(type, $event)" style="cursor: pointer">
+							<i style="color: {{(type.checked || type.hover) && type.color || '#d0d0d0'}}" class="{{type.icon}} icon-2x icon-fixed-width" ng-mouseenter="type.hover = true" ng-mouseleave="type.hover = false"></i>
+						</span>
+					</div>
+				</div>
+			</form>
+		</div>
+
 	</div>
 
 

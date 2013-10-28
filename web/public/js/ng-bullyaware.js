@@ -342,6 +342,130 @@
 		});
 
 		$('#getstarted_content').fadeIn(1000);
+
+		$scope.step = 2;
+
+		$scope.steps = [{
+			name: 'Role'
+		}, {
+			name: 'Email'
+		}, {
+			name: 'Done'
+		}];
+
+		$scope.goto_step = function(step) {
+			$scope.step = step;
+		};
+
+		$scope.on_user_role = function(role) {
+			action_log({
+				user_role: role
+			});
+			$scope.user_role = role;
+			$scope.step++;
+		};
+
+		$scope.do_signup = function() {
+			if (!$scope.user_email) {
+				$("#user_email").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
+			if (!$scope.user_password) {
+				$("#user_password").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
+			if (!$scope.user_password2 || $scope.user_password2 !== $scope.user_password) {
+				$("#user_password2").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
+			// send action log async
+			action_log({
+				signup: $scope.user_email
+			});
+			return $http({
+				method: 'POST',
+				url: '/user/signup',
+				data: {
+					email: $scope.user_email,
+					password: $scope.user_password,
+					role: $scope.user_role
+				}
+			}).then(function(res) {
+				console.log('USER CREATED', res);
+				$scope.step++;
+			}, function(err) {
+				console.error('USER CREATE FAILED', err);
+			});
+		};
+
+
+		$scope.on_click_account_type = function(type, event) {
+			$(event.target).effect({
+				effect: 'pulsate',
+				times: 2
+			});
+			type.checked = !type.checked;
+			if (type.checked) {
+				action_log({
+					account_type_set: type.name
+				});
+			} else {
+				action_log({
+					account_type_unset: type.name
+				});
+			}
+		};
+
+		$scope.account_types = [{
+			name: 'Twitter',
+			icon: 'icon-twitter-sign',
+			color: '#7af'
+		}, {
+			name: 'Facebook',
+			icon: 'icon-facebook-sign',
+			color: '#66b'
+		}, {
+			name: 'Google+',
+			icon: 'icon-google-plus-sign',
+			color: '#c33'
+		}, {
+			name: 'Youtube',
+			icon: 'icon-youtube-sign',
+			color: '#a66'
+		}, {
+			name: 'Instagram',
+			icon: 'icon-instagram',
+			color: '#881'
+		}, {
+			name: 'Tumblr',
+			icon: 'icon-tumblr-sign',
+			color: '#33b'
+		}, {
+			name: 'Flickr',
+			icon: 'icon-flickr',
+			color: '#b3b'
+		}, {
+			name: 'Pinterest',
+			icon: 'icon-pinterest-sign',
+			color: '#b33'
+		}, {
+			name: 'Other',
+			icon: 'icon-question-sign',
+			color: '#777'
+		}];
+
 	}
 
 
@@ -383,44 +507,6 @@
 			load_page: $location.absUrl()
 		});
 
-
-		$scope.account_types = [{
-			name: 'Twitter',
-			icon: 'icon-twitter-sign',
-			color: '#7af'
-		}, {
-			name: 'Facebook',
-			icon: 'icon-facebook-sign',
-			color: '#66b'
-		}, {
-			name: 'Google+',
-			icon: 'icon-google-plus-sign',
-			color: '#c33'
-		}, {
-			name: 'Youtube',
-			icon: 'icon-youtube-sign',
-			color: '#a66'
-		}, {
-			name: 'Instagram',
-			icon: 'icon-instagram',
-			color: '#881'
-		}, {
-			name: 'Tumblr',
-			icon: 'icon-tumblr-sign',
-			color: '#33b'
-		}, {
-			name: 'Flickr',
-			icon: 'icon-flickr',
-			color: '#b3b'
-		}, {
-			name: 'Pinterest',
-			icon: 'icon-pinterest-sign',
-			color: '#b33'
-		}, {
-			name: 'Other',
-			icon: 'icon-question-sign',
-			color: '#777'
-		}];
 
 		$scope.account_type = $scope.account_types[0];
 		$scope.choose_account_type = function(type) {
