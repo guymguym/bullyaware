@@ -217,6 +217,7 @@
 		$scope.server_data = server_data_raw ? JSON.parse(server_data_raw) : {};
 		$scope.session_id = $scope.server_data.session;
 		$scope.user = $scope.server_data.user;
+		// console.log('USER', $scope.user, 'DATA', $scope.server_data);
 	}
 
 
