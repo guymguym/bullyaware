@@ -129,25 +129,6 @@
 		};
 	});
 
-	/*
-	bullyaware_app.directive('baSignup', ['$http', '$timeout',
-		function($http, $timeout) {
-			return {
-				restrict: 'E',
-				transclude: true,
-				scope: {},
-				controller: function($scope) {
-
-				},
-				template: [
-					'<div>',
-					'	<',
-					'</div'
-				].join('\n')
-			};
-		}
-	]);
-	*/
 
 	// general action log to save operations info
 	bullyaware_app.factory('action_log', ['$http',
@@ -169,12 +150,155 @@
 	]);
 
 
+	function init_common_links($scope, $window, action_log) {
+		if (!$scope.on_whatis) {
+			$scope.on_whatis = function() {
+				$window.location = '/whatis'
+			};
+		}
+		if (!$scope.on_signin) {
+			$scope.on_signin = function() {
+				$window.location = '/signin'
+			};
+		}
+		if (!$scope.on_getstarted) {
+			$scope.on_getstarted = function() {
+				$window.location = '/getstarted'
+			};
+		}
+		if (!$scope.on_contact_us) {
+			$scope.on_contact_us = function() {
+				action_log({
+					contact_us: true
+				});
+				var url = 'mailto:info@bullyaware.co?subject=Request for info';
+				$window.open(url, '_blank');
+			};
+		}
+		if (!$scope.on_support_call) {
+			$scope.on_support_call = function() {
+				action_log({
+					support_call: true
+				});
+				var url = 'mailto:info@bullyaware.co?subject=Support call';
+				$window.open(url, '_blank');
+			};
+		}
+		if (!$scope.on_terms_of_use) {
+			$scope.on_terms_of_use = function() {
+				action_log({
+					terms_of_use: true
+				});
+				alert('The terms of use are being finalized and will soon be available');
+			};
+		}
+		if (!$scope.on_privacy_policy) {
+			$scope.on_privacy_policy = function() {
+				action_log({
+					privacy_policy: true
+				});
+				alert('The privacy policy is being finalized and will soon be available');
+			};
+		}
+	}
 
-	bullyaware_app.controller('BullyCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$location', 'action_log', BullyCtrl
+	function init_server_data($scope) {
+		var server_data_raw = $('#server_data').html();
+		$scope.server_data = server_data_raw ? JSON.parse(server_data_raw) : {};
+		$scope.session_id = $scope.server_data.session;
+	}
+
+
+
+
+	bullyaware_app.controller('MenuCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', MenuCtrl
 	]);
 
-	function BullyCtrl($scope, $http, $q, $timeout, $location, action_log) {
+	function MenuCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		$scope.active_link = function(link) {
+			return (link === $window.location.pathname) ? 'active' : '';
+		};
+	}
+
+
+
+
+	bullyaware_app.controller('WelcomeCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', WelcomeCtrl
+	]);
+
+	function WelcomeCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
+
+		// on page load log the load action
+		action_log({
+			load_page_welcome: $location.absUrl()
+		});
+
+		// start animations on page load
+		$('.poster_area').fadeIn(1000);
+
+	}
+
+
+
+
+	bullyaware_app.controller('WhatisCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', WhatisCtrl
+	]);
+
+	function WhatisCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
+
+		// on page load log the load action
+		action_log({
+			load_page_whatis: $location.absUrl()
+		});
+
+		// start animations on page load
+		$('.poster_area').fadeIn(1000);
+	}
+
+
+
+
+	bullyaware_app.controller('AboutCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', AboutCtrl
+	]);
+
+	function AboutCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
+
+		// on page load log the load action
+		action_log({
+			load_page_about: $location.absUrl()
+		});
+
+		$.when($('#about_head').fadeIn(1000)).then(function() {
+			return $('#about_content').fadeIn(1000);
+		});
+	}
+
+
+
+
+
+
+
+
+
+
+
+	bullyaware_app.controller('BullyCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', BullyCtrl
+	]);
+
+	function BullyCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
 		$scope.location = $location;
 		var server_data_raw = $('#server_data').html();
 		$scope.server_data = server_data_raw ? JSON.parse(server_data_raw) : {};
@@ -201,8 +325,6 @@
 			load_page: $location.absUrl()
 		});
 
-		// start animations on page load
-		$('#bg, #welcome_header, #welcome_action').fadeIn(1000);
 
 		$scope.account_types = [{
 			name: 'Twitter',
@@ -315,8 +437,8 @@
 
 			var duration = 1000;
 			$.when(
-				$('body').switchClass('lights-off', 'lights-on', duration),
-				$('#bg, #welcome_view').fadeOut(duration)
+				$('body').switchClass('bgblk', 'bgwht', duration),
+				$('.poster_area').fadeOut(duration)
 			).then(function() {
 				return $('#box_header').fadeIn(duration);
 			}).then(function() {
@@ -489,39 +611,6 @@
 
 
 
-	bullyaware_app.controller('AboutCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$location', 'action_log', AboutCtrl
-	]);
-
-	function AboutCtrl($scope, $http, $q, $timeout, $location, action_log) {
-		// on page load log the load action
-		action_log({
-			load_page: $location.absUrl()
-		});
-
-		$.when($('#about_head').fadeIn(1000)).then(function() {
-			return $('#about_content').fadeIn(1000);
-		});
-	}
-
-
-
-	bullyaware_app.controller('MenuCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$location', 'action_log', MenuCtrl
-	]);
-
-	function MenuCtrl($scope, $http, $q, $timeout, $location, action_log) {
-		$scope.on_contact_us = function() {
-			action_log({
-				contact_us: true
-			});
-		};
-		$scope.on_support_call = function() {
-			action_log({
-				support_call: true
-			});
-		};
-	}
 
 
 })();

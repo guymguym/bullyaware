@@ -1,35 +1,93 @@
 h1, h2, h3, h4, h5, h6, p, a, span, div {
-	/*font-family:'Open Sans', sans-serif !important;*/
+	font-family:'Open Sans', sans-serif !important;
 }
-.lights-off {
+.lead {
+	font-size: 1.2em !important;
+}
+body {
+	/*padding-top: 100px;*/
+}
+.bgblk {
 	background-color: black;
 }
-.lights-on {
+.bgwht {
 	background-color: white;
 }
-#bg {
-	position: fixed;
-	top: 0;
-	bottom: 0;
+.hide {
+	display: none;
+}
+#menubar {
 	left: 0;
 	right: 0;
-	background: url('/public/img/5907015_l.jpg') no-repeat center center fixed;
+	background-color: white;
+	margin: 0;
+	border-bottom: solid 1px black;
+}
+.menu_color {
+	color: #0096bb;
+}
+.poster_area {
+	position: relative;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 300px;
+}
+@media all and (min-height: 700px) {
+	.poster_area {
+		height: 400px;
+	}
+}
+@media all and (min-height: 800px) {
+	.poster_area {
+		height: 500px;
+	}
+}
+.poster_area .poster_header {
+	color: white;
+}
+.poster_area .poster_action {
+	background-color: rgba(0, 0, 0, 0.5);
+	/*padding: 10px 20px 10px 20px;*/
+	color: white;
+}
+.poster1 {
+	background-image: url('/public/img/5907015_l.jpg');
+	background-position: top right;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: cover;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
+}
+.poster2 {
+	background-image: url('/public/img/canstockphoto8821969.jpg');
+	background-position: top right;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
 	background-size: cover;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
 }
-.bx {
-	display: none;
-	padding-top: 30px;
+.ngo_box {
+	display: inline-block;
+	padding: 30px;
+	margin: 20px;
+	border: solid 1px gray;
+	border-radius: 30px
 }
-.bgx {
+.box {
+	margin-top: 30px;
+}
+.wbox {
 	background-color: rgba(255, 255, 255, 0.85);
 	border: 2px solid rgba(255, 255, 255, 0.95);
 	border-radius: 10px;
 	padding: 10px 20px 10px 20px;
 }
-.lights-on .bgx {
+.bgwht .wbox {
 	background-color: #f2f2f2;
 	/* #f0f0f0; */
 	border: 2px solid #e0e0e0;
@@ -56,4 +114,79 @@ other selectors that are more specific or come later and might alter display.
 */
 [ng\:cloak], [ng-cloak], .ng-cloak {
 	display: none !important;
+}
+@media all and (min-width: 992px) and (max-width: 1099px) {
+	.container {
+		width: 750px !important;
+	}
+}
+@media all and (min-width: 1100px) and (max-width: 1400px) {
+	.container {
+		width: 1000px !important;
+	}
+}
+/* http://getbootstrap.com/examples/non-responsive/
+ * 
+ * Non-responsive overrides
+ * 
+ * Utilitze the following CSS to disable the responsive-ness of the container,
+ * grid system, and navbar.
+ */
+
+/* Reset the container */
+ .nonresp .container {
+	max-width: none !important;
+	/* fixed width seems unneeded */
+}
+/* Always float the navbar header */
+ .nonresp .navbar-header {
+	float: left;
+}
+/* Undo the collapsing navbar */
+ .nonresp .navbar-collapse {
+	display: block !important;
+	height: auto !important;
+	padding-bottom: 0;
+	overflow: visible !important;
+}
+.nonresp .navbar-toggle {
+	display: none;
+}
+/* Always apply the floated nav */
+ .nonresp .navbar-nav {
+	float: left;
+	margin: 0;
+}
+.nonresp .navbar-nav > li {
+	float: left;
+}
+.nonresp .navbar-nav > li > a {
+	padding: 15px;
+}
+/* Redeclare since we override the float above */
+ .nonresp .navbar-nav.navbar-right {
+	float: right;
+}
+/* Undo custom dropdowns */
+ .nonresp .navbar .open .dropdown-menu {
+	position: absolute;
+	float: left;
+	background-color: #fff;
+	border: 1px solid #cccccc;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-width: 0 1px 1px;
+	border-radius: 0 0 4px 4px;
+	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+}
+.nonresp .navbar .open .dropdown-menu > li > a {
+	color: #333 !important;
+}
+.nonresp .navbar .open .dropdown-menu > li > a:hover, .nonresp .navbar .open .dropdown-menu > li > a:focus, .nonresp .navbar .open .dropdown-menu > .active > a, .nonresp .navbar .open .dropdown-menu > .active > a:hover, .nonresp .navbar .open .dropdown-menu > .active > a:focus {
+	color: #fff !important;
+	background-color: #428bca !important;
+}
+.nonresp .navbar .open .dropdown-menu > .disabled > a, .nonresp .navbar .open .dropdown-menu > .disabled > a:hover, .nonresp .navbar .open .dropdown-menu > .disabled > a:focus {
+	color: #999 !important;
+	background-color: transparent !important;
 }

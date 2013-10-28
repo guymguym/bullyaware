@@ -234,6 +234,15 @@ app.get('/', users.mk_session, function(req, res) {
 app.get('/about', users.mk_session, function(req, res) {
 	return res.render('about.html', page_context(req));
 });
+app.get('/whatis', users.mk_session, function(req, res) {
+	return res.render('whatis.html', page_context(req));
+});
+app.get('/getstarted', users.mk_session, function(req, res) {
+	return res.render('getstarted.html', page_context(req));
+});
+app.get('/signin', users.mk_session, function(req, res) {
+	return res.render('signin.html', page_context(req));
+});
 
 
 // start http server
