@@ -130,6 +130,23 @@
 	});
 
 
+	// see http://stackoverflow.com/questions/14965968/angularjs-browser-autofill-workaround-by-using-a-directive
+	// TODO: but it still doesn't work, and angular doesn't handle autofill...
+	bullyaware_app.directive('autoFillSync', function($timeout) {
+		return {
+			require: '?ngModel',
+			link: function(scope, elem, attrs, ngModel) {
+				var origVal = elem.val();
+				$timeout(function() {
+					var newVal = elem.val();
+					if (ngModel.$pristine && origVal !== newVal) {
+						ngModel.$setViewValue(newVal);
+					}
+				}, 500);
+			}
+		};
+	});
+
 	// general action log to save operations info
 	bullyaware_app.factory('action_log', ['$http',
 		function($http) {
@@ -161,7 +178,7 @@
 		$scope.on_main = $scope.on_main || make_redirect('/');
 		$scope.on_whatis = $scope.on_whatis || make_redirect('/whatis');
 		$scope.on_about = $scope.on_about || make_redirect('/about');
-		$scope.on_signin = $scope.on_signin || make_redirect('/signin');
+		$scope.on_login = $scope.on_login || make_redirect('/login');
 		$scope.on_getstarted = $scope.on_getstarted || make_redirect('/getstarted');
 
 		$scope.on_contact_us = $scope.on_contact_us || function() {
@@ -273,6 +290,58 @@
 		});
 
 		$('#about_content').fadeIn(1000);
+	}
+
+
+
+
+	bullyaware_app.controller('LoginCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', LoginCtrl
+	]);
+
+	function LoginCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
+
+		// on page load log the load action
+		action_log({
+			load_page_login: $location.absUrl()
+		});
+
+		$('#login_content').fadeIn(1000);
+
+		$scope.do_login = function() {
+			console.log('LOGIN', $scope.user_email, $scope.user_password);
+			action_log({
+				do_login: {
+					user_email: $scope.user_email,
+					user_password: $scope.user_password
+				}
+			});
+			if ($scope.user_email && $scope.user_password) {
+				alert('Your login request was accepted and you will be contacted');
+				$scope.on_main();
+			}
+		};
+	}
+
+
+
+
+	bullyaware_app.controller('GetStartedCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', GetStartedCtrl
+	]);
+
+	function GetStartedCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
+
+		// on page load log the load action
+		action_log({
+			load_page_getstarted: $location.absUrl()
+		});
+
+		$('#getstarted_content').fadeIn(1000);
 	}
 
 

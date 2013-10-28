@@ -240,8 +240,8 @@ app.get('/whatis', users.mk_session, function(req, res) {
 app.get('/getstarted', users.mk_session, function(req, res) {
 	return res.render('getstarted.html', page_context(req));
 });
-app.get('/signin', users.mk_session, function(req, res) {
-	return res.render('signin.html', page_context(req));
+app.get('/login', users.mk_session, function(req, res) {
+	return res.render('login.html', page_context(req));
 });
 
 
