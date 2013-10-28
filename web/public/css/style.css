@@ -72,27 +72,6 @@ body {
 	-moz-background-size: cover;
 	-o-background-size: cover;
 }
-.ngo_box {
-	display: inline-block;
-	padding: 30px;
-	margin: 20px;
-	border: solid 1px gray;
-	border-radius: 30px
-}
-.box {
-	margin-top: 30px;
-}
-.wbox {
-	background-color: rgba(255, 255, 255, 0.85);
-	border: 2px solid rgba(255, 255, 255, 0.95);
-	border-radius: 10px;
-	padding: 10px 20px 10px 20px;
-}
-.bgwht .wbox {
-	background-color: #f2f2f2;
-	/* #f0f0f0; */
-	border: 2px solid #e0e0e0;
-}
 .css-form input.ng-invalid.ng-dirty {
 	background-color: rgba(250, 150, 150, 0.3);
 }
