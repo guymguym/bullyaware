@@ -27,6 +27,14 @@ var action_schema = new mongoose.Schema({
 
 // indexes
 
+user_schema.index({
+	email: 1
+}, {
+	unique: true,
+	// defining as sparse avoids indexing when the field is not present
+	sparse: true
+});
+
 session_schema.index({
 	user: 1
 }, {
@@ -49,6 +57,11 @@ action_schema.index({
 var Session = mongoose.model('Session', session_schema);
 var User = mongoose.model('User', user_schema);
 var Action = mongoose.model('Action', action_schema);
+
+// indexes are ensured by default
+// Session.ensureIndexes();
+// User.ensureIndexes();
+// Action.ensureIndexes();
 
 
 // mk_session is a middleware (it takes 3 arguments and can pass execution to next)
@@ -108,6 +121,16 @@ exports.action_log = function(req, res) {
 	});
 };
 
+
+// save the user id into cookie session
+
+function save_user_in_session(req, user) {
+	req.session.user = {
+		id: user.id,
+		email: user.email
+	};
+}
+
 // signup creates a new user with a given email
 exports.signup = function(req, res) {
 	console.log('SIGNUP', req.body);
@@ -139,22 +162,56 @@ exports.signup = function(req, res) {
 		},
 
 		function(next) {
-			// save the user id into cookie session
-			req.session.user = {
-				id: user.id,
-				email: user.email
-			};
-			// send the user as reply
-			return next(null, _.omit(user, 'password'));
+			save_user_in_session(req, user);
+			return next();
 		}
 
 	], common.reply_callback(req, res, 'SIGNUP ' + req.body.email));
 };
 
 
+exports.login = function(req, res) {
+	var email = req.body.user_email;
+	var password = req.body.user_password;
+
+	return async.waterfall([
+
+		function(next) {
+			return User.find({
+				email: email
+			}, next);
+		},
+
+		function(users, next) {
+			if (users.length === 0) {
+				console.error('LOGIN: USER NOT FOUND', email, password);
+				return next({
+					status: 403
+				});
+			}
+			if (users.length > 1) {
+				console.error('LOGIN: MULTIPLE RESULTS FOR EMAIL', users);
+				return next({
+					status: 500
+				});
+			}
+			var user = users[0];
+			if (user.password !== password) {
+				console.error('LOGIN: BAD PASSWORD', user, password);
+				return next({
+					status: 403
+				})
+			}
+			save_user_in_session(req, user);
+			return next();
+		}
+	], common.reply_callback(req, res, 'LOGIN ' + email));
+};
+
+
 exports.logout = function(req, res) {
 	delete req.session.user;
-	res.redirect('/');
+	return res.redirect('/');
 };
 
 exports.fetch_all = function(callback) {

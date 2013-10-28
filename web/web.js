@@ -93,7 +93,7 @@ app.use(function(req, res, next) {
 	}
 	return next();
 });
-var COOKIE_SECRET = '2430360efa2d43cf271d413cf4811024';
+var COOKIE_SECRET = '2430360efa2d43cf271d413cf48110249baa23110639f9a';
 app.use(express.cookieParser(COOKIE_SECRET));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
@@ -101,7 +101,7 @@ app.use(express.cookieSession({
 	// no need for secret since its signed by cookieParser
 	key: 'bullyaware_session',
 	cookie: {
-		maxAge: 356 * 24 * 60 * 60 * 1000 // 1 year
+		maxAge: 7 * 24 * 60 * 60 * 1000 // 1 week
 	}
 }));
 // app.use(passport.initialize());
@@ -199,6 +199,7 @@ function error_501(req, res, next) {
 var users = require('./lib/users');
 app.post('/user/action_log', users.mk_session, users.action_log);
 app.post('/user/signup', users.mk_session, users.signup);
+app.post('/user/login', users.mk_session, users.login);
 app.get('/user/logout', users.mk_session, users.logout);
 
 // admin route
@@ -238,7 +239,16 @@ app.get('/whatis', users.mk_session, function(req, res) {
 	return res.render('whatis.html', page_context(req));
 });
 app.get('/getstarted', users.mk_session, function(req, res) {
+	if (!req.session.user) {
+		return res.redirect('/signup');
+	}
 	return res.render('getstarted.html', page_context(req));
+});
+app.get('/signup', users.mk_session, function(req, res) {
+	if (req.session.user) {
+		return res.redirect('/getstarted');
+	}
+	return res.render('signup.html', page_context(req));
 });
 app.get('/login', users.mk_session, function(req, res) {
 	return res.render('login.html', page_context(req));

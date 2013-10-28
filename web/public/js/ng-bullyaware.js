@@ -216,6 +216,7 @@
 		var server_data_raw = $('#server_data').html();
 		$scope.server_data = server_data_raw ? JSON.parse(server_data_raw) : {};
 		$scope.session_id = $scope.server_data.session;
+		$scope.user = $scope.server_data.user;
 	}
 
 
@@ -311,59 +312,62 @@
 		$('#login_content').fadeIn(1000);
 
 		$scope.do_login = function() {
-			console.log('LOGIN', $scope.user_email, $scope.user_password);
+			if (!$scope.user_email) {
+				$("#user_email").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
+			if (!$scope.user_password) {
+				$("#user_password").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
 			action_log({
 				do_login: {
 					user_email: $scope.user_email,
 					user_password: $scope.user_password
 				}
 			});
-			if ($scope.user_email && $scope.user_password) {
-				alert('Your login request was accepted and you will be contacted');
-				$scope.on_main();
-			}
+			$http({
+				method: 'POST',
+				url: '/user/login',
+				data: {
+					user_email: $scope.user_email,
+					user_password: $scope.user_password
+				}
+			}).then(function(res) {
+				console.log('USER LOGIN DONE', res);
+				$scope.on_getstarted();
+			}, function(err) {
+				console.error('USER LOGIN FAILED', err);
+				alert('Login failed. Please try again later');
+			});
 		};
 	}
 
 
 
 
-	bullyaware_app.controller('GetStartedCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', GetStartedCtrl
+	bullyaware_app.controller('SignupCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', SignupCtrl
 	]);
 
-	function GetStartedCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+	function SignupCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
 		init_common_links($scope, $window, action_log);
 		init_server_data($scope);
 
 		// on page load log the load action
 		action_log({
-			load_page_getstarted: $location.absUrl()
+			load_page_signup: $location.absUrl()
 		});
 
-		$('#getstarted_content').fadeIn(1000);
-
-		$scope.step = 0;
-
-		$scope.steps = [{
-			name: 'Role'
-		}, {
-			name: 'Email'
-		}, {
-			name: 'Done'
-		}];
-
-		$scope.goto_step = function(step) {
-			$scope.step = step;
-		};
-
-		$scope.on_user_role = function(role) {
-			action_log({
-				user_role: role
-			});
-			$scope.user_role = role;
-			$scope.step++;
-		};
+		$('#signup_content').fadeIn(1000);
 
 		$scope.do_signup = function() {
 			if (!$scope.user_email) {
@@ -404,10 +408,51 @@
 				}
 			}).then(function(res) {
 				console.log('USER CREATED', res);
-				$scope.step++;
+				$scope.on_getstarted();
 			}, function(err) {
 				console.error('USER CREATE FAILED', err);
+				alert('Signup failed. Please try again later');
 			});
+		};
+	}
+
+
+
+
+
+	bullyaware_app.controller('GetStartedCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', GetStartedCtrl
+	]);
+
+	function GetStartedCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
+
+		// on page load log the load action
+		action_log({
+			load_page_getstarted: $location.absUrl()
+		});
+
+		$('#getstarted_content').fadeIn(1000);
+
+		$scope.step = 0;
+
+		$scope.steps = [{
+			name: 'You are a'
+		}, {
+			name: 'Done'
+		}];
+
+		$scope.goto_step = function(step) {
+			$scope.step = step;
+		};
+
+		$scope.on_user_role = function(role) {
+			action_log({
+				user_role: role
+			});
+			$scope.user_role = role;
+			$scope.step++;
 		};
 
 
