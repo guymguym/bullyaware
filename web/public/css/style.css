@@ -54,8 +54,8 @@ h1, h2, h3, h4, h5, h6, p, a, span, div {
 }
 .poster1 {
 	background-image: url('/public/img/5907015_l.jpg');
-	background-position: top right;
-	background-attachment: fixed;
+	background-position: bottom right;
+	background-attachment: scroll;
 	background-repeat: no-repeat;
 	background-size: cover;
 	-webkit-background-size: cover;
@@ -65,7 +65,7 @@ h1, h2, h3, h4, h5, h6, p, a, span, div {
 .poster2 {
 	background-image: url('/public/img/canstockphoto8821969.jpg');
 	background-position: top right;
-	background-attachment: fixed;
+	background-attachment: scroll;
 	background-repeat: no-repeat;
 	background-size: cover;
 	-webkit-background-size: cover;
