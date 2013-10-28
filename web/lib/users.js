@@ -200,7 +200,7 @@ exports.login = function(req, res) {
 				console.error('LOGIN: BAD PASSWORD', user, password);
 				return next({
 					status: 403
-				})
+				});
 			}
 			save_user_in_session(req, user);
 			return next();
