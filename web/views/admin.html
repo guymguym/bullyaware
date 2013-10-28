@@ -16,7 +16,9 @@
 
 <body ng-controller="AdminCtrl" ng-cloak>
 
-	<div id="bg" style="display: none"></div>
+	<div class="stable">
+		<?# def.include( 'common_menu.html') ?>
+	</div>
 
 	<div class="container" style="margin-top: 20px">
 
@@ -73,47 +75,48 @@
 		</div>
 	</div>
 
-	<?# def.include( 'common_scripts.html') ?>
-		<!-- <script src="/public/js/d3.v3.min.js" charset="utf-8"></script> -->
+	<div>
+		<?# def.include( 'common_scripts.html') ?>
+	</div>
 
 
-		<!-- server data is safely embedded in a JSON type script -->
-		<script id="server_data" type="application/json">
-		<?= JSON.stringify(it) ?>
-		</script>
+	<!-- server data is safely embedded in a JSON type script -->
+	<script id="server_data" type="application/json">
+	<?= JSON.stringify(it) ?>
+	</script>
 
-		<script type="text/javascript">
-		(function() {
-			'use strict';
-			var bullyaware_app = angular.module('bullyaware_app');
-			bullyaware_app.controller('AdminCtrl', ['$scope', AdminCtrl]);
+	<script type="text/javascript">
+	(function() {
+		'use strict';
+		var bullyaware_app = angular.module('bullyaware_app');
+		bullyaware_app.controller('AdminCtrl', ['$scope', AdminCtrl]);
 
-			function AdminCtrl($scope) {
-				$scope.data = JSON.parse($('#server_data').html());
-				$scope.data.sessions.reverse();
+		function AdminCtrl($scope) {
+			$scope.data = JSON.parse($('#server_data').html());
+			$scope.data.sessions.reverse();
 
-				$scope.users = _.indexBy($scope.data.users, '_id');
-				$scope.sessions = _.indexBy($scope.data.sessions, '_id');
-				$scope.actions = _.groupBy($scope.data.actions, 'session');
+			$scope.users = _.indexBy($scope.data.users, '_id');
+			$scope.sessions = _.indexBy($scope.data.sessions, '_id');
+			$scope.actions = _.groupBy($scope.data.actions, 'session');
 
-				$scope.stats = {};
-				_.each($scope.actions, function(actions, session_id) {
-					var actions_desc = {};
-					_.each(actions, function(action) {
-						_.each(action.data, function(value, key) {
-							actions_desc[key] = true;
-						});
+			$scope.stats = {};
+			_.each($scope.actions, function(actions, session_id) {
+				var actions_desc = {};
+				_.each(actions, function(action) {
+					_.each(action.data, function(value, key) {
+						actions_desc[key] = true;
 					});
-					var actions_str = _.keys(actions_desc).sort().join(', ');
-					if (actions_str in $scope.stats) {
-						$scope.stats[actions_str]++;
-					} else {
-						$scope.stats[actions_str] = 1;
-					}
 				});
-			}
-		})();
-		</script>
+				var actions_str = _.keys(actions_desc).sort().join(', ');
+				if (actions_str in $scope.stats) {
+					$scope.stats[actions_str]++;
+				} else {
+					$scope.stats[actions_str] = 1;
+				}
+			});
+		}
+	})();
+	</script>
 </body>
 
 </html>

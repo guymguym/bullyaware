@@ -129,25 +129,23 @@
 		};
 	});
 
-	/*
-	bullyaware_app.directive('baSignup', ['$http', '$timeout',
-		function($http, $timeout) {
-			return {
-				restrict: 'E',
-				transclude: true,
-				scope: {},
-				controller: function($scope) {
 
-				},
-				template: [
-					'<div>',
-					'	<',
-					'</div'
-				].join('\n')
-			};
-		}
-	]);
-	*/
+	// see http://stackoverflow.com/questions/14965968/angularjs-browser-autofill-workaround-by-using-a-directive
+	// TODO: but it still doesn't work, and angular doesn't handle autofill...
+	bullyaware_app.directive('autoFillSync', function($timeout) {
+		return {
+			require: '?ngModel',
+			link: function(scope, elem, attrs, ngModel) {
+				var origVal = elem.val();
+				$timeout(function() {
+					var newVal = elem.val();
+					if (ngModel.$pristine && origVal !== newVal) {
+						ngModel.$setViewValue(newVal);
+					}
+				}, 500);
+			}
+		};
+	});
 
 	// general action log to save operations info
 	bullyaware_app.factory('action_log', ['$http',
@@ -169,40 +167,266 @@
 	]);
 
 
+	function init_common_links($scope, $window, action_log) {
+		function make_redirect(path) {
+			return function() {
+				$.when($('body').children().not('.stable').fadeOut(300)).then(function() {
+					$window.location = path;
+				});
+			};
+		}
+		$scope.on_main = $scope.on_main || make_redirect('/');
+		$scope.on_whatis = $scope.on_whatis || make_redirect('/whatis');
+		$scope.on_about = $scope.on_about || make_redirect('/about');
+		$scope.on_login = $scope.on_login || make_redirect('/login');
+		$scope.on_getstarted = $scope.on_getstarted || make_redirect('/getstarted');
 
-	bullyaware_app.controller('BullyCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$location', 'action_log', BullyCtrl
-	]);
+		$scope.on_contact_us = $scope.on_contact_us || function() {
+			action_log({
+				contact_us: true
+			});
+			var url = 'mailto:info@bullyaware.co?subject=Request for info';
+			$window.open(url, '_blank');
+		};
 
-	function BullyCtrl($scope, $http, $q, $timeout, $location, action_log) {
-		$scope.location = $location;
+		$scope.on_support_call = $scope.on_support_call || function() {
+			action_log({
+				support_call: true
+			});
+			var url = 'mailto:info@bullyaware.co?subject=Support call';
+			$window.open(url, '_blank');
+		};
+
+		$scope.on_terms_of_use = $scope.on_terms_of_use || function() {
+			action_log({
+				terms_of_use: true
+			});
+			alert('The terms of use are being finalized and will soon be available');
+		};
+
+		$scope.on_privacy_policy = $scope.on_privacy_policy || function() {
+			action_log({
+				privacy_policy: true
+			});
+			alert('The privacy policy is being finalized and will soon be available');
+		};
+	}
+
+	function init_server_data($scope) {
 		var server_data_raw = $('#server_data').html();
 		$scope.server_data = server_data_raw ? JSON.parse(server_data_raw) : {};
 		$scope.session_id = $scope.server_data.session;
+	}
 
-		// set_user($scope.server_data.user);
 
-		function set_user(user) {
-			$scope.user = user;
-			if (user) {
-				$.when($('#signup_form').fadeOut(1000)).then(function() {
-					return $('#thanks').fadeIn();
-				});
-			} else {
-				$.when($('#thanks').fadeOut(1000)).then(function() {
-					return $('#signup_form').fadeIn();
-				});
-			}
-		}
 
+
+	bullyaware_app.controller('MenuCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', MenuCtrl
+	]);
+
+	function MenuCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		$scope.active_link = function(link) {
+			return (link === $window.location.pathname) ? 'active' : '';
+		};
+	}
+
+
+
+
+	bullyaware_app.controller('WelcomeCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', WelcomeCtrl
+	]);
+
+	function WelcomeCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
 
 		// on page load log the load action
 		action_log({
-			load_page: $location.absUrl()
+			load_page_welcome: $location.absUrl()
 		});
 
 		// start animations on page load
-		$('#bg, #welcome_header, #welcome_action').fadeIn(1000);
+		$('.poster_area').fadeIn(1000);
+
+	}
+
+
+
+
+	bullyaware_app.controller('WhatisCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', WhatisCtrl
+	]);
+
+	function WhatisCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
+
+		// on page load log the load action
+		action_log({
+			load_page_whatis: $location.absUrl()
+		});
+
+		// start animations on page load
+		$('.poster_area').fadeIn(1000);
+	}
+
+
+
+
+	bullyaware_app.controller('AboutCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', AboutCtrl
+	]);
+
+	function AboutCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
+
+		// on page load log the load action
+		action_log({
+			load_page_about: $location.absUrl()
+		});
+
+		$('#about_content').fadeIn(1000);
+	}
+
+
+
+
+	bullyaware_app.controller('LoginCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', LoginCtrl
+	]);
+
+	function LoginCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
+
+		// on page load log the load action
+		action_log({
+			load_page_login: $location.absUrl()
+		});
+
+		$('#login_content').fadeIn(1000);
+
+		$scope.do_login = function() {
+			console.log('LOGIN', $scope.user_email, $scope.user_password);
+			action_log({
+				do_login: {
+					user_email: $scope.user_email,
+					user_password: $scope.user_password
+				}
+			});
+			if ($scope.user_email && $scope.user_password) {
+				alert('Your login request was accepted and you will be contacted');
+				$scope.on_main();
+			}
+		};
+	}
+
+
+
+
+	bullyaware_app.controller('GetStartedCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', GetStartedCtrl
+	]);
+
+	function GetStartedCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
+
+		// on page load log the load action
+		action_log({
+			load_page_getstarted: $location.absUrl()
+		});
+
+		$('#getstarted_content').fadeIn(1000);
+
+		$scope.step = 2;
+
+		$scope.steps = [{
+			name: 'Role'
+		}, {
+			name: 'Email'
+		}, {
+			name: 'Done'
+		}];
+
+		$scope.goto_step = function(step) {
+			$scope.step = step;
+		};
+
+		$scope.on_user_role = function(role) {
+			action_log({
+				user_role: role
+			});
+			$scope.user_role = role;
+			$scope.step++;
+		};
+
+		$scope.do_signup = function() {
+			if (!$scope.user_email) {
+				$("#user_email").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
+			if (!$scope.user_password) {
+				$("#user_password").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
+			if (!$scope.user_password2 || $scope.user_password2 !== $scope.user_password) {
+				$("#user_password2").effect({
+					effect: 'highlight',
+					color: '#07d',
+					duration: 1000
+				}).focus();
+				return;
+			}
+			// send action log async
+			action_log({
+				signup: $scope.user_email
+			});
+			return $http({
+				method: 'POST',
+				url: '/user/signup',
+				data: {
+					email: $scope.user_email,
+					password: $scope.user_password,
+					role: $scope.user_role
+				}
+			}).then(function(res) {
+				console.log('USER CREATED', res);
+				$scope.step++;
+			}, function(err) {
+				console.error('USER CREATE FAILED', err);
+			});
+		};
+
+
+		$scope.on_click_account_type = function(type, event) {
+			$(event.target).effect({
+				effect: 'pulsate',
+				times: 2
+			});
+			type.checked = !type.checked;
+			if (type.checked) {
+				action_log({
+					account_type_set: type.name
+				});
+			} else {
+				action_log({
+					account_type_unset: type.name
+				});
+			}
+		};
 
 		$scope.account_types = [{
 			name: 'Twitter',
@@ -241,6 +465,48 @@
 			icon: 'icon-question-sign',
 			color: '#777'
 		}];
+
+	}
+
+
+
+
+
+
+
+
+
+	bullyaware_app.controller('BullyCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', BullyCtrl
+	]);
+
+	function BullyCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		$scope.location = $location;
+		var server_data_raw = $('#server_data').html();
+		$scope.server_data = server_data_raw ? JSON.parse(server_data_raw) : {};
+		$scope.session_id = $scope.server_data.session;
+
+		// set_user($scope.server_data.user);
+
+		function set_user(user) {
+			$scope.user = user;
+			if (user) {
+				$.when($('#signup_form').fadeOut(1000)).then(function() {
+					return $('#thanks').fadeIn();
+				});
+			} else {
+				$.when($('#thanks').fadeOut(1000)).then(function() {
+					return $('#signup_form').fadeIn();
+				});
+			}
+		}
+
+
+		// on page load log the load action
+		action_log({
+			load_page: $location.absUrl()
+		});
+
 
 		$scope.account_type = $scope.account_types[0];
 		$scope.choose_account_type = function(type) {
@@ -315,8 +581,8 @@
 
 			var duration = 1000;
 			$.when(
-				$('body').switchClass('lights-off', 'lights-on', duration),
-				$('#bg, #welcome_view').fadeOut(duration)
+				$('body').switchClass('bgblk', 'bgwht', duration),
+				$('.poster_area').fadeOut(duration)
 			).then(function() {
 				return $('#box_header').fadeIn(duration);
 			}).then(function() {
@@ -489,39 +755,6 @@
 
 
 
-	bullyaware_app.controller('AboutCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$location', 'action_log', AboutCtrl
-	]);
-
-	function AboutCtrl($scope, $http, $q, $timeout, $location, action_log) {
-		// on page load log the load action
-		action_log({
-			load_page: $location.absUrl()
-		});
-
-		$.when($('#about_head').fadeIn(1000)).then(function() {
-			return $('#about_content').fadeIn(1000);
-		});
-	}
-
-
-
-	bullyaware_app.controller('MenuCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$location', 'action_log', MenuCtrl
-	]);
-
-	function MenuCtrl($scope, $http, $q, $timeout, $location, action_log) {
-		$scope.on_contact_us = function() {
-			action_log({
-				contact_us: true
-			});
-		};
-		$scope.on_support_call = function() {
-			action_log({
-				support_call: true
-			});
-		};
-	}
 
 
 })();
