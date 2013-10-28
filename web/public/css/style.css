@@ -1,5 +1,6 @@
 h1, h2, h3, h4, h5, h6, p, a, span, div {
-	font-family:'Open Sans', sans-serif !important;
+	/*font-family:'Open Sans', sans-serif !important;*/
+	font-family:'PT Sans', sans-serif !important;
 }
 .lead {
 	font-size: 1.2em !important;
