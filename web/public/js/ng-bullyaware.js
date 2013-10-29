@@ -339,8 +339,8 @@
 				method: 'POST',
 				url: '/user/login',
 				data: {
-					user_email: $scope.user_email,
-					user_password: $scope.user_password
+					email: $scope.user_email,
+					password: $scope.user_password
 				}
 			}).then(function(res) {
 				console.log('USER LOGIN DONE', res);
@@ -404,8 +404,7 @@
 				url: '/user/signup',
 				data: {
 					email: $scope.user_email,
-					password: $scope.user_password,
-					role: $scope.user_role
+					password: $scope.user_password
 				}
 			}).then(function(res) {
 				console.log('USER CREATED', res);
@@ -434,45 +433,47 @@
 			load_page_getstarted: $location.absUrl()
 		});
 
-		$('#getstarted_content').fadeIn(1000);
+		function init_user_info() {
+			$http({
+				method: 'GET',
+				url: '/user'
+			}).then(function(res) {
+				console.log('GOT USER', res.data);
+				$scope.user_info = res.data;
+				if ($scope.user_info.role) {
+					$scope.user_role = $scope.user_info.role;
+				}
+				$('#loading_sign').hide();
+				$('#getstarted_content').fadeIn(1000);
+			}, function(err) {
+				console.error('FAILED GET USER', err);
+				$timeout(init_user_info, 1000);
+			});
+		}
+		init_user_info();
 
-		$scope.step = 0;
-
-		$scope.steps = [{
-			name: 'You are a'
-		}, {
-			name: 'Done'
-		}];
-
-		$scope.goto_step = function(step) {
-			$scope.step = step;
-		};
 
 		$scope.on_user_role = function(role) {
+			if (role === $scope.user_role) {
+				return;
+			}
 			action_log({
 				user_role: role
 			});
-			$scope.user_role = role;
-			$scope.step++;
-		};
-
-
-		$scope.on_click_account_type = function(type, event) {
-			$(event.target).effect({
-				effect: 'pulsate',
-				times: 2
+			$http({
+				method: 'PUT',
+				url: '/user',
+				data: {
+					role: role
+				}
+			}).then(function(res) {
+				console.log('UPDATED ROLE', res);
+				$scope.user_role = role;
+			}, function(err) {
+				console.error('FAILED UPDATE ROLE', err);
 			});
-			type.checked = !type.checked;
-			if (type.checked) {
-				action_log({
-					account_type_set: type.name
-				});
-			} else {
-				action_log({
-					account_type_unset: type.name
-				});
-			}
 		};
+
 
 		$scope.account_types = [{
 			name: 'Twitter',
@@ -512,6 +513,68 @@
 			color: '#777'
 		}];
 
+
+		// TODO sync with user object on server
+		$scope.twitter_accounts = [];
+
+		$scope.add_twitter = function() {
+			var name = $scope.target_account;
+			if (!name) {
+				return;
+			}
+			action_log({
+				add_twitter: name
+			});
+			if (name[0] !== '@') {
+				name = '@' + name;
+			}
+			$scope.twitter_accounts.push(name);
+			$scope.target_account = '';
+		};
+		$scope.help_find_twitter = function() {
+			action_log({
+				help_find_twitter: true
+			});
+			alert('Coming soon');
+		};
+		$scope.done_twitter = function() {
+			action_log({
+				done_twitter: true
+			});
+			$scope.is_done_twitter = true;
+		};
+
+
+		$scope.on_click_account_type = function(type, event) {
+			$(event.target).effect({
+				effect: 'pulsate',
+				times: 2
+			});
+			type.checked = !type.checked;
+			if (type.checked) {
+				action_log({
+					account_type_set: type.name
+				});
+			} else {
+				action_log({
+					account_type_unset: type.name
+				});
+			}
+		};
+		$scope.done_others = function() {
+			action_log({
+				done_others: true
+			});
+			$scope.is_done_others = true;
+		};
+
+
+		$scope.subscribe = function(time) {
+			action_log({
+				subscribe: time
+			});
+			alert('Thanks! We will contact you shortly');
+		};
 	}
 
 

@@ -11,65 +11,142 @@
 		<?# def.include( 'common_menu.html') ?>
 	</div>
 
+	<div id="loading_sign" class="text-center" style="font-size: 50px; padding: 30px">
+		<i class="icon-spinner icon-spin"></i>
+	</div>
+
 	<div id="getstarted_content" class="container" style="display: none; padding-bottom: 30px">
-		<div style="padding: 30px 0 30px 0;">
+
+		<div style="padding: 30px 0 15px 0;">
 			<h1>Get Started</h1>
 			<hr/>
-			<ol class="breadcrumb">
-				<li>Steps:</li>
-				<li ng-repeat="st in steps" ng-show="$index <= step">
-					<a href="#" ng-class="(step == $index) && 'active' || ''" ng-click="goto_step($index)">{{st.name}}</a>
+		</div>
+
+
+		<div style="margin-bottom: 40px">
+			<h3 style="margin-bottom: 15px">
+				<i class="icon-cog icon-large icon-fixed-width menu_color"></i>
+				Choose your account type
+			</h3>
+			<div class="row">
+				<div class="col-xs-6 col-sm-4 text-center">
+					<button class="btn btn-lg btn-{{user_role=='parent' && 'danger' || 'default'}}" style="width: 100%; margin-bottom: 15px" ng-click="on_user_role('parent')">
+						Parent
+					</button>
+				</div>
+				<div class="col-xs-6 col-sm-4 text-center">
+					<button class="btn btn-lg btn-{{user_role=='teenager' && 'danger' || 'default'}}" style="width: 100%; margin-bottom: 15px" ng-click="on_user_role('teenager')">
+						Teenager
+					</button>
+				</div>
+			</div>
+		</div>
+
+
+		<div ng-show="!!user_role" style="margin-bottom: 40px">
+			<h3 style="margin-bottom: 15px">
+				<i class="icon-twitter icon-large icon-fixed-width menu_color"></i>
+				Connect twitter accounts
+			</h3>
+			<ul>
+				<li ng-repeat="name in twitter_accounts">
+					{{name}}
 				</li>
-			</ol>
-		</div>
-
-		<div ng-show="step==0" class="text-center">
-			<h1>You are a</h1>
-			<br/>
-			<div class="col-sm-6 text-center">
-				<button class="btn btn-lg btn-warning" style="width: 200px; height: 150px" ng-click="on_user_role('teenager')">
-					<h1>Teenager</h1>
-				</button>
-			</div>
-			<div class="col-sm-6 text-center">
-				<button class="btn btn-lg btn-primary" style="width: 200px; height: 150px" ng-click="on_user_role('parent')">
-					<h1>Parent</h1>
-				</button>
-			</div>
-		</div>
-
-		<div ng-show="step==1" class="text-center">
-			<h1>Thank you!</h1>
-			<h4>We will contact you using this email address:</h4>
-			<p class="lead">
-				<b>{{ user_email || 'HOLDER' }}</b>
-			</p>
-			<form class="form-horizontal" role="form">
-				<!-- 
-				<div class="form-group">
-					<label class="col-sm-3 control-label">You are a:</label>
-					<div class="col-sm-9">
-						<select class="form-control" ng-model="user_role" ng-change="on_user_role()">
-							<option value="" disabled></option>
-							<option value="parent">Parent</option>
-							<option value="teenager">Teenager</option>
-							<option value="other">Other</option>
-						</select>
+			</ul>
+			<div class="row">
+				<div class="col-sm-4">
+					<h5>Enter your {{user_role=='parent' && 'child\'s' || ''}} twitter name</h5>
+				</div>
+				<div class="col-sm-4">
+					<div class="input-group input-group-lg" style="margin-bottom: 15px">
+						<input id="target_account" ng-model="target_account" type="text" class="form-control" placeholder="Enter twitter account" autocomplete="on" />
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-danger" ng-click="add_twitter()">
+								<i class="icon-arrow-right icon-large icon-fixed-width"></i>
+							</button>
+						</div>
 					</div>
 				</div>
-				-->
-				<div class="form-group">
-					<h4>
-						Click on the social networks that you are interested to monitor:
-					</h4>
-					<div>
-						<span ng-repeat="type in account_types" title="{{type.name}}" ng-click="on_click_account_type(type, $event)" style="cursor: pointer">
-							<i style="color: {{(type.checked || type.hover) && type.color || '#d0d0d0'}}" class="{{type.icon}} icon-2x icon-fixed-width" ng-mouseenter="type.hover = true" ng-mouseleave="type.hover = false"></i>
-						</span>
-					</div>
+			</div>
+			<div class="row" ng-show="user_role=='parent'">
+				<div class="col-sm-4">
+					<h5>We can find the account name for you if needed</h5>
 				</div>
-			</form>
+				<div class="col-sm-8">
+					<button class="btn btn-default" style="margin-bottom: 15px" ng-click="help_find_twitter()">Find twitter user</button>
+				</div>
+			</div>
+			<div class="row" ng-show="!is_done_twitter">
+				<div class="col-sm-4">
+					<h5>When done click next</h5>
+				</div>
+				<div class="col-sm-8">
+					<button class="btn btn-default" style="margin-bottom: 15px" ng-click="done_twitter()">Next</button>
+				</div>
+			</div>
 		</div>
+
+
+		<div ng-show="is_done_twitter" style="margin-bottom: 40px">
+			<h3 style="margin-bottom: 15px">
+				<i class="icon-user icon-large icon-fixed-width menu_color"></i>
+				Connect more accounts
+			</h3>
+			<div class="row">
+				<div class="col-sm-4">
+					<h5>
+						Choose social networks {{user_role=='parent' && 'your child uses' || 'you use'}}
+					</h5>
+				</div>
+				<div class="col-sm-8">
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<span ng-repeat="type in account_types" title="{{type.name}}" ng-click="on_click_account_type(type, $event)" style="cursor: pointer">
+								<i style="color: {{(type.checked || type.hover) && type.color || '#d0d0d0'}}" class="{{type.icon}} icon-2x icon-fixed-width" ng-mouseenter="type.hover = true" ng-mouseleave="type.hover = false"></i>
+							</span>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="row" ng-show="!is_done_others">
+				<div class="col-sm-4">
+					<h5>When done click next</h5>
+				</div>
+				<div class="col-sm-8">
+					<button class="btn btn-default" style="margin-bottom: 15px" ng-click="done_others()">Next</button>
+				</div>
+			</div>
+		</div>
+
+
+		<div ng-show="is_done_others" style="margin-bottom: 40px">
+			<h3 style="margin-bottom: 15px">
+				<i class="icon-rss icon-large icon-fixed-width menu_color"></i>
+				Subscribe for continuous monitoring for your family
+			</h3>
+			<div class="row">
+				<div class="col-sm-4">
+					<h5>10$ per month</h5>
+				</div>
+				<div class="col-sm-4">
+					<button class="btn btn-lg btn-danger" style="width: 100%; margin-bottom: 15px" ng-click="subscribe('month')">
+						Monthly subscription
+					</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<h5>100$ per year</h5>
+				</div>
+				<div class="col-sm-4">
+					<button class="btn btn-lg btn-danger" style="width: 100%; margin-bottom: 15px" ng-click="subscribe('year')">
+						Yearly subscription
+					</button>
+				</div>
+			</div>
+			<p class="lead">Limited time offer - subscribe now and get 30 days free trial!</p>
+		</div>
+
 
 	</div>
 

@@ -131,6 +131,7 @@ function save_user_in_session(req, user) {
 	};
 }
 
+
 // signup creates a new user with a given email
 exports.signup = function(req, res) {
 	console.log('SIGNUP', req.body);
@@ -171,8 +172,8 @@ exports.signup = function(req, res) {
 
 
 exports.login = function(req, res) {
-	var email = req.body.user_email;
-	var password = req.body.user_password;
+	var email = req.body.email;
+	var password = req.body.password;
 
 	return async.waterfall([
 
@@ -213,6 +214,57 @@ exports.logout = function(req, res) {
 	delete req.session.user;
 	return res.redirect('/');
 };
+
+
+exports.read_user = function(req, res) {
+	var user_id;
+
+	return async.waterfall([
+
+		function(next) {
+			if (!req.session.user || !req.session.user.id) {
+				return next({
+					status: 403
+				});
+			}
+			user_id = req.session.user.id;
+			return User.findById(req.session.user.id, next);
+		},
+
+		function(user, next) {
+			if (!user) {
+				console.error('GET USER NOT FOUND', req.session.user);
+				return next({
+					status: 403
+				});
+			}
+			return next(null, _.omit(user.toObject(), 'password'));
+		}
+	], common.reply_callback(req, res, 'GET_USER ' + user_id));
+};
+
+
+exports.update_user = function(req, res) {
+	var updates = _.pick(req.body, 'role');
+	var user_id;
+
+	return async.waterfall([
+
+		function(next) {
+			if (!req.session.user || !req.session.user.id) {
+				return next({
+					status: 403
+				});
+			}
+			user_id = req.session.user.id;
+			return User.findByIdAndUpdate(req.session.user.id, updates, function(err) {
+				return next(err);
+			});
+		},
+
+	], common.reply_callback(req, res, 'GET_USER ' + user_id));
+};
+
 
 exports.fetch_all = function(callback) {
 	async.parallel({

@@ -196,11 +196,16 @@ function error_501(req, res, next) {
 // ROUTES //
 ////////////
 
+var engine = require('./lib/engine');
 var users = require('./lib/users');
+
+app.post('/engine/analyze', users.mk_session, engine.analyze_api);
 app.post('/user/action_log', users.mk_session, users.action_log);
 app.post('/user/signup', users.mk_session, users.signup);
 app.post('/user/login', users.mk_session, users.login);
 app.get('/user/logout', users.mk_session, users.logout);
+app.get('/user', users.mk_session, users.read_user);
+app.put('/user', users.mk_session, users.update_user);
 
 // admin route
 var admin_auth = express.basicAuth(function(user, pass, callback) {
@@ -215,10 +220,6 @@ app.get('/admin', admin_auth, function(req, res, next) {
 		return res.render('admin.html', results);
 	});
 });
-
-
-var engine = require('./lib/engine');
-app.post('/engine/analyze', users.mk_session, engine.analyze_api);
 
 
 function page_context(req) {
