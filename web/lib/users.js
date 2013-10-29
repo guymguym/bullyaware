@@ -269,15 +269,15 @@ exports.update_user = function(req, res) {
 exports.fetch_all = function(callback) {
 	async.parallel({
 		users: function(next) {
-			return User.find(next);
+			return User.find().lean().exec(next);
 		},
 		sessions: function(next) {
-			return Session.find(next);
+			return Session.find().lean().exec(next);
 		},
 		actions: function(next) {
 			return Action.find({}, {
 				req: 0
-			}, next);
+			}).lean().exec(next);
 		}
 	}, callback);
 };
