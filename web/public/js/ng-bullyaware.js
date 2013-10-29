@@ -177,6 +177,7 @@
 		}
 		$scope.on_main = $scope.on_main || make_redirect('/');
 		$scope.on_whatis = $scope.on_whatis || make_redirect('/whatis');
+		$scope.on_features = $scope.on_features || make_redirect('/features');
 		$scope.on_about = $scope.on_about || make_redirect('/about');
 		$scope.on_login = $scope.on_login || make_redirect('/login');
 		$scope.on_getstarted = $scope.on_getstarted || make_redirect('/getstarted');
@@ -269,6 +270,26 @@
 		// on page load log the load action
 		action_log({
 			load_page_whatis: $location.absUrl()
+		});
+
+		// start animations on page load
+		$('.poster_area').fadeIn(1000);
+	}
+
+
+
+
+	bullyaware_app.controller('FeaturesCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', FeaturesCtrl
+	]);
+
+	function FeaturesCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
+
+		// on page load log the load action
+		action_log({
+			load_page_features: $location.absUrl()
 		});
 
 		// start animations on page load

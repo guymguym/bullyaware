@@ -13,6 +13,8 @@ if (process.env.NODETIME_ACCOUNT_KEY) {
 	});
 }
 
+require('newrelic');
+
 var path = require('path');
 var URL = require('url');
 var http = require('http');
@@ -238,6 +240,9 @@ app.get('/about', users.mk_session, function(req, res) {
 });
 app.get('/whatis', users.mk_session, function(req, res) {
 	return res.render('whatis.html', page_context(req));
+});
+app.get('/features', users.mk_session, function(req, res) {
+	return res.render('features.html', page_context(req));
 });
 app.get('/getstarted', users.mk_session, function(req, res) {
 	if (!req.session.user) {

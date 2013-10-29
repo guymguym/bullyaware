@@ -10,33 +10,38 @@
 			</a>
 		</div>
 		<div class="collapse navbar-collapse navbar-menu-collapse">
-			<ul class="nav navbar-nav">
-				<li ng-class="active_link('/whatis')">
-					<a href="#" ng-click="on_whatis()">
-						<b class="menu_color">What is</b>
-						<span>Bullyaware</span>
-					</a>
-				</li>
-				<li ng-class="active_link('/about')">
-					<a href="#" ng-click="on_about()">
-						<b class="menu_color">About</b>
-						<span>us</span>
-					</a>
-				</li>
-			</ul>
-			<ul ng-show="!!user" class="nav navbar-nav navbar-right">
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						<b>{{ user.email }}</b>
-						<span class="caret"></span>
-					</a>
-					<ul class="dropdown-menu" role="menu">
-						<li><a href="/user/logout">Logout</a>
-						</li>
-					</ul>
-				</li>
-			</ul>
 			<div class="navbar-right">
+				<ul class="nav navbar-nav navbar-left">
+					<li ng-class="active_link('/whatis')">
+						<a href="#" ng-click="on_whatis()">
+							<b class="menu_color">What is</b>
+							<span>Bullyaware</span>
+						</a>
+					</li>
+					<li ng-class="active_link('/features')">
+						<a href="#" ng-click="on_features()">
+							<b class="menu_color">Features</b>
+						</a>
+					</li>
+					<li ng-class="active_link('/about')">
+						<a href="#" ng-click="on_about()">
+							<b class="menu_color">About</b>
+							<span>us</span>
+						</a>
+					</li>
+				</ul>
+				<ul ng-show="!!user" class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<b>{{ user.email }}</b>
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="/user/logout">Logout</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
 				<button type="button" class="btn btn-primary navbar-btn" ng-click="on_getstarted()">
 					Get started
 				</button>
