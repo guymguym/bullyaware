@@ -74,7 +74,7 @@ app.engine('html', dot_emc_app.__express);
 
 // configure app middleware handlers in the order to use them
 
-app.use(express.favicon('/public/img/kid.gif'));
+app.use(express.favicon(path.join(__dirname, 'public/img/kid.gif')));
 app.use(express.logger());
 app.use(function(req, res, next) {
 	// HTTPS redirect:
