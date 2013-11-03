@@ -151,6 +151,11 @@
 	bullyaware_app.factory('action_log', ['$http',
 		function($http) {
 			return function action_log(data) {
+				if (mixpanel && mixpanel.track) {
+					for (var x in data) {
+						mixpanel.track(x.toString(), data[x]);
+					}
+				}
 				return $http({
 					method: 'POST',
 					url: '/user/action_log',
