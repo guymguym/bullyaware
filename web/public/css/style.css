@@ -1,91 +1,102 @@
 body {
-	/*padding-top: 100px;*/
+    /*padding-top: 100px;*/
 }
 h1, h2, h3, h4, h5, h6, p, a, span, div {
-	/*font-family:'Open Sans', sans-serif !important;*/
-	font-family:'PT Sans', sans-serif !important;
+    /*font-family:'Open Sans', sans-serif !important;*/
+    font-family:'PT Sans', sans-serif !important;
 }
 .lead {
-	font-size: 1.2em !important;
+    font-size: 1.2em !important;
 }
 .bgblk {
-	background-color: black;
+    background-color: black;
 }
 .bgwht {
-	background-color: white;
+    background-color: white;
 }
 .hide {
-	display: none;
+    display: none;
 }
 #menubar {
-	left: 0;
-	right: 0;
-	background-color: white;
-	margin: 0;
-	border-bottom: solid 1px black;
+    left: 0;
+    right: 0;
+    background-color: white;
+    margin: 0;
+    border-bottom: solid 1px black;
 }
 .menu_color {
-	color: #0096bb;
+    color: #0096bb;
+}
+.feature-row img {
+    width:300px;
+}
+.feature-row {
+    margin-bottom: 50px;
 }
 .poster_area {
-	position: relative;
-	top: 0;
-	left: 0;
-	right: 0;
-	height: 300px;
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 300px;
+}
+#anti_features {
+    /*	
+background-color:#778899;
+*/
 }
 @media all and (min-height: 700px) {
-	.poster_area {
-		height: 400px;
-	}
+    .poster_area {
+        height: 400px;
+    }
 }
 @media all and (min-height: 800px) {
-	.poster_area {
-		height: 500px;
-	}
+    .poster_area {
+        height: 500px;
+    }
 }
 .poster_area .poster_header {
-	color: white;
+    color: white;
 }
 .poster_area .poster_action {
-	background-color: rgba(0, 0, 0, 0.5);
-	/*padding: 10px 20px 10px 20px;*/
-	color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    /*padding: 10px 20px 10px 20px;*/
+    color: white;
 }
 .poster1 {
-	background-image: url('/public/img/5907015_l.jpg');
-	background-position: bottom right;
-	background-attachment: scroll;
-	background-repeat: no-repeat;
-	background-size: cover;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
+    background-image: url('/public/img/5907015_l.jpg');
+    background-position: bottom right;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
 }
 .poster2 {
-	background-image: url('/public/img/canstockphoto8821969.jpg');
-	background-position: top right;
-	background-attachment: scroll;
-	background-repeat: no-repeat;
-	background-size: cover;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
+    background-image: url('/public/img/canstockphoto8821969.jpg');
+    background-position: top right;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
 }
 .css-form input.ng-invalid.ng-dirty {
-	background-color: rgba(250, 150, 150, 0.3);
+    background-color: rgba(250, 150, 150, 0.3);
 }
 .css-form input.ng-valid.ng-dirty {
-	background-color: rgba(150, 200, 250, 0.3);
+    background-color: rgba(150, 200, 250, 0.3);
 }
 .axis path, .axis line {
-	fill: none;
-	stroke: black;
-	shape-rendering: crispEdges;
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
 }
 .axis text {
-	font-family: sans-serif;
-	font-size: 11px;
+    font-family: sans-serif;
+    font-size: 11px;
 }
 /*
 Allow angular.js to be loaded in body, hiding cloaked elements until 
@@ -93,17 +104,17 @@ templates compile.  The !important is important given that there may be
 other selectors that are more specific or come later and might alter display.  
 */
 [ng\:cloak], [ng-cloak], .ng-cloak {
-	display: none !important;
+    display: none !important;
 }
 @media all and (min-width: 992px) and (max-width: 1099px) {
-	.container {
-		width: 750px !important;
-	}
+    .container {
+        width: 750px !important;
+    }
 }
 @media all and (min-width: 1100px) and (max-width: 1400px) {
-	.container {
-		width: 1000px !important;
-	}
+    .container {
+        width: 1000px !important;
+    }
 }
 /* http://getbootstrap.com/examples/non-responsive/
  * 
@@ -115,58 +126,58 @@ other selectors that are more specific or come later and might alter display.
 
 /* Reset the container */
  .nonresp .container {
-	max-width: none !important;
-	/* fixed width seems unneeded */
+    max-width: none !important;
+    /* fixed width seems unneeded */
 }
 /* Always float the navbar header */
  .nonresp .navbar-header {
-	float: left;
+    float: left;
 }
 /* Undo the collapsing navbar */
  .nonresp .navbar-collapse {
-	display: block !important;
-	height: auto !important;
-	padding-bottom: 0;
-	overflow: visible !important;
+    display: block !important;
+    height: auto !important;
+    padding-bottom: 0;
+    overflow: visible !important;
 }
 .nonresp .navbar-toggle {
-	display: none;
+    display: none;
 }
 /* Always apply the floated nav */
  .nonresp .navbar-nav {
-	float: left;
-	margin: 0;
+    float: left;
+    margin: 0;
 }
 .nonresp .navbar-nav > li {
-	float: left;
+    float: left;
 }
 .nonresp .navbar-nav > li > a {
-	padding: 15px;
+    padding: 15px;
 }
 /* Redeclare since we override the float above */
  .nonresp .navbar-nav.navbar-right {
-	float: right;
+    float: right;
 }
 /* Undo custom dropdowns */
  .nonresp .navbar .open .dropdown-menu {
-	position: absolute;
-	float: left;
-	background-color: #fff;
-	border: 1px solid #cccccc;
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	border-width: 0 1px 1px;
-	border-radius: 0 0 4px 4px;
-	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    position: absolute;
+    float: left;
+    background-color: #fff;
+    border: 1px solid #cccccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-width: 0 1px 1px;
+    border-radius: 0 0 4px 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
 }
 .nonresp .navbar .open .dropdown-menu > li > a {
-	color: #333 !important;
+    color: #333 !important;
 }
 .nonresp .navbar .open .dropdown-menu > li > a:hover, .nonresp .navbar .open .dropdown-menu > li > a:focus, .nonresp .navbar .open .dropdown-menu > .active > a, .nonresp .navbar .open .dropdown-menu > .active > a:hover, .nonresp .navbar .open .dropdown-menu > .active > a:focus {
-	color: #fff !important;
-	background-color: #428bca !important;
+    color: #fff !important;
+    background-color: #428bca !important;
 }
 .nonresp .navbar .open .dropdown-menu > .disabled > a, .nonresp .navbar .open .dropdown-menu > .disabled > a:hover, .nonresp .navbar .open .dropdown-menu > .disabled > a:focus {
-	color: #999 !important;
-	background-color: transparent !important;
+    color: #999 !important;
+    background-color: transparent !important;
 }
