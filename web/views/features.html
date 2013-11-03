@@ -2,119 +2,144 @@
 <html ng-app="bullyaware_app">
 
 <head>
-	<?# def.include( 'common_head.html') ?>
+    <?# def.include( 'common_head.html') ?>
 
-		<style type="text/css">
-		
-		</style>
+        <style type="text/css">
+        </style>
 </head>
 
 <body ng-controller="FeaturesCtrl" ng-cloak>
 
-	<div class="stable">
-		<?# def.include( 'common_menu.html') ?>
-	</div>
+    <div class="stable">
+        <?# def.include( 'common_menu.html') ?>
+    </div>
+    <div class="container">
+        <div id="features_div">
+            <div style="padding: 40px 0 30px 0;">
+                <h1>Bullyaware features</h1>
+                <hr/>
+            </div>
+            <div class="container">
+                <div class="lc">
+                    <h3>Require teenager’s cooperation and agreement</h3>
+                    <p class="lead">
+                        Bullyaware is a tool that enables teens and parents to deal with cyberbullying using technology. Unlike parental control systems, it requires the teenager's agreement.
+                    </p>
+                    <br/>
+                </div>
+                <div class="rc">
+                    <img src="/public/img/cooperation.jpg" alt="">
+                </div>
+            </div>
 
-	<div class="poster_area poster2 bgblk" style="display: none">
-		<div class="poster_header" style="position: absolute; top:0; left:0; right:0">
-			<div class="container">
-			</div>
-		</div>
-		<div class="poster_action" style="position: absolute; bottom:0; left:0; right:0">
-			<div class="container">
-				<h2 style="margin: 15px 0 0 0">Bullyaware. Always vigilant.</h2>
-				<p class="lead" style="margin: 10px 0 0 0">
-					Someone you know might be the target of cyber-bullying
-				</p>
-				<p class="lead" style="margin: 10px 0 0 0">
-					With our technology you can change that
-				</p>
-				<p class="lead" style="margin: 15px 0 15px 0">
-					<button class="btn btn-lg btn-primary" ng-click="on_getstarted()">
-						Get started
-					</button>
-				</p>
-			</div>
-		</div>
-	</div>
+            <div class="container">
+                <div class="lc">
+                    <img src="/public/img/cyberbullying.jpg" alt="">
+                </div>
+                <div class="rc">
+                    <h3>Analyze any social networks for cyberbullying risks</h3>
+                    <p class="lead">
+                        Cyberbullying takes many forms and shapes. It can include profanities, abusive language, humiliation, exclusion and more. Bullyaware identifies suspicious patterns and helps in early cyberbullying identification.
+                    </p>
+                    <br/>
+                </div>
+            </div>
 
+            <div class="container">
+                <div class="lc">
+                    <h3>Provide information on best response to specific cyberbullying situation</h3>
+                    <p class="lead">
+                        Not all cyberbullying requires the same response. Good response may vary from ignoring it altogether, to reporting and engaging the authorities. Bullyaware will provide you with the various alternatives which best fit the situation.
+                    </p>
+                    <br/>
+                </div>
+                <div class="rc">
+                    <img src="/public/img/best_response.jpg" alt="">
+                </div>
+            </div>
 
-	<div class="container">
-		<div style="padding: 40px 0 30px 0;">
-			<h1>Six things to know about Bullyaware</h1>
-			<hr/>
-		</div>
-
-		<h3>1. Bullyaware is a new way to protect teenagers in the social network</h3>
-		<br/>
-		<p class="lead">
-			Cyberbullying is a growing phenomenon with implications on the victims, the abusers and their families. Bullyaware provides tools to monitor and identify bullying activities in social networks and alert all parties involved. Abusers might not be aware of the implications of their misconduct and victims might not be aware of the dangers they are exposed to. Bullyaware provides a safety net to both.
-		</p>
-		<br/>
-		<br/>
-
-		<h3>2. Together parents and teenagers make communities safer</h3>
-		<br/>
-		<p class="lead">
-			Cyberbullying can be stopped if identified as soon as possible, and dealt with the right tools. Teenagers are seldom equipped to handle cyberbullying on their own, nor can their parents catch up with the social activities they are unaware of. It requires cooperation, communication and sensitivity. Bullyaware provides the best in class expertise on dealing with cyberbullying.
-		</p>
-		<br/>
-		<br/>
-
-		<h3>3. Teenagers’ autonomy is of the highest priority</h3>
-		<br/>
-		<p class="lead">
-			Not every bicycle ride requires a stuntman helmet. Forcing excessive precautions that limit the user leads to pushback and rejection of the safety measures all together. Due to their concerns, parents oppose more and more control over their teenagers. This does not lead to a safer conduct but rather to more tension and evasions within the family. Teenagers must be granted their autonomy and they should not be forced into hiding their activities.
-		</p>
-		<br/>
-		<br/>
-
-		<h3>4. Protection only</h3>
-		<br/>
-		<p class="lead">
-			Bullyaware alerts parents on problematic scenarios but does not provide the specific details nor does it breach the fine line of privacy so much needed by teenagers. Bullyaware can’t be used as a spying tool nor as a punishment tool. We will cease to monitor a teenager if there is no buy-in from them or if they require us to stop it.
-		</p>
-		<br/>
-		<br/>
-
-		<h3>5. New technologies to deal with modern threats</h3>
-		<br/>
-		<p class="lead">
-			Current tools focus on spying and site blocking. All these techniques both limit the free use of the network and do not provide any form of protection against cyberbullying. The new threats require that the fight is taken into the arena where it is being conducted – within the social network and not within the home computer.
-		</p>
-		<br/>
-		<br/>
-
-		<h3>6. Our mission is to create a safer network</h3>
-		<br/>
-		<p class="lead">
-			Our activity within the network must not harm it’s fun factor, or its users will look for a different arena. Safe networks are free and allow their users to explore and learn. The safety is provided by supplying a protection layer that guards users from committing fatal mistakes and helps them recover if such mistakes happen.
-		</p>
-		<br/>
-		<br/>
-
-		<p class="lead">
-			Together with parents and teenagers, we can make social networks free from cyberbullying!
-		</p>
-		<p class="lead text-center" style="margin: 15px 0 15px 0">
-			<button class="btn btn-lg btn-primary" ng-click="on_getstarted()">
-				Get started
-			</button>
-		</p>
-		<br/>
-		<div class="text-center">
-			<img src="/public/img/stop-bullying-logo.jpg" width="200" />
-		</div>
-	</div>
+            <div class="container">
+                <div class="lc">
+                    <img src="/public/img/warning.jpg" alt="">
+                </div>
+                <div class="rc">
+                    <h3>Alert kids when they behave like bullies</h3>
+                    <p class="lead">
+                        Being a cyberbully has sever implications outside the internet and in real life for both the victim and the abuser. Not all cyberbullies are aware of the implications of their misconduct, which might expose both themselves and their parents to face legal charges. Bullyaware notifies oblivious abusers and helps reduce the risk on both victims and bullies.</p>
+                    <br/>
+                </div>
+            </div>
 
 
-	<div class="stable_foot">
-		<?# def.include( 'common_foot.html') ?>
-	</div>
+            <p class="lead text-center" style="margin: 15px 0 15px 0">
+                <button class="btn btn-lg btn-primary" ng-click="on_getstarted()">
+                    Get started
+                </button>
+            </p>
+        </div>
+        <div id="anti_features_div">
+            <div style="padding: 40px 0 30px 0;">
+                <h1>Features you won't find on Bullyaware</h1>
+                <hr/>
+            </div>
 
-	<div>
-		<?# def.include( 'common_scripts.html') ?>
-	</div>
+            <div class="container">
+                <div class="lc">
+                    <h3>Forcefully monitor unwillful teenager</h3>
+                    <p class="lead">
+                        Bullyaware is a strong believer in teenagers’ autonomy. If a teenager does not see the value in the service we provide or requests us to stop monitor his/her account, we will always respond.
+                    </p>
+                    <br/>
+                </div>
+                <div class="rc">
+                    <img src="/public/img/force.jpg" alt="">
+                </div>
+            </div>
+            <div class="container">
+                <div class="lc">
+                    <img src="/public/img/spy.jpg" alt="">
+                </div>
+                <div class="rc">
+                    <h3>Strong parental control</h3>
+                    <p class="lead">
+                        We do not believe in controlling teenagers. We believe in healthy limitations that protect the young generation from a position of acceptance of the parental authority. We do not believe in forcing lost authority by providing control tools.
+                    </p>
+                    <br/>
+                </div>
+
+            </div>
+            <div class="container">
+                <div class="lc">
+                    <h3>Become the perfect punishment tool</h3>
+                    <p class="lead">
+                        Parents must not punish or judge teenagers due to alerts received on Bullyaware. If we will become aware of such misconduct by a friend or other source, we will stop our interaction.
+                    </p>
+                    <br/>
+                </div>
+                <div class="rc">
+                    <img src="/public/img/punish.jpg" alt="">
+                </div>
+
+            </div>
+
+            <br/>
+            <p class="lead text-center" style="margin: 15px 0 15px 0">
+                <button class="btn btn-lg btn-primary" ng-click="on_getstarted()">
+                    Get started
+                </button>
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="stable_foot">
+        <?# def.include( 'common_foot.html') ?>
+    </div>
+
+    <div>
+        <?# def.include( 'common_scripts.html') ?>
+    </div>
 
 </body>
 
