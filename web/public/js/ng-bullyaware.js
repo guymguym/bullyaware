@@ -182,6 +182,14 @@
 		$scope.on_login = $scope.on_login || make_redirect('/login');
 		$scope.on_getstarted = $scope.on_getstarted || make_redirect('/getstarted');
 
+		$scope.on_yahoo_hackathon = $scope.on_yahoo_hackathon || function() {
+			action_log({
+				yahoo_hackathon: true
+			});
+			var url = 'http://yahoodevelopers.tumblr.com/post/64404445568/yahoo-hack-israel-winning-hacks';
+			$window.open(url, '_blank');
+		};
+
 		$scope.on_contact_us = $scope.on_contact_us || function() {
 			action_log({
 				contact_us: true
