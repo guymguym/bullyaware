@@ -13,7 +13,7 @@ if (process.env.NODETIME_ACCOUNT_KEY) {
 	});
 }
 
-require('newrelic');
+// require('newrelic');
 
 var path = require('path');
 var URL = require('url');
