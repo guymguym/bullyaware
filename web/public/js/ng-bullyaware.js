@@ -366,7 +366,7 @@
 			action_log({
 				do_login: {
 					user_email: $scope.user_email,
-					user_password: $scope.user_password
+					// user_password: $scope.user_password
 				}
 			});
 			$http({
