@@ -238,11 +238,17 @@ app.get('/', users.mk_session, function(req, res) {
 app.get('/about', users.mk_session, function(req, res) {
 	return res.render('about.html', page_context(req));
 });
+app.get('/contact', users.mk_session, function(req, res) {
+	return res.render('contact.html', page_context(req));
+});
 app.get('/whatis', users.mk_session, function(req, res) {
 	return res.render('whatis.html', page_context(req));
 });
 app.get('/features', users.mk_session, function(req, res) {
 	return res.render('features.html', page_context(req));
+});
+app.get('/demo', users.mk_session, function(req, res) {
+	return res.render('demo.html', page_context(req));
 });
 app.get('/getstarted', users.mk_session, function(req, res) {
 	if (!req.session.user) {

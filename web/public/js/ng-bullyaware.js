@@ -154,6 +154,7 @@
 				if (mixpanel && mixpanel.track) {
 					for (var x in data) {
 						mixpanel.track(x.toString(), data[x]);
+						ga('send', 'event', 'general', x.toString(), data[x].toString());
 					}
 				}
 				return $http({
@@ -186,6 +187,8 @@
 		$scope.on_about = $scope.on_about || make_redirect('/about');
 		$scope.on_login = $scope.on_login || make_redirect('/login');
 		$scope.on_getstarted = $scope.on_getstarted || make_redirect('/getstarted');
+		$scope.on_demo = $scope.on_demo || make_redirect('/demo');
+		$scope.on_contact_us = $scope.on_contact_us || make_redirect('/contact');
 
 		$scope.on_yahoo_hackathon = $scope.on_yahoo_hackathon || function() {
 			action_log({
@@ -195,9 +198,9 @@
 			$window.open(url, '_blank');
 		};
 
-		$scope.on_contact_us = $scope.on_contact_us || function() {
+		$scope.on_send_mail = $scope.on_send_mail || function() {
 			action_log({
-				contact_us: true
+				send_mail: true
 			});
 			var url = 'mailto:info@bullyaware.co?subject=Request for info';
 			$window.open(url, '_blank');
@@ -208,6 +211,22 @@
 				support_call: true
 			});
 			var url = 'mailto:info@bullyaware.co?subject=Support call';
+			$window.open(url, '_blank');
+		};
+
+		$scope.on_follow_facebook = $scope.on_follow_facebook || function() {
+			action_log({
+				follow_facebook: true
+			});
+			var url = 'https://www.facebook.com/Bullyaware.co';
+			$window.open(url, '_blank');
+		};
+
+		$scope.on_follow_twitter = $scope.on_follow_twitter || function() {
+			action_log({
+				follow_twitter: true
+			});
+			var url = 'https://twitter.com/bullyawareco';
 			$window.open(url, '_blank');
 		};
 
@@ -224,6 +243,9 @@
 			});
 			alert('The privacy policy is being finalized and will soon be available');
 		};
+
+		// start animations on page load
+		$('.page_content').fadeIn(1000);
 	}
 
 	function init_server_data($scope) {
@@ -232,6 +254,53 @@
 		$scope.session_id = $scope.server_data.session;
 		$scope.user = $scope.server_data.user;
 		// console.log('USER', $scope.user, 'DATA', $scope.server_data);
+		// init_intercom_io($scope.user);
+	}
+
+	function init_intercom_io(user) {
+		window.intercomSettings = {
+			// TODO: The current logged in user's email address.
+			email: user ? user.email : 'guest@bullyaware.co',
+			// TODO: The current logged in user's sign-up date as a Unix timestamp.
+			created_at: 0,
+			app_id: "3372acc94990a1532f4a3488f3c3fa49932b7ddf",
+			"widget": {
+				// "activator": "#IntercomDefaultWidget",
+				"activator": "#Intercom",
+			},
+		};
+		(function() {
+			var w = window;
+			var ic = w.Intercom;
+			if (typeof ic === "function") {
+				ic('reattach_activator');
+				ic('update', intercomSettings);
+			} else {
+				var d = document;
+				var i = function() {
+					i.c(arguments)
+				};
+				i.q = [];
+				i.c = function(args) {
+					i.q.push(args)
+				};
+				w.Intercom = i;
+
+				var l = function() {
+					var s = d.createElement('script');
+					s.type = 'text/javascript';
+					s.async = true;
+					s.src = 'https://static.intercomcdn.com/intercom.v1.js';
+					var x = d.getElementsByTagName('script')[0];
+					x.parentNode.insertBefore(s, x);
+				}
+				if (w.attachEvent) {
+					w.attachEvent('onload', l);
+				} else {
+					w.addEventListener('load', l, false);
+				}
+			};
+		})();
 	}
 
 
@@ -263,10 +332,6 @@
 		action_log({
 			load_page_welcome: $location.absUrl()
 		});
-
-		// start animations on page load
-		$('.poster_area').fadeIn(1000);
-
 	}
 
 
@@ -304,9 +369,6 @@
 		action_log({
 			load_page_features: $location.absUrl()
 		});
-
-		// start animations on page load
-		$('.poster_area').fadeIn(1000);
 	}
 
 
@@ -324,8 +386,23 @@
 		action_log({
 			load_page_about: $location.absUrl()
 		});
+	}
 
-		$('#about_content').fadeIn(1000);
+
+
+
+	bullyaware_app.controller('ContactCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', ContactCtrl
+	]);
+
+	function ContactCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
+
+		// on page load log the load action
+		action_log({
+			load_page_contact: $location.absUrl()
+		});
 	}
 
 
@@ -343,8 +420,6 @@
 		action_log({
 			load_page_login: $location.absUrl()
 		});
-
-		$('#login_content').fadeIn(1000);
 
 		$scope.do_login = function() {
 			if (!$scope.user_email) {
@@ -401,8 +476,6 @@
 		action_log({
 			load_page_signup: $location.absUrl()
 		});
-
-		$('#signup_content').fadeIn(1000);
 
 		$scope.do_signup = function() {
 			if (!$scope.user_email) {
@@ -615,85 +688,18 @@
 
 
 
-
-
-
-
-	bullyaware_app.controller('BullyCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', BullyCtrl
+	bullyaware_app.controller('DemoCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', DemoCtrl
 	]);
 
-	function BullyCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
-		$scope.location = $location;
-		var server_data_raw = $('#server_data').html();
-		$scope.server_data = server_data_raw ? JSON.parse(server_data_raw) : {};
-		$scope.session_id = $scope.server_data.session;
-
-		// set_user($scope.server_data.user);
-
-		function set_user(user) {
-			$scope.user = user;
-			if (user) {
-				$.when($('#signup_form').fadeOut(1000)).then(function() {
-					return $('#thanks').fadeIn();
-				});
-			} else {
-				$.when($('#thanks').fadeOut(1000)).then(function() {
-					return $('#signup_form').fadeIn();
-				});
-			}
-		}
-
+	function DemoCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
+		init_common_links($scope, $window, action_log);
+		init_server_data($scope);
 
 		// on page load log the load action
 		action_log({
-			load_page: $location.absUrl()
+			load_page_demo: $location.absUrl()
 		});
-
-
-		$scope.account_type = $scope.account_types[0];
-		$scope.choose_account_type = function(type) {
-			$scope.account_type = type;
-		};
-
-		$scope.on_tryit_account_type = function() {
-			action_log({
-				account_type_tryit: true
-			});
-		};
-
-		$scope.on_click_account_type = function(type, event) {
-			$(event.target).effect({
-				effect: 'pulsate',
-				times: 2
-			});
-			type.checked = !type.checked;
-			if (type.checked) {
-				action_log({
-					account_type_set: type.name
-				});
-			} else {
-				action_log({
-					account_type_unset: type.name
-				});
-			}
-		};
-
-		$scope.open_signup = function() {
-			$('#box_signup').fadeIn(1000);
-			action_log({
-				open_signup: true
-			});
-		};
-
-		$scope.on_user_role = function() {
-			action_log({
-				user_role: $scope.user_role
-			});
-		};
-
-
-
 
 		// $scope.target_account = 'elizabeth_tice';
 		// $scope.target_account = 'yahoomail';
@@ -702,8 +708,11 @@
 		// $scope.target_account = 'MileyCyrus';
 
 		var DEMO_ACCOUNT = 'MileyCyrus';
+		$scope.target_account = DEMO_ACCOUNT;
+		$scope.analyze = analyze;
+		analyze();
 
-		$scope.analyze = function() {
+		function analyze() {
 			if (!$scope.target_account || $scope.target_account === DEMO_ACCOUNT) {
 				action_log({
 					analyze_demo: DEMO_ACCOUNT
@@ -721,24 +730,6 @@
 			}
 			$scope.last_result = '';
 			$scope.last_error = null;
-
-			var duration = 1000;
-			$.when(
-				$('body').switchClass('bgblk', 'bgwht', duration),
-				$('.poster_area').fadeOut(duration)
-			).then(function() {
-				return $('#box_header').fadeIn(duration);
-			}).then(function() {
-				return $('#box_description').fadeIn(duration);
-			}).then(function() {
-				// if ($scope.user) {
-				return $('#box_signup').fadeIn(duration);
-				// }
-			}).then(function() {
-				fill_graph();
-				return $('#box_analyze').fadeIn(duration);
-			});
-
 			return $http({
 				method: 'POST',
 				url: '/engine/analyze',
@@ -751,57 +742,6 @@
 				fill_graph();
 			}, function(err) {
 				$scope.last_error = err;
-			});
-		};
-
-
-		$scope.signup = function() {
-			if ($scope.user) {
-				return;
-			}
-			if (!$scope.user_email) {
-				$("#user_email").effect({
-					effect: 'highlight',
-					color: '#07d',
-					duration: 1000
-				}).focus();
-				return;
-			}
-			/*
-			if (!$scope.user_password) {
-				$("#user_password").effect({
-					effect: 'highlight',
-					color: '#07d',
-					duration: 1000
-				}).focus();
-				return;
-			}
-			if (!$scope.user_password2 || $scope.user_password2 !== $scope.user_password) {
-				$("#user_password2").effect({
-					effect: 'highlight',
-					color: '#07d',
-					duration: 1000
-				}).focus();
-				return;
-			}
-			*/
-			// send action log async
-			action_log({
-				signup: $scope.user_email
-			});
-			return $http({
-				method: 'POST',
-				url: '/user/signup',
-				data: {
-					email: $scope.user_email,
-					// password: $scope.user_password,
-					// role: $scope.user_role
-				}
-			}).then(function(res) {
-				console.log('USER CREATED', res);
-				set_user(res.data);
-			}, function(err) {
-				console.error('USER CREATE FAILED', err);
 			});
 		};
 
@@ -829,7 +769,7 @@
 				return;
 			}
 			d3.select("#graph").select("svg").remove();
-			var width = $("#graph").parent().parent().parent().parent().width() - 50;
+			var width = $("#graph").parent().parent().width() - 50;
 			var height = 200;
 			var pad = 25;
 			var messages = $scope.last_result.messages;

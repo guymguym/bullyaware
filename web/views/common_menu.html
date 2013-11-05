@@ -37,12 +37,23 @@
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu" role="menu">
+							<li>
+								<a href="#" ng-click="on_getstarted()">
+									Get Started
+								</a>
+							</li>
+							<li>
+								<a href="#" ng-click="on_demo()">
+									Example
+								</a>
+							</li>
+							<li class="divider"></li>
 							<li><a href="/user/logout">Logout</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
-				<button type="button" class="btn btn-primary navbar-btn" ng-click="on_getstarted()">
+				<button ng-show="!user" type="button" class="btn btn-primary navbar-btn" ng-click="on_getstarted()">
 					Get started
 				</button>
 				<button ng-show="!user" type="button" class="btn btn-default navbar-btn" ng-click="on_login()">

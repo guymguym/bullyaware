@@ -11,28 +11,45 @@
 		<?# def.include( 'common_menu.html') ?>
 	</div>
 
-	<div id="signup_content" class="container text-center" style="display: none; padding-bottom: 30px">
+	<div class="page_content container" style="display: none; padding-bottom: 30px">
 		<div style="padding: 30px 0 30px 0;">
-			<h1>Create an account to get started</h1>
+			<h1>Get started in 3 quick steps:</h1>
 			<hr/>
 		</div>
 
-		<form id="signup_form" name="form" role="form" novalidate class="css-form col-sm-offset-3 col-sm-6">
-			<div class="form-group">
-				<input id="user_email" required ng-model="user_email" auto-fill-sync type="email" class="form-control" placeholder="Your email address" autocomplete="off" name="email" />
+		<div class="col-sm-6">
+			<div style="background-color: #eef; border-radius: 10px; margin-bottom: 20px; padding: 20px">
+				<h4><b><i class="icon-caret-right icon-fixed-width"></i> Create a personal account</b></h4>
+				<h4><i class="icon-caret-right icon-fixed-width"></i> Setup social accounts to monitor</h4>
+				<h4><i class="icon-caret-right icon-fixed-width"></i> Subscribe and get 30 days free trial</h4>
+				<div style="padding: 45px 0 20px 0">
+					<a type="button" class="btn btn-success" href="/demo" target="_blank">
+						See Risk Analysis Example
+					</a>
+				</div>
 			</div>
-			<div class="form-group">
-				<input id="user_password" required ng-model="user_password" auto-fill-sync type="password" class="form-control" placeholder="Choose password" name="password" />
+		</div>
+		<div class="col-sm-6">
+			<div style="background-color: #eef; border-radius: 10px; margin-bottom: 20px; padding: 20px">
+				<form id="signup_form" name="form" role="form" novalidate class="css-form">
+					<div class="form-group">
+						<input id="user_email" required ng-model="user_email" auto-fill-sync type="email" class="form-control" placeholder="Your email address" autocomplete="off" name="email" />
+					</div>
+					<div class="form-group">
+						<input id="user_password" required ng-model="user_password" auto-fill-sync type="password" class="form-control" placeholder="Choose password" name="password" />
+					</div>
+					<div class="form-group">
+						<input id="user_password2" required ng-model="user_password2" auto-fill-sync type="password" class="form-control" placeholder="Retype password" name="password2" />
+					</div>
+					<div class="form-group">
+						<button class="btn btn-primary form-control" ng-click="do_signup()">
+							<i class="icon-arrow-right icon-large icon-fixed-width"></i>
+						</button>
+					</div>
+				</form>
 			</div>
-			<div class="form-group">
-				<input id="user_password2" required ng-model="user_password2" auto-fill-sync type="password" class="form-control" placeholder="Retype password" name="password2" />
-			</div>
-			<div class="form-group">
-				<button class="btn btn-primary form-control" ng-click="do_signup()">
-					<i class="icon-arrow-right icon-large icon-fixed-width"></i>
-				</button>
-			</div>
-		</form>
+		</div>
+
 	</div>
 
 
