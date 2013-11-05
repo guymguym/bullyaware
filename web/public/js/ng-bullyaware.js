@@ -278,11 +278,11 @@
 			} else {
 				var d = document;
 				var i = function() {
-					i.c(arguments)
+					i.c(arguments);
 				};
 				i.q = [];
 				i.c = function(args) {
-					i.q.push(args)
+					i.q.push(args);
 				};
 				w.Intercom = i;
 
@@ -293,13 +293,13 @@
 					s.src = 'https://static.intercomcdn.com/intercom.v1.js';
 					var x = d.getElementsByTagName('script')[0];
 					x.parentNode.insertBefore(s, x);
-				}
+				};
 				if (w.attachEvent) {
 					w.attachEvent('onload', l);
 				} else {
 					w.addEventListener('load', l, false);
 				}
-			};
+			}
 		})();
 	}
 
@@ -743,7 +743,7 @@
 			}, function(err) {
 				$scope.last_error = err;
 			});
-		};
+		}
 
 		$scope.is_level_low = function(level) {
 			return level < 0.4;
