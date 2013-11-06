@@ -7,6 +7,7 @@ var async = require('async');
 var _ = require('underscore');
 var mongoose = require('mongoose');
 var types = mongoose.Schema.Types;
+var mandrill = require('node-mandrill')('T4f6so795LfLb-mFVed1wg');
 
 // schemas
 
@@ -165,6 +166,23 @@ exports.signup = function(req, res) {
 		function(next) {
 			save_user_in_session(req, user);
 			return next();
+		},
+
+		function(next) {
+			return mandrill('/messages/send', {
+				message: {
+					to: [{
+						email: 'info@bullyaware.co',
+						name: 'info@bullyaware.co'
+					}],
+					from_email: 'info@bullyaware.co',
+					from_name: 'Bullyaware Signup',
+					subject: "User Signup - " + user.email,
+					text: [].join('\n')
+				}
+			}, function(err) {
+				return next(err);
+			});
 		}
 
 	], common.reply_callback(req, res, 'SIGNUP ' + req.body.email));
