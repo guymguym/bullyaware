@@ -174,11 +174,31 @@ exports.signup = function(req, res) {
 					to: [{
 						email: 'info@bullyaware.co',
 						name: 'info@bullyaware.co'
+					}, {
+						email: user.email,
+						name: user.email
 					}],
 					from_email: 'info@bullyaware.co',
-					from_name: 'Bullyaware Signup',
-					subject: "User Signup - " + user.email,
-					text: [].join('\n')
+					from_name: 'Bullyaware.co',
+					subject: "Welcome to Bullyaware - " + user.email,
+					text: [
+						'Hi and welcome to Bullyaware.co',
+						'',
+						'Thank you for signing up.',
+						'With Bullyaware we are trying to fight cyberbullying over the social networks with technology.',
+						'We are a young company and we need the community\'s help.',
+						'',
+						'We are trying to improve our service and would like to get your feedback.',
+						'Would you be willing to tell us about your experience?',
+						'What did you like/dislike?',
+						'We will reward you for any feedback.',
+						'',
+						'We are at your service and can be reached at info@bullyaware.co',
+						'You can login to your account at www.bullyaware.co',
+						'',
+						'Many thanks,',
+						'Bullyaware Team'
+					].join('\n')
 				}
 			}, function(err) {
 				return next(err);
