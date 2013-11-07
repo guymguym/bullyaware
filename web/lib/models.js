@@ -45,9 +45,8 @@ var social_id_schema = new mongoose.Schema({
 var message_schema = new mongoose.Schema({
 	type: String,
 	data: {},
-	sender: types.ObjectId, // SocialID
-	target: types.ObjectId, // SocialID
-	mentions: [types.ObjectId], // SocialIDs
+	sender: String, // sid from social_id_schema
+	mentions: [String], // sid from social_id_schema
 	owner: types.ObjectId, // User, or empty if received through public tapping
 });
 
