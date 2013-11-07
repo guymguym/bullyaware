@@ -13,7 +13,7 @@ if (process.env.NODETIME_ACCOUNT_KEY) {
 	});
 }
 
-// require('newrelic');
+require('newrelic');
 
 var path = require('path');
 var URL = require('url');
@@ -25,9 +25,11 @@ var express = require('express');
 var mongoose = require('mongoose');
 
 // connect to the database
-if (process.env.MONGOHQ_URL) {
-	mongoose.connect(process.env.MONGOHQ_URL);
+if (!process.env.MONGOHQ_URL) {
+	console.error('MISSING MONGOHQ_URL');
+	process.exit(1);
 }
+mongoose.connect(process.env.MONGOHQ_URL);
 
 // create express app
 var app = express();
@@ -95,7 +97,7 @@ app.use(function(req, res, next) {
 	}
 	return next();
 });
-var COOKIE_SECRET = '2430360efa2d43cf271d413cf48110249baa23110639f9a';
+var COOKIE_SECRET = '2430360efa2d43cf271d413cf48110249baa23110639f9a987asdlkmlknv';
 app.use(express.cookieParser(COOKIE_SECRET));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
@@ -201,8 +203,8 @@ function error_501(req, res, next) {
 var engine = require('./lib/engine');
 var users = require('./lib/users');
 
+app.post('/event_log', users.mk_session, users.event_log);
 app.post('/engine/analyze', users.mk_session, engine.analyze_api);
-app.post('/user/action_log', users.mk_session, users.action_log);
 app.post('/user/signup', users.mk_session, users.signup);
 app.post('/user/login', users.mk_session, users.login);
 app.get('/user/logout', users.mk_session, users.logout);

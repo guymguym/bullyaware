@@ -148,24 +148,27 @@
 	});
 
 	// general action log to save operations info
-	bullyaware_app.factory('action_log', ['$http',
+	bullyaware_app.factory('event_log', ['$http',
 		function($http) {
-			return function action_log(data) {
+			return function event_log(event, data) {
 				if (mixpanel && mixpanel.track) {
-					for (var x in data) {
-						mixpanel.track(x.toString(), data[x]);
-						ga('send', 'event', 'general', x.toString(), data[x].toString());
-					}
+					mixpanel.track(event, data);
+				}
+				if (ga) {
+					ga('send', 'event', 'general', event, data ? data.toString() : undefined);
 				}
 				return $http({
 					method: 'POST',
-					url: '/user/action_log',
-					data: data
+					url: '/event_log',
+					data: {
+						event: event,
+						data: data
+					}
 				}).then(function(res) {
-					console.log('ACTION LOGGED', data);
+					console.log('EVENT LOGGED', event, data);
 					return res;
 				}, function(err) {
-					console.error('ACTION LOG FAILED', err);
+					console.error('EVENT LOG FAILED', err);
 					throw err;
 				});
 			};
@@ -173,7 +176,7 @@
 	]);
 
 
-	function init_common_links($scope, $window, action_log) {
+	function init_common_links($scope, $window, $location, event_log) {
 		function make_redirect(path) {
 			return function() {
 				$.when($('body').children().not('.stable').fadeOut(300)).then(function() {
@@ -191,61 +194,53 @@
 		$scope.on_contact_us = $scope.on_contact_us || make_redirect('/contact');
 
 		$scope.on_yahoo_hackathon = $scope.on_yahoo_hackathon || function() {
-			action_log({
-				yahoo_hackathon: true
-			});
+			event_log('yahoo_hackathon');
 			var url = 'http://yahoodevelopers.tumblr.com/post/64404445568/yahoo-hack-israel-winning-hacks';
 			$window.open(url, '_blank');
 		};
 
 		$scope.on_send_mail = $scope.on_send_mail || function() {
-			action_log({
-				send_mail: true
-			});
+			event_log('send_mail');
 			var url = 'mailto:info@bullyaware.co?subject=Request for info';
 			$window.open(url, '_blank');
 		};
 
 		$scope.on_support_call = $scope.on_support_call || function() {
-			action_log({
-				support_call: true
-			});
+			event_log('support_call');
 			var url = 'mailto:info@bullyaware.co?subject=Support call';
 			$window.open(url, '_blank');
 		};
 
 		$scope.on_follow_facebook = $scope.on_follow_facebook || function() {
-			action_log({
-				follow_facebook: true
-			});
+			event_log('follow_facebook');
 			var url = 'https://www.facebook.com/Bullyaware.co';
 			$window.open(url, '_blank');
 		};
 
 		$scope.on_follow_twitter = $scope.on_follow_twitter || function() {
-			action_log({
-				follow_twitter: true
-			});
+			event_log('follow_twitter');
 			var url = 'https://twitter.com/bullyawareco';
 			$window.open(url, '_blank');
 		};
 
 		$scope.on_terms_of_use = $scope.on_terms_of_use || function() {
-			action_log({
-				terms_of_use: true
-			});
+			event_log('terms_of_use');
 			alert('The terms of use are being finalized and will soon be available');
 		};
 
 		$scope.on_privacy_policy = $scope.on_privacy_policy || function() {
-			action_log({
-				privacy_policy: true
-			});
+			event_log('privacy_policy');
 			alert('The privacy policy is being finalized and will soon be available');
 		};
 
-		// start animations on page load
-		$('.page_content').fadeIn(1000);
+		if (!$scope.page_loaded) {
+			$scope.page_loaded = true;
+
+			// start animations on page load
+			$('.page_content').fadeIn(1000);
+
+			event_log('page', $location.absUrl());
+		}
 	}
 
 	function init_server_data($scope) {
@@ -307,11 +302,11 @@
 
 
 	bullyaware_app.controller('MenuCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', MenuCtrl
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', MenuCtrl
 	]);
 
-	function MenuCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
-		init_common_links($scope, $window, action_log);
+	function MenuCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		init_common_links($scope, $window, $location, event_log);
 		$scope.active_link = function(link) {
 			return (link === $window.location.pathname) ? 'active' : '';
 		};
@@ -321,34 +316,24 @@
 
 
 	bullyaware_app.controller('WelcomeCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', WelcomeCtrl
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', WelcomeCtrl
 	]);
 
-	function WelcomeCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
-		init_common_links($scope, $window, action_log);
+	function WelcomeCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		init_common_links($scope, $window, $location, event_log);
 		init_server_data($scope);
-
-		// on page load log the load action
-		action_log({
-			load_page_welcome: $location.absUrl()
-		});
 	}
 
 
 
 
 	bullyaware_app.controller('WhatisCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', WhatisCtrl
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', WhatisCtrl
 	]);
 
-	function WhatisCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
-		init_common_links($scope, $window, action_log);
+	function WhatisCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		init_common_links($scope, $window, $location, event_log);
 		init_server_data($scope);
-
-		// on page load log the load action
-		action_log({
-			load_page_whatis: $location.absUrl()
-		});
 
 		// start animations on page load
 		$('.poster_area').fadeIn(1000);
@@ -358,68 +343,48 @@
 
 
 	bullyaware_app.controller('FeaturesCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', FeaturesCtrl
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', FeaturesCtrl
 	]);
 
-	function FeaturesCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
-		init_common_links($scope, $window, action_log);
+	function FeaturesCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		init_common_links($scope, $window, $location, event_log);
 		init_server_data($scope);
-
-		// on page load log the load action
-		action_log({
-			load_page_features: $location.absUrl()
-		});
 	}
 
 
 
 
 	bullyaware_app.controller('AboutCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', AboutCtrl
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', AboutCtrl
 	]);
 
-	function AboutCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
-		init_common_links($scope, $window, action_log);
+	function AboutCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		init_common_links($scope, $window, $location, event_log);
 		init_server_data($scope);
-
-		// on page load log the load action
-		action_log({
-			load_page_about: $location.absUrl()
-		});
 	}
 
 
 
 
 	bullyaware_app.controller('ContactCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', ContactCtrl
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', ContactCtrl
 	]);
 
-	function ContactCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
-		init_common_links($scope, $window, action_log);
+	function ContactCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		init_common_links($scope, $window, $location, event_log);
 		init_server_data($scope);
-
-		// on page load log the load action
-		action_log({
-			load_page_contact: $location.absUrl()
-		});
 	}
 
 
 
 
 	bullyaware_app.controller('LoginCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', LoginCtrl
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', LoginCtrl
 	]);
 
-	function LoginCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
-		init_common_links($scope, $window, action_log);
+	function LoginCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		init_common_links($scope, $window, $location, event_log);
 		init_server_data($scope);
-
-		// on page load log the load action
-		action_log({
-			load_page_login: $location.absUrl()
-		});
 
 		$scope.do_login = function() {
 			if (!$scope.user_email) {
@@ -438,12 +403,7 @@
 				}).focus();
 				return;
 			}
-			action_log({
-				do_login: {
-					user_email: $scope.user_email,
-					// user_password: $scope.user_password
-				}
-			});
+			event_log('do_login', $scope.user_email);
 			$http({
 				method: 'POST',
 				url: '/user/login',
@@ -465,17 +425,12 @@
 
 
 	bullyaware_app.controller('SignupCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', SignupCtrl
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', SignupCtrl
 	]);
 
-	function SignupCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
-		init_common_links($scope, $window, action_log);
+	function SignupCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		init_common_links($scope, $window, $location, event_log);
 		init_server_data($scope);
-
-		// on page load log the load action
-		action_log({
-			load_page_signup: $location.absUrl()
-		});
 
 		$scope.do_signup = function() {
 			if (!$scope.user_email) {
@@ -503,9 +458,7 @@
 				return;
 			}
 			// send action log async
-			action_log({
-				signup: $scope.user_email
-			});
+			event_log('signup', $scope.user_email);
 			return $http({
 				method: 'POST',
 				url: '/user/signup',
@@ -528,17 +481,12 @@
 
 
 	bullyaware_app.controller('GetStartedCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', GetStartedCtrl
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', GetStartedCtrl
 	]);
 
-	function GetStartedCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
-		init_common_links($scope, $window, action_log);
+	function GetStartedCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		init_common_links($scope, $window, $location, event_log);
 		init_server_data($scope);
-
-		// on page load log the load action
-		action_log({
-			load_page_getstarted: $location.absUrl()
-		});
 
 		function init_user_info() {
 			$http({
@@ -564,9 +512,8 @@
 			if (role === $scope.user_role) {
 				return;
 			}
-			action_log({
-				user_role: role
-			});
+			event_log('user_role', role);
+			/*
 			$http({
 				method: 'PUT',
 				url: '/user',
@@ -579,6 +526,8 @@
 			}, function(err) {
 				console.error('FAILED UPDATE ROLE', err);
 			});
+			*/
+			$scope.user_role = role;
 		};
 
 
@@ -629,9 +578,7 @@
 			if (!name) {
 				return;
 			}
-			action_log({
-				add_twitter: name
-			});
+			event_log('add_twitter', name);
 			if (name[0] !== '@') {
 				name = '@' + name;
 			}
@@ -639,15 +586,11 @@
 			$scope.target_account = '';
 		};
 		$scope.help_find_twitter = function() {
-			action_log({
-				help_find_twitter: true
-			});
+			event_log('help_find_twitter');
 			alert('Coming soon');
 		};
 		$scope.done_twitter = function() {
-			action_log({
-				done_twitter: true
-			});
+			event_log('done_twitter');
 			$scope.is_done_twitter = true;
 		};
 
@@ -659,27 +602,19 @@
 			});
 			type.checked = !type.checked;
 			if (type.checked) {
-				action_log({
-					account_type_set: type.name
-				});
+				event_log('account_type_set', type.name);
 			} else {
-				action_log({
-					account_type_unset: type.name
-				});
+				event_log('account_type_unset', type.name);
 			}
 		};
 		$scope.done_others = function() {
-			action_log({
-				done_others: true
-			});
+			event_log('done_others');
 			$scope.is_done_others = true;
 		};
 
 
 		$scope.subscribe = function(time) {
-			action_log({
-				subscribe: time
-			});
+			event_log('subscribe', time);
 			alert('Thanks! We will contact you shortly');
 		};
 	}
@@ -689,17 +624,12 @@
 
 
 	bullyaware_app.controller('DemoCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'action_log', DemoCtrl
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', DemoCtrl
 	]);
 
-	function DemoCtrl($scope, $http, $q, $timeout, $window, $location, action_log) {
-		init_common_links($scope, $window, action_log);
+	function DemoCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		init_common_links($scope, $window, $location, event_log);
 		init_server_data($scope);
-
-		// on page load log the load action
-		action_log({
-			load_page_demo: $location.absUrl()
-		});
 
 		// $scope.target_account = 'elizabeth_tice';
 		// $scope.target_account = 'yahoomail';
@@ -714,14 +644,10 @@
 
 		function analyze() {
 			if (!$scope.target_account || $scope.target_account === DEMO_ACCOUNT) {
-				action_log({
-					analyze_demo: DEMO_ACCOUNT
-				});
+				event_log('analyze_demo', DEMO_ACCOUNT);
 				$scope.target_account = DEMO_ACCOUNT;
 			} else {
-				action_log({
-					analyze_try: $scope.target_account
-				});
+				event_log(analyze_try, $scope.target_account);
 			}
 			if ($scope.target_account[0] === '@') {
 				$scope.last_query = $scope.target_account;
@@ -825,9 +751,7 @@
 				return yscale(msg.level);
 			}).duration(2000).delay(750);
 			circles.on('click', function(msg) {
-				action_log({
-					timeline_details: msg
-				});
+				event_log('timeline_details', msg);
 				alert('[Level ' + (msg.level * 100).toFixed(0) +
 					'%] [Retweeted ' + msg.retweet_count + '] ' + msg.text);
 			});

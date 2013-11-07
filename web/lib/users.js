@@ -5,64 +5,12 @@
 var common = require('./common');
 var async = require('async');
 var _ = require('underscore');
-var mongoose = require('mongoose');
-var types = mongoose.Schema.Types;
 var mandrill = require('node-mandrill')('T4f6so795LfLb-mFVed1wg');
 
-// schemas
-
-var user_schema = new mongoose.Schema({
-	email: String,
-	password: String,
-	role: String
-});
-var session_schema = new mongoose.Schema({
-	user: types.ObjectId,
-});
-var action_schema = new mongoose.Schema({
-	session: types.ObjectId,
-	user: types.ObjectId,
-	data: {},
-	req: {}
-});
-
-// indexes
-
-user_schema.index({
-	email: 1
-}, {
-	unique: true,
-	// defining as sparse avoids indexing when the field is not present
-	sparse: true
-});
-
-session_schema.index({
-	user: 1
-}, {
-	unique: false,
-	// user is not mandatory in session so
-	// defining as sparse avoids indexing when the field is not present
-	sparse: true
-});
-
-action_schema.index({
-	session: 1,
-	user: 1
-}, {
-	unique: false,
-	sparse: true
-});
-
-// models
-
-var Session = mongoose.model('Session', session_schema);
-var User = mongoose.model('User', user_schema);
-var Action = mongoose.model('Action', action_schema);
-
-// indexes are ensured by default
-// Session.ensureIndexes();
-// User.ensureIndexes();
-// Action.ensureIndexes();
+var models = require('./models');
+var Session = models.Session;
+var EventLog = models.EventLog;
+var User = models.User;
 
 
 // mk_session is a middleware (it takes 3 arguments and can pass execution to next)
@@ -85,39 +33,22 @@ exports.mk_session = function(req, res, next) {
 	});
 };
 
-// action_log is a route that is used to capture actions info from the UI.
+// event_log is a route that is used to capture actions info from the UI.
 // it saves the action info along with the session_id and optionaly user_id 
 // to have proper links to the state when the action occured.
-exports.action_log = function(req, res) {
-	var act = new Action();
+exports.event_log = function(req, res) {
+	var ev = new EventLog();
 	// session_id is always created before this route by mk_session
-	act.session = req.session.session_id;
+	ev.session = req.session.session_id;
 	// user_id is not always available, but save when it does
 	if (req.session.user) {
-		act.user = req.session.user.id;
+		ev.user = req.session.user.id;
 	}
-	// pick only expected fields
-	act.data = req.body;
-	/* TODO: validity needed?
-	_.pick(req.body,
-		'load_page',
-		'analyze_demo',
-		'analyze_try',
-		'try_account_type',
-		'contact_us',
-		'about_us',
-		'support_call',
-		'user_role'
-	);
-	*/
-	// saving request headers in case they will become valuable
-	act.req = {
-		headers: _.clone(req.headers)
-	};
-	delete act.req.headers.cookie; // not very interesting to save
+	ev.event = req.body.event;
+	ev.data = req.body.data;
 
-	return act.save(function(err) {
-		var callback = common.reply_callback(req, res, 'ACTION ' + req.session.session_id);
+	return ev.save(function(err) {
+		var callback = common.reply_callback(req, res, 'EVENT_LOG ' + req.session.session_id);
 		return callback(err);
 	});
 };
@@ -139,7 +70,7 @@ exports.signup = function(req, res) {
 	var user = new User();
 	user.email = req.body.email;
 	user.password = req.body.password;
-	user.role = req.body.role;
+	// user.role = req.body.role;
 
 	// TODO check for duplicate email?
 
@@ -254,17 +185,28 @@ exports.logout = function(req, res) {
 };
 
 
+
+function validate_user(req) {
+	return function(next) {
+		if (!req.session.user || !req.session.user.id) {
+			return next({
+				status: 403
+			});
+		}
+		return next();
+	};
+}
+
+
+
 exports.read_user = function(req, res) {
 	var user_id;
 
 	return async.waterfall([
 
+		validate_user(req),
+
 		function(next) {
-			if (!req.session.user || !req.session.user.id) {
-				return next({
-					status: 403
-				});
-			}
 			user_id = req.session.user.id;
 			return User.findById(req.session.user.id, next);
 		},
@@ -283,39 +225,34 @@ exports.read_user = function(req, res) {
 
 
 exports.update_user = function(req, res) {
-	var updates = _.pick(req.body, 'role');
+	var updates = _.pick(req.body, 'CANCELED-role');
 	var user_id;
 
 	return async.waterfall([
 
+		validate_user(req),
+
 		function(next) {
-			if (!req.session.user || !req.session.user.id) {
-				return next({
-					status: 403
-				});
-			}
 			user_id = req.session.user.id;
 			return User.findByIdAndUpdate(req.session.user.id, updates, function(err) {
 				return next(err);
 			});
 		},
 
-	], common.reply_callback(req, res, 'GET_USER ' + user_id));
+	], common.reply_callback(req, res, 'UPDATE_USER ' + user_id));
 };
 
 
 exports.fetch_all = function(callback) {
 	async.parallel({
-		users: function(next) {
-			return User.find().lean().exec(next);
-		},
 		sessions: function(next) {
 			return Session.find().lean().exec(next);
 		},
-		actions: function(next) {
-			return Action.find({}, {
-				req: 0
-			}).lean().exec(next);
+		event_logs: function(next) {
+			return EventLog.find().lean().exec(next);
+		},
+		users: function(next) {
+			return User.find().lean().exec(next);
 		}
 	}, callback);
 };

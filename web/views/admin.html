@@ -22,16 +22,16 @@
 
 	<div class="container" style="margin-top: 20px">
 
-		<a data-toggle="collapse" href="#combinations">
-			<h3>Action Combinations Stats</h3>
+		<a data-toggle="collapse" data-target="#combinations" href="#">
+			<h3>Events Combinations Stats</h3>
 		</a>
 		<div id="combinations" class="collapse">
-			<div ng-repeat="(actions,count) in stats">
-				{{ count }} sessions ==> {{ actions }}
+			<div ng-repeat="(desc,count) in event_stats">
+				{{ count }} sessions ==> {{ desc }}
 			</div>
 		</div>
 
-		<a data-toggle="collapse" href="#users_list">
+		<a data-toggle="collapse" data-target="#users_list" href="#">
 			<h3>Users - total {{data.users.length}}</h3>
 		</a>
 		<div id="users_list" class="collapse">
@@ -40,22 +40,20 @@
 			</div>
 		</div>
 
-		<a data-toggle="collapse" href="#actions_list">
-			<h3>Actions - total {{data.actions.length}}</h3>
+		<a data-toggle="collapse" data-target="#events_list" href="#">
+			<h3>Events - total {{data.event_logs.length}}</h3>
 		</a>
-		<div id="actions_list" class="collapse">
-			<div ng-repeat="action in data.actions | orderBy:'_id':true">
-				<span>Session {{action.session}}</span>
-				&nbsp;
-				<span ng-repeat="(key,val) in action.data">{{key}}: {{val}}{{!$last && ','||''}}</span>
+		<div id="events_list" class="collapse">
+			<div ng-repeat="event in data.event_logs | orderBy:'_id':true">
+				Session {{event.session}} - {{event.event}}: {{event.data}}
 			</div>
 		</div>
 
-		<a data-toggle="collapse" href="#sessions_list">
+		<a data-toggle="collapse" data-target="#sessions_list" href="#">
 			<h3>Sessions - total {{data.sessions.length}}</h3>
 		</a>
 		<div id="sessions_list" class="collapse">
-			<div ng-repeat="session in data.sessions | orderBy:'_id':true" ng-show="!!actions[session._id].length">
+			<div ng-repeat="session in data.sessions | orderBy:'_id':true" ng-show="!!session_events[session._id].length">
 				<div class="hdr">
 					<span>Session #{{ data.sessions.length-$index }}</span>
 					&nbsp;
@@ -64,11 +62,9 @@
 					<span>({{ session._id }},{{ session.user }})</span>
 				</div>
 				<div>
-					<div ng-repeat="action in actions[session._id] | orderBy:'_id':true">
-						<span>#{{data.sessions.length - $parent.$index}}.{{actions[session._id].length - $index}}</span>
-						&nbsp;
-						<span ng-repeat="(key,val) in action.data">{{key}}: {{val}}{{!$last && ','||''}}</span>
-						&nbsp;
+					<div ng-repeat="event in session_events[session._id] | orderBy:'_id':true">
+						<span>#{{data.sessions.length - $parent.$index}}.{{session_events[session._id].length - $index}}</span>
+						&nbsp; {{event.event}}: {{event.data}}
 					</div>
 				</div>
 			</div>
@@ -92,21 +88,23 @@
 
 			$scope.users = _.indexBy($scope.data.users, '_id');
 			$scope.sessions = _.indexBy($scope.data.sessions, '_id');
-			$scope.actions = _.groupBy($scope.data.actions, 'session');
+			$scope.session_events = _.groupBy($scope.data.event_logs, 'session');
 
-			$scope.stats = {};
-			_.each($scope.actions, function(actions, session_id) {
-				var actions_desc = {};
-				_.each(actions, function(action) {
-					_.each(action.data, function(value, key) {
-						actions_desc[key] = true;
-					});
+			$scope.event_stats = {};
+			_.each($scope.session_events, function(events, session_id) {
+				var events_set = {};
+				_.each(events, function(event) {
+					var key = event.event;
+					if (key === 'page') {
+						key += ':' + event.data;
+					}
+					events_set[key] = true;
 				});
-				var actions_str = _.keys(actions_desc).sort().join(', ');
-				if (actions_str in $scope.stats) {
-					$scope.stats[actions_str]++;
+				var desc = _.keys(events_set).sort().join(', ');
+				if (desc in $scope.event_stats) {
+					$scope.event_stats[desc]++;
 				} else {
-					$scope.stats[actions_str] = 1;
+					$scope.event_stats[desc] = 1;
 				}
 			});
 		}
