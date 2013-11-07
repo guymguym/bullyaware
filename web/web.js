@@ -204,12 +204,12 @@ var engine = require('./lib/engine');
 var users = require('./lib/users');
 
 app.post('/event_log', users.mk_session, users.event_log);
-app.post('/engine/analyze', users.mk_session, engine.analyze_api);
 app.post('/user/signup', users.mk_session, users.signup);
 app.post('/user/login', users.mk_session, users.login);
 app.get('/user/logout', users.mk_session, users.logout);
 app.get('/user', users.mk_session, users.read_user);
 app.put('/user', users.mk_session, users.update_user);
+app.post('/demo_query', users.mk_session, engine.demo_query);
 
 // admin route
 var admin_auth = express.basicAuth(function(user, pass, callback) {

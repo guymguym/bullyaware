@@ -9,6 +9,7 @@
 		"postinstall": "./node_modules/.bin/grunt"
 	},
 	"dependencies": {
+		"moment": "2.4.0",
 		"nodetime": "0.8.13",
 		"newrelic": "1.0.1",
 		"underscore": "1.5.1",
@@ -35,7 +36,6 @@
 		"mime": "1.2.11",
 		"facebook-api": "0.1.2",
 		"backbone": "1.0.0",
-		"moment": "2.1.0",
 		"winston": "0.7.2",
 		"blueimp-file-upload": "8.6.1",
 		"filesize": "1.10.0",

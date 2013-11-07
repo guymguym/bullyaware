@@ -647,7 +647,7 @@
 				event_log('analyze_demo', DEMO_ACCOUNT);
 				$scope.target_account = DEMO_ACCOUNT;
 			} else {
-				event_log(analyze_try, $scope.target_account);
+				event_log('analyze_try', $scope.target_account);
 			}
 			if ($scope.target_account[0] === '@') {
 				$scope.last_query = $scope.target_account;
@@ -658,7 +658,7 @@
 			$scope.last_error = null;
 			return $http({
 				method: 'POST',
-				url: '/engine/analyze',
+				url: '/demo_query',
 				data: {
 					query: $scope.last_query
 				}
