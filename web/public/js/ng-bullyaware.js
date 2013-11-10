@@ -514,15 +514,20 @@
 				return;
 			}
 			event_log('add_twitter', name);
+
 			$http({
 				method: 'POST',
-				url: '/user/person',
+				url: '/person',
 				data: {
 					name: name
 				}
-			}).then(function() {
+			}).then(function(res) {
+				console.log('ADD PERSON', res);
 				return init_user_info();
+			}, function(err) {
+				console.error('FAILED ADD PERSON', err);
 			});
+
 			if (name[0] !== '@') {
 				name = '@' + name;
 			}
@@ -532,6 +537,37 @@
 		$scope.help_find_twitter = function() {
 			event_log('help_find_twitter');
 			alert('Coming soon');
+		};
+		$scope.remove_person = function(person) {
+			return $http({
+				method: 'DELETE',
+				url: '/person/' + person._id
+			}).then(function(res) {
+				console.log('DEL PERSON', res);
+				return init_user_info();
+			}, function(err) {
+				console.error('FAILED DEL PERSON', err);
+			});
+		};
+		$scope.make_person_report = function(person) {
+			return $http({
+				method: 'POST',
+				url: '/person/' + person._id + '/report'
+			}).then(function(res) {
+				console.log('MAKE REPORT', res);
+			}, function(err) {
+				console.error('FAILED MAKE REPORT', err);
+			});
+		};
+		$scope.make_report = function() {
+			return $http({
+				method: 'POST',
+				url: '/report'
+			}).then(function(res) {
+				console.log('MAKE REPORT', res);
+			}, function(err) {
+				console.error('FAILED MAKE REPORT', err);
+			});
 		};
 	}
 

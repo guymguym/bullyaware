@@ -26,6 +26,7 @@
 			<div class="row">
 				<div class="col-sm-4">
 					<div class="input-group" style="margin-bottom: 15px">
+						<input id="target_person" ng-model="target_person" type="text" class="form-control" placeholder="Person name" autocomplete="on" />
 						<input id="target_account" ng-model="target_account" type="text" class="form-control" placeholder="Add twitter account" autocomplete="on" />
 						<div class="input-group-btn">
 							<button type="button" class="btn btn-primary" ng-click="add_twitter()">
@@ -36,11 +37,27 @@
 				</div>
 			</div>
 
-			<div ng-repeat="person in user_info.persons">
-				<h3>
-					<i class="fa fa-user fa-lg fa-fw menu_color"></i>
-					{{ person.name }}
-				</h3>
+			<div ng-repeat="person in user_info.persons" style="margin-bottom: 15px">
+				<div class="dropdown">
+					<a data-toggle="dropdown" href="#" class="btn btn-default btn-lg">
+						<h3>
+							<i class="fa fa-user fa-lg fa-fw menu_color"></i>
+							{{ person.name }}
+						</h3>
+					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<li>
+							<a href="#" ng-click="make_person_report(person)">
+								Make Report
+							</a>
+						</li>
+						<li>
+							<a href="#" ng-click="remove_person(person)">
+								Remove...
+							</a>
+						</li>
+					</ul>
+				</div>
 				<div ng-repeat="social_id in person.social_ids">
 					<i class="fa fa-twitter fa-lg fa-fw menu_color"></i>
 					{{ social_ids_map[social_id].name }}
@@ -55,6 +72,11 @@
 					<button class="btn btn-default" style="margin-bottom: 15px" ng-click="help_find_twitter()">Find twitter user</button>
 				</div>
 			</div>
+
+
+			<button class="btn btn-danger btn-lg" ng-click="make_report()">
+				Make Report
+			</button>
 		</div>
 	</div>
 

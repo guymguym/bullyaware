@@ -156,7 +156,7 @@ app.use(function(err, req, res, next) {
 	} else if (req.accepts('html')) {
 		return res.render('error.html', {
 			err: e,
-			req: req
+			// req: req
 		});
 	} else if (req.accepts('json')) {
 		return res.json(e);
@@ -209,12 +209,12 @@ app.post('/user/login', users.mk_session, users.login);
 app.get('/user/logout', users.mk_session, users.logout);
 app.get('/user', users.mk_session, users.read_user);
 app.put('/user', users.mk_session, users.update_user);
-app.post('/user/person', users.mk_session, users.add_person);
-app.del('/user/person/:person_id', users.mk_session, users.del_person);
-app.post('/user/person/:person_id/social_id', users.mk_session, users.add_social_id);
+app.post('/person', users.mk_session, users.add_person);
+app.del('/person/:person_id', users.mk_session, users.del_person);
+app.post('/person/:person_id/social_id', users.mk_session, users.add_social_id);
+app.post('/person/:person_id/report', users.mk_session, engine.make_person_report);
 
 app.post('/demo_query', users.mk_session, engine.demo_query);
-app.post('/report', users.mk_session, engine.make_report);
 
 
 // admin route

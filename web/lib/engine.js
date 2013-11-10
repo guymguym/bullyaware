@@ -71,6 +71,9 @@ function find_related_messages(social_ids, callback) {
 				mentions: s.sid
 			};
 		}
+		if (j === 0) {
+			return callback(null, []);
+		}
 		return Message.find().or(q).exec(callback);
 	});
 }
@@ -131,8 +134,8 @@ function periodic_report(person_id, period_seconds, callback) {
 }
 
 
-exports.make_report = function(req, res) {
-	var person_id = req.body.person_id;
+exports.make_person_report = function(req, res) {
+	var person_id = req.params.person_id;
 	return make_report(person_id,
 		common.reply_callback(req, res, 'REPORT ' + person_id));
 };
