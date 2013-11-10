@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html ng-app="bullyaware_app">
+
+<head>
+	<?# def.include( 'common_head.html') ?>
+</head>
+
+<body ng-controller="SettingsCtrl" ng-cloak>
+
+	<div class="stable">
+		<?# def.include( 'common_menu.html') ?>
+	</div>
+
+	<div class="container page_content" style="display: none; padding-bottom: 30px">
+
+		<div style="padding: 30px 0 15px 0;">
+			<h1>Settings</h1>
+			<hr/>
+		</div>
+
+		<div ng-show="!user_info" class="text-center" style="font-size: 50px; padding: 30px">
+			<i class="fa fa-spinner fa-spin"></i>
+		</div>
+		<div ng-show="!!user_info" style="margin-bottom: 40px">
+
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="input-group" style="margin-bottom: 15px">
+						<input id="target_account" ng-model="target_account" type="text" class="form-control" placeholder="Add twitter account" autocomplete="on" />
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-primary" ng-click="add_twitter()">
+								<i class="fa fa-plus fa-lg fa-fw"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div ng-repeat="person in user_info.persons">
+				<h3>
+					<i class="fa fa-user fa-lg fa-fw menu_color"></i>
+					{{ person.name }}
+				</h3>
+				<div ng-repeat="social_id in person.social_ids">
+					<i class="fa fa-twitter fa-lg fa-fw menu_color"></i>
+					{{ social_ids_map[social_id].name }}
+				</div>
+			</div>
+
+			<div class="row" ng-show="user_role=='parent'">
+				<div class="col-sm-4">
+					<h5>We can find the account name for you if needed</h5>
+				</div>
+				<div class="col-sm-8">
+					<button class="btn btn-default" style="margin-bottom: 15px" ng-click="help_find_twitter()">Find twitter user</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="stable_foot">
+		<?# def.include( 'common_foot.html') ?>
+	</div>
+
+	<div>
+		<?# def.include( 'common_scripts.html') ?>
+	</div>
+
+</body>
+
+</html>

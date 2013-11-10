@@ -11,6 +11,8 @@ var models = require('./models');
 var Session = models.Session;
 var EventLog = models.EventLog;
 var User = models.User;
+var Person = models.Person;
+var SocialID = models.SocialID;
 
 
 // mk_session is a middleware (it takes 3 arguments and can pass execution to next)
@@ -199,31 +201,6 @@ function validate_user(req) {
 
 
 
-exports.read_user = function(req, res) {
-	var user_id;
-
-	return async.waterfall([
-
-		validate_user(req),
-
-		function(next) {
-			user_id = req.session.user.id;
-			return User.findById(req.session.user.id, next);
-		},
-
-		function(user, next) {
-			if (!user) {
-				console.error('GET USER NOT FOUND', req.session.user);
-				return next({
-					status: 403
-				});
-			}
-			return next(null, _.omit(user.toObject(), 'password'));
-		}
-	], common.reply_callback(req, res, 'GET_USER ' + user_id));
-};
-
-
 exports.update_user = function(req, res) {
 	var updates = _.pick(req.body, 'CANCELED-role');
 	var user_id;
@@ -240,6 +217,145 @@ exports.update_user = function(req, res) {
 		},
 
 	], common.reply_callback(req, res, 'UPDATE_USER ' + user_id));
+};
+
+
+exports.read_user = function(req, res) {
+	var user_id;
+	var user_info;
+	var persons;
+	var social_ids_map;
+
+	return async.waterfall([
+
+		validate_user(req),
+
+		function(next) {
+			user_id = req.session.user.id;
+			return User.findById(req.session.user.id).lean().exec(next);
+		},
+
+		function(user, next) {
+			if (!user) {
+				console.error('GET USER NOT FOUND', req.session.user);
+				return next({
+					status: 403
+				});
+			}
+			user_info = _.omit(user, 'password');
+			return next();
+		},
+
+		function(next) {
+			return Person.find({
+				user: user_id
+			}).lean().exec(function(err, persons_list) {
+				if (err) {
+					return next(err);
+				}
+				persons = persons_list;
+				return next();
+			});
+		},
+
+		function(next) {
+			var ids = [];
+			for (var i = 0; i < persons.length; i++) {
+				ids = ids.concat(persons[i].social_ids);
+			}
+			return SocialID.find({
+				_id: {
+					$in: ids
+				}
+			}, function(err, social_ids) {
+				if (err) {
+					return next(err);
+				}
+				social_ids_map = _.indexBy(social_ids, '_id');
+				return next();
+			});
+		},
+
+		function(next) {
+			user_info.persons = persons;
+			user_info.social_ids_map = social_ids_map;
+			return next(null, user_info);
+		}
+
+	], common.reply_callback(req, res, 'GET_USER ' + user_id));
+};
+
+
+exports.add_person = function(req, res) {
+	var user_id;
+	var name = req.body.name;
+
+	return async.waterfall([
+
+		validate_user(req),
+
+		function(next) {
+			user_id = req.session.user.id;
+			var person = new Person();
+			person.user = user_id;
+			person.name = name;
+			return person.save(function(err) {
+				return next(err);
+			});
+		},
+
+	], common.reply_callback(req, res, 'ADD_PERSON ' + user_id));
+};
+
+exports.del_person = function(req, res) {
+	var user_id;
+	var person_id = req.params.person_id;
+
+	return async.waterfall([
+
+		validate_user(req),
+
+		function(next) {
+			user_id = req.session.user.id;
+			Person.findByIdAndRemove(person_id, function(err) {
+				return next(err);
+			});
+		},
+
+	], common.reply_callback(req, res, 'DEL_PERSON ' + user_id));
+};
+
+exports.add_social_id = function(req, res) {
+	var user_id;
+	var person_id = req.params.person_id;
+	var type = req.body.type;
+	var sid = req.body.sid;
+
+	return async.waterfall([
+
+		validate_user(req),
+
+		function(next) {
+			user_id = req.session.user.id;
+			var social_id = new SocialID();
+			social_id.type = type;
+			social_id.sid = sid;
+			return social_id.save(function(err) {
+				return next(err, social_id);
+			});
+		},
+
+		function(social_id, next) {
+			Person.findByIdAndUpdate(person_id, {
+				$push: {
+					social_ids: social_id.id
+				}
+			}, function(err) {
+				return next(err);
+			});
+		}
+
+	], common.reply_callback(req, res, 'ADD_SOCIAL_ID ' + user_id));
 };
 
 

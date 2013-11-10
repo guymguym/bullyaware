@@ -12,7 +12,7 @@
 		"moment": "2.4.0",
 		"nodetime": "0.8.13",
 		"newrelic": "1.0.1",
-		"underscore": "1.5.1",
+		"underscore": "1.5.2",
 		"util": "0.4.9",
 		"string": "1.6.0",
 		"underscore.string": "2.3.3",

@@ -22,7 +22,7 @@
 			<div class="form-group input-group col-sm-6">
 				<div class="input-group-btn">
 					<button type="button" class="btn btn-default">
-						<i class="icon-twitter icon-large icon-fixed-width" style="color: #7af"></i>
+						<i class="fa fa-twitter fa-lg fa-fw" style="color: #7af"></i>
 					</button>
 				</div>
 
@@ -30,7 +30,7 @@
 
 				<div class="input-group-btn">
 					<button type="button" class="btn btn-primary" ng-click="analyze()" ng-disabled="!last_result">
-						<i class="{{last_result && 'icon-arrow-right' || 'icon-spinner icon-spin'}} icon-large icon-fixed-width"></i>
+						<i class="fa {{last_result && 'fa-arrow-right' || 'fa-spinner fa-spin'}} fa-lg fa-fw"></i>
 					</button>
 				</div>
 			</div>
@@ -38,29 +38,29 @@
 
 		<div ng-show="last_result">
 			<h3>Summary</h3>
-			<ul class="icons-ul" style="margin-left: 0; color: {{level_to_color(last_result.level)}}">
+			<ul class="fa-ul" style="margin-left: 0; color: {{level_to_color(last_result.level)}}">
 				<li>
-					<i class="icon-li icon-ok"></i>
+					<i class="fa-li fa fa-ok"></i>
 					Analyzed Twitter account {{last_query}}
 				</li>
 				<li>
-					<i class="icon-li icon-ok"></i>
+					<i class="fa-li fa fa-ok"></i>
 					Performed text processing on last {{last_result.messages.length}} messages
 				</li>
 				<li ng-show="is_level_low(last_result.level)">
-					<i class="icon-li icon-ok"></i>
+					<i class="fa-li fa fa-ok"></i>
 					The current status seems to be fine
 				</li>
 				<li ng-show="is_level_med(last_result.level)">
-					<i class="icon-li icon-ok"></i>
+					<i class="fa-li fa fa-ok"></i>
 					The current status seems to require some attention
 				</li>
 				<li ng-show="is_level_high(last_result.level)">
-					<i class="icon-li icon-ok"></i>
+					<i class="fa-li fa fa-ok"></i>
 					The current status seems to be problematic and requires serious attention
 				</li>
 				<li>
-					<i class="icon-li icon-ok"></i>
+					<i class="fa-li fa fa-ok"></i>
 					Monitoring is advised
 				</li>
 			</ul>
@@ -70,16 +70,16 @@
 			<div id="graph"></div>
 
 			<h3>Top Priority</h3>
-			<ul class="icons-ul" style="margin-left: 0">
+			<ul class="fa-ul" style="margin-left: 0">
 				<li ng-repeat="user in last_result.users | limitTo:3" style="padding:0">
 					<a ng-href="//twitter.com/{{user.info.screen_name}}" target="_blank" style="color: black">
 						<img ng-src="{{user.info.profile_image_url}}" width="30" height="30" style="border: solid 2px white" />
-						<!-- <i class="icon-li icon-user icon-fixed-width"></i> -->
+						<!-- <i class="fa-li fa fa-user fa-fw"></i> -->
 						<b>{{ user.info.name }}</b>
 					</a>
-					<ul class="icons-ul" style="margin-left: 0">
+					<ul class="fa-ul" style="margin-left: 0">
 						<li ng-repeat="msg in user.messages | limitTo:3" style="padding:0">
-							<i class="icon-li icon-twitter icon-fixed-width" style="color: {{level_to_color(msg.level)}}"></i>
+							<i class="fa-li fa fa-twitter fa-fw" style="color: {{level_to_color(msg.level)}}"></i>
 							{{ msg.text }}
 						</li>
 					</ul>

@@ -2,7 +2,7 @@
 /* jshint -W099 */
 'use strict';
 var mongoose = require('mongoose');
-var twitter = require('ntwitter');
+var ntwitter = require('ntwitter');
 var _ = require('underscore');
 var SocialID = require('./lib/models').SocialID;
 var Message = require('./lib/models').Message;
@@ -14,7 +14,7 @@ if (process.env.MONGOHQ_URL) {
 	mongoose.connect(process.env.MONGOHQ_URL);
 }
 
-var twit = new twitter({
+var twitter = new ntwitter({
 	consumer_key: process.env.TWITTER_CONSUMER_KEY,
 	consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
 	access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
@@ -67,12 +67,12 @@ function ingest_twit(twit, callback) {
 	if (mentions) {
 		message.mentions = mentions;
 	}
-	return message.save(function(err, message, num) {
+	return message.save(function(err) {
 		if (err) {
-			console.log("error while creating message: ", err);
+			console.error('SAVE MESSAGE FAILED', err, message);
 			return callback(err, null);
 		}
-		console.log("Successfuly collected message:", message);
+		console.log('SAVED MESSAGE FROM', twit.user.name);
 		return callback(null);
 	});
 }
@@ -86,12 +86,13 @@ function collect_twits() {
 			console.log('filter: ', filter);
 			if (!_.keys(filter).length) {
 				filter = {
-					'locations': '-122.75,36.8,-121.75,37.8,-74,40,-73,41'
+					track: ['MileyCyrus']
+					// 'locations': '-122.75,36.8,-121.75,37.8,-74,40,-73,41'
 				};
 			}
 			console.log('filter: ', filter);
 
-			twit.stream('statuses/filter', filter, function(stream) {
+			twitter.stream('statuses/filter', filter, function(stream) {
 				stream.on('data', function(data) {
 					ingest_twit(data, function(err) {
 						if (err) {
@@ -99,11 +100,10 @@ function collect_twits() {
 						}
 					});
 				});
-				stream.on('error', function(error) {
-					console.log("Error in reading tweets using filetr. The filter was: ", filter);
-					console.log('error: ', error);
+				stream.on('error', function(err) {
+					console.error('TWITTER STREAM ERROR', err);
+					console.log('TWITTER STREAM ERROR - FILTER', filter);
 				});
-
 			});
 		}
 	], function(err, results) {
@@ -111,4 +111,4 @@ function collect_twits() {
 	});
 }
 
-collect_twits();
+// collect_twits();

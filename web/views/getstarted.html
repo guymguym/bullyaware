@@ -12,7 +12,7 @@
 	</div>
 
 	<div id="loading_sign" class="text-center" style="font-size: 50px; padding: 30px">
-		<i class="icon-spinner icon-spin"></i>
+		<i class="fa fa-spinner fa-spin"></i>
 	</div>
 
 	<div id="getstarted_content" class="container" style="display: none; padding-bottom: 30px">
@@ -25,7 +25,7 @@
 
 		<div style="margin-bottom: 40px">
 			<h3 style="margin-bottom: 15px">
-				<i class="icon-cog icon-large icon-fixed-width menu_color"></i>
+				<i class="fa fa-cog fa-lg fa-fw menu_color"></i>
 				Choose your account type
 			</h3>
 			<div class="row">
@@ -45,7 +45,7 @@
 
 		<div ng-show="!!user_role" style="margin-bottom: 40px">
 			<h3 style="margin-bottom: 15px">
-				<i class="icon-twitter icon-large icon-fixed-width menu_color"></i>
+				<i class="fa fa-twitter fa-lg fa-fw menu_color"></i>
 				Connect twitter accounts
 			</h3>
 			<ul>
@@ -62,7 +62,7 @@
 						<input id="target_account" ng-model="target_account" type="text" class="form-control" placeholder="Enter twitter account" autocomplete="on" />
 						<div class="input-group-btn">
 							<button type="button" class="btn btn-danger" ng-click="add_twitter()">
-								<i class="icon-arrow-right icon-large icon-fixed-width"></i>
+								<i class="fa fa-arrow-right fa-lg fa-fw"></i>
 							</button>
 						</div>
 					</div>
@@ -89,7 +89,7 @@
 
 		<div ng-show="is_done_twitter" style="margin-bottom: 40px">
 			<h3 style="margin-bottom: 15px">
-				<i class="icon-user icon-large icon-fixed-width menu_color"></i>
+				<i class="fa fa-user fa-lg fa-fw menu_color"></i>
 				Connect more accounts
 			</h3>
 			<div class="row">
@@ -102,7 +102,7 @@
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
 							<span ng-repeat="type in account_types" title="{{type.name}}" ng-click="on_click_account_type(type, $event)" style="cursor: pointer">
-								<i style="color: {{(type.checked || type.hover) && type.color || '#d0d0d0'}}" class="{{type.icon}} icon-2x icon-fixed-width" ng-mouseenter="type.hover = true" ng-mouseleave="type.hover = false"></i>
+								<i style="color: {{(type.checked || type.hover) && type.color || '#d0d0d0'}}" class="fa {{type.icon}} fa-2x fa-fw" ng-mouseenter="type.hover = true" ng-mouseleave="type.hover = false"></i>
 							</span>
 						</div>
 					</form>
@@ -121,7 +121,7 @@
 
 		<div ng-show="is_done_others" style="margin-bottom: 40px">
 			<h3 style="margin-bottom: 15px">
-				<i class="icon-rss icon-large icon-fixed-width menu_color"></i>
+				<i class="fa fa-rss fa-lg fa-fw menu_color"></i>
 				Subscribe for continuous monitoring for your family
 			</h3>
 			<div class="row">

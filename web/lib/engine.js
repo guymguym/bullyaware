@@ -49,17 +49,30 @@ function find_person(person_id, callback) {
 
 
 function find_related_messages(social_ids, callback) {
-	// TODO convert social_ids to type+sid
-	var in_query = {
-		$in: social_ids
-	};
-	return Message.find().or([{
-		sender: in_query
-	}, {
-		target: in_query
-	}, {
-		mentions: in_query
-	}]).exec(callback);
+	SocialID.find({
+		_id: {
+			$in: social_ids
+		}
+	}, function(err, social_id_list) {
+		if (err) {
+			console.error('FAILED FIND SOCIAL IDS', err, social_ids);
+			return callback(err);
+		}
+		var q = new Array(2 * social_id_list.length);
+		var j = 0;
+		for (var i = 0; i < social_id_list.length; i++) {
+			var s = social_id_list[i];
+			q[j++] = {
+				type: s.type,
+				sender: s.sid
+			};
+			q[j++] = {
+				type: s.type,
+				mentions: s.sid
+			};
+		}
+		return Message.find().or(q).exec(callback);
+	});
 }
 
 

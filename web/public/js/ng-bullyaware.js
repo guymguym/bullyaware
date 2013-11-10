@@ -190,6 +190,7 @@
 		$scope.on_about = $scope.on_about || make_redirect('/about');
 		$scope.on_login = $scope.on_login || make_redirect('/login');
 		$scope.on_getstarted = $scope.on_getstarted || make_redirect('/getstarted');
+		$scope.on_settings = $scope.on_settings || make_redirect('/settings');
 		$scope.on_demo = $scope.on_demo || make_redirect('/demo');
 		$scope.on_contact_us = $scope.on_contact_us || make_redirect('/contact');
 
@@ -480,6 +481,64 @@
 
 
 
+	bullyaware_app.controller('SettingsCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', SettingsCtrl
+	]);
+
+	function SettingsCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		init_common_links($scope, $window, $location, event_log);
+		init_server_data($scope);
+
+		function init_user_info() {
+			$http({
+				method: 'GET',
+				url: '/user'
+			}).then(function(res) {
+				console.log('GOT USER', res.data);
+				$scope.user_info = res.data;
+				$('#loading_sign').hide();
+				$('#getstarted_content').fadeIn(1000);
+			}, function(err) {
+				console.error('FAILED GET USER', err);
+				$timeout(init_user_info, 1000);
+			});
+		}
+		init_user_info();
+
+		// TODO sync with user object on server
+		$scope.twitter_accounts = [];
+
+		$scope.add_twitter = function() {
+			var name = $scope.target_account;
+			if (!name) {
+				return;
+			}
+			event_log('add_twitter', name);
+			$http({
+				method: 'POST',
+				url: '/user/person',
+				data: {
+					name: name
+				}
+			}).then(function() {
+				return init_user_info();
+			});
+			if (name[0] !== '@') {
+				name = '@' + name;
+			}
+			$scope.twitter_accounts.push(name);
+			$scope.target_account = '';
+		};
+		$scope.help_find_twitter = function() {
+			event_log('help_find_twitter');
+			alert('Coming soon');
+		};
+	}
+
+
+
+
+
 	bullyaware_app.controller('GetStartedCtrl', [
 		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', GetStartedCtrl
 	]);
@@ -533,39 +592,39 @@
 
 		$scope.account_types = [{
 			name: 'Twitter',
-			icon: 'icon-twitter-sign',
+			icon: 'fa-twitter-square',
 			color: '#7af'
 		}, {
 			name: 'Facebook',
-			icon: 'icon-facebook-sign',
+			icon: 'fa-facebook-square',
 			color: '#66b'
 		}, {
 			name: 'Google+',
-			icon: 'icon-google-plus-sign',
+			icon: 'fa-google-plus-square',
 			color: '#c33'
 		}, {
 			name: 'Youtube',
-			icon: 'icon-youtube-sign',
+			icon: 'fa-youtube-square',
 			color: '#a66'
 		}, {
 			name: 'Instagram',
-			icon: 'icon-instagram',
+			icon: 'fa-instagram',
 			color: '#881'
 		}, {
 			name: 'Tumblr',
-			icon: 'icon-tumblr-sign',
+			icon: 'fa-tumblr-square',
 			color: '#33b'
 		}, {
 			name: 'Flickr',
-			icon: 'icon-flickr',
+			icon: 'fa-flickr',
 			color: '#b3b'
 		}, {
 			name: 'Pinterest',
-			icon: 'icon-pinterest-sign',
+			icon: 'fa-pinterest-square',
 			color: '#b33'
 		}, {
 			name: 'Other',
-			icon: 'icon-question-sign',
+			icon: 'fa-question-circle',
 			color: '#777'
 		}];
 

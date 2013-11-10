@@ -209,7 +209,13 @@ app.post('/user/login', users.mk_session, users.login);
 app.get('/user/logout', users.mk_session, users.logout);
 app.get('/user', users.mk_session, users.read_user);
 app.put('/user', users.mk_session, users.update_user);
+app.post('/user/person', users.mk_session, users.add_person);
+app.del('/user/person/:person_id', users.mk_session, users.del_person);
+app.post('/user/person/:person_id/social_id', users.mk_session, users.add_social_id);
+
 app.post('/demo_query', users.mk_session, engine.demo_query);
+app.post('/report', users.mk_session, engine.make_report);
+
 
 // admin route
 var admin_auth = express.basicAuth(function(user, pass, callback) {
@@ -257,6 +263,12 @@ app.get('/getstarted', users.mk_session, function(req, res) {
 		return res.redirect('/signup');
 	}
 	return res.render('getstarted.html', page_context(req));
+});
+app.get('/settings', users.mk_session, function(req, res) {
+	if (!req.session.user) {
+		return res.redirect('/signup');
+	}
+	return res.render('settings.html', page_context(req));
 });
 app.get('/signup', users.mk_session, function(req, res) {
 	if (req.session.user) {
