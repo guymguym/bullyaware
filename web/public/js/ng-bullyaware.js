@@ -164,11 +164,14 @@
 						search: function(event, ui) {
 							console.log('AUTOCOMPLETE', element.val());
 						}
-					}).data("ui-autocomplete")._renderItem = function(ul, item) {
-						return $("<li>")
-							.append("<a><b>" + '@' + $sanitize(item.screen_name) +
-								"</b><br/>" + $sanitize(item.name) + "</a>")
-							.appendTo(ul);
+					}).data('ui-autocomplete')._renderItem = function(ul, item) {
+						return $('<li>').append(
+							'<a><b>@' + $sanitize(item.screen_name) +
+							'</b><br/><small><u>Name:</u> ' + $sanitize(item.name) +
+							'<br/><u>From:</u> ' + $sanitize(item.location) + 
+							'<br/><img width="40" src="' + $sanitize(item.profile_image_url) + 
+							'"/></small></a>'
+						).appendTo(ul);
 					};
 				}
 			};
@@ -587,15 +590,36 @@
 			});
 		};
 
-		$scope.get_id = function(x) {
+		$scope.return_id = function(x) {
 			return x._id;
 		};
-		$scope.display_name = function(identity) {
+		$scope.return_arg = function(x) {
+			return x;
+		};
+
+		$scope.identity_account_name = function(identity) {
 			if (identity.type === 'twitter') {
 				return '@' + identity.profile.screen_name;
-			} else {
-				return 'Unknown Type ' + identity.type;
 			}
+			return 'Unknown Type ' + identity.type;
+		};
+		$scope.identity_real_name = function(identity) {
+			if (identity.type === 'twitter') {
+				return identity.profile.name;
+			}
+			return '';
+		};
+		$scope.identity_location_info = function(identity) {
+			if (identity.type === 'twitter') {
+				return identity.profile.location;
+			}
+			return '';
+		};
+		$scope.identity_more_info = function(identity) {
+			if (identity.type === 'twitter') {
+				return identity.profile.description;
+			}
+			return '';
 		};
 
 		$scope.show_add_twit = function(person) {
