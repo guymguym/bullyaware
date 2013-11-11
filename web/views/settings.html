@@ -46,11 +46,11 @@
 						</div>
 						<br/>
 						<div ng-repeat="social_id in person.social_ids" ng-init="sid=user_info.social_ids_map[social_id]" class="row">
-							<div class="col-xs-11">
+							<div class="col-xs-10">
 								<i class="fa fa-fw fa-twitter menu_color"></i>
 								{{ sid.sid }}
 							</div>
-							<div class="col-xs-1">
+							<div class="col-xs-2">
 								<button class="btn btn-default btn-xs pull-right" ng-click="del_sid(person,sid)" title="Remove {{sid.sid}}...">
 									<i class="fa fa-trash-o"></i>
 								</button>

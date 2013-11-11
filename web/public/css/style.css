@@ -1,5 +1,7 @@
 body {
     /*padding-top: 100px;*/
+    /*background-color: #433b43 !important;*/
+    /*color: #f8f8f8 !important;*/
 }
 h1, h2, h3, h4, h5, h6, p, a, span, div {
     /*font-family:'Open Sans', sans-serif !important;*/
@@ -97,6 +99,18 @@ background-color:#778899;
 .axis text {
     font-family: sans-serif;
     font-size: 11px;
+}
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+}
+/* IE 6 doesn't support max-height
+ * we use height instead, but this forces the menu to always be this tall
+ */
+ * html .ui-autocomplete {
+    height: 200px;
 }
 /*
 Allow angular.js to be loaded in body, hiding cloaked elements until 

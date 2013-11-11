@@ -32,7 +32,8 @@ $(function() {
 	// jqueryui tooltips are better than bootstrap
 	// we also make sure to load the jqueryui script after bootstrap.
 	$(document).tooltip({
-		container: 'body'
+		container: 'body',
+		trigger: 'hover'
 	});
 	$('[rel=popover]').popover({
 		container: 'body'

@@ -147,15 +147,13 @@
 								method: 'GET',
 								url: '/api/user/twitter_id_complete?q=' + escape(request.term)
 							}).then(function(res) {
-								var arr = res.data;
-								for (var i = 0; i < arr.length; i++) {
-									arr[i].value = '@' + $sanitize(arr[i].screen_name) +
-										' - ' + $sanitize(arr[i].name);
-								}
 								return callback(res.data);
 							}, function(err) {
 								return callback();
 							});
+						},
+						focus: function(event, ui) {
+							return false;
 						},
 						select: function(event, ui) {
 							var val = '@' + ui.item.screen_name;
@@ -164,7 +162,12 @@
 							$rootScope.safe_apply();
 							return false;
 						}
-					});
+					}).data("ui-autocomplete")._renderItem = function(ul, item) {
+						return $("<li>")
+							.append("<a><b>" + '@' + $sanitize(item.screen_name) +
+								"</b><br/>" + $sanitize(item.name) + "</a>")
+							.appendTo(ul);
+					};;
 				}
 			};
 		}
@@ -588,19 +591,30 @@
 
 		$scope.add_twit = function(person) {
 			var elem = $('#new_twit_id_' + person._id);
-			if (!person.ng_show_add_twit) {
+			var show_add_twit = function() {
 				person.ng_show_add_twit = true;
 				person.ng_new_twit_id = '';
 				$.when(elem.animate({
 					opacity: 1,
 					width: '200px'
 				}, 200)).then(function() {
-					elem.effect(HIGHLIGHT_EFFECT).focus();
+					elem.focus();
 				});
+			}
+			var hide_add_twit = function() {
+				person.ng_show_add_twit = false;
+				elem.animate({
+					opacity: 0,
+					width: 0
+				}, 100);
+			}
+			if (!person.ng_show_add_twit) {
+				show_add_twit();
 				return;
 			}
 			var twit_id = person.ng_new_twit_id;
 			if (!twit_id) {
+				hide_add_twit();
 				return;
 			}
 			if (twit_id[0] !== '@') {
@@ -618,11 +632,7 @@
 			}).then(function(res) {
 				console.log('ADD SID', res);
 				person.ng_new_twit_id = '';
-				person.ng_show_add_twit = false;
-				elem.animate({
-					opacity: 0,
-					width: 0
-				}, 200);
+				hide_add_twit();
 				return fetch_user_info();
 			}, function(err) {
 				console.error('FAILED ADD SID', err);
