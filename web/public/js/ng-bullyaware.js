@@ -158,7 +158,7 @@
 								fn(scope, {
 									$item: ui.item
 								});
-							})
+							});
 							return false;
 						},
 						search: function(event, ui) {
@@ -169,7 +169,7 @@
 							.append("<a><b>" + '@' + $sanitize(item.screen_name) +
 								"</b><br/>" + $sanitize(item.name) + "</a>")
 							.appendTo(ul);
-					};;
+					};
 				}
 			};
 		}
@@ -608,7 +608,7 @@
 			}, 200)).then(function() {
 				elem.focus();
 			});
-		}
+		};
 
 		$scope.hide_add_twit = function(person, force) {
 			var elem = $('#new_twit_id_' + person._id);
@@ -623,7 +623,7 @@
 				opacity: 0,
 				width: 0
 			}, 100);
-		}
+		};
 
 		$scope.toggle_add_twit = function(person) {
 			if (!person.ng_show_add_twit) {
