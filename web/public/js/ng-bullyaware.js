@@ -678,7 +678,7 @@
 		};
 
 		$scope.del_identity = function(person, identity) {
-			var q = 'Are you sure you want to remove the social id "' + identity.sid + '" from your account?';
+			var q = 'Are you sure you want to remove "' + $scope.identity_account_name(identity) + '"?';
 			if (!window.confirm(q)) {
 				return;
 			}
