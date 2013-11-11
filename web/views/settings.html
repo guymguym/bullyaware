@@ -32,12 +32,12 @@
 							{{ person.name }}
 						</h3>
 						<div class="btn-toolbar text-center">
-							<input ng-model="person.ng_new_twit_id" nb-twitter-name-complete id="new_twit_id_{{get_id(person)}}" class="form-control" type="text" placeholder="Twitter account" style="width: 0; display: inline-block; opacity: 0" />
-							<button class="btn btn-info" title="Add Twitter account to person" ng-click="add_twit(person)">
+							<input nb-twitter-chooser="person.ng_new_twit_identity" id="new_twit_id_{{get_id(person)}}" class="form-control" type="text" placeholder="Twitter account" style="width: 0; display: inline-block; opacity: 0" />
+							<button class="btn btn-info" title="Add Twitter account to person" ng-click="add_twit_identity(person)">
 								<i class="fa fa-twitter fa-lg menu_color"></i>
 								<i class="fa fa-plus menu_color"></i>
 							</button>
-							<button class="btn btn-warning" ng-click="make_person_report(person)" title="Make Report">
+							<button class="btn btn-warning" ng-click="do_report(person)" title="Report">
 								<i class="fa fa-bar-chart-o"></i>
 							</button>
 							<button class="btn btn-default" ng-click="del_person(person)" title="Remove {{person.name}}...">
@@ -45,17 +45,27 @@
 							</button>
 						</div>
 						<br/>
-						<div ng-repeat="social_id in person.social_ids" ng-init="sid=user_info.social_ids_map[social_id]" class="row">
+						<div ng-repeat="identity_id in person.identities" ng-init="identity=user_info.identity_map[identity_id]" class="row">
 							<div class="col-xs-10">
 								<i class="fa fa-fw fa-twitter menu_color"></i>
-								{{ sid.sid }}
+								{{ display_name(identity) }}
 							</div>
 							<div class="col-xs-2">
-								<button class="btn btn-default btn-xs pull-right" ng-click="del_sid(person,sid)" title="Remove {{sid.sid}}...">
+								<button class="btn btn-default btn-xs pull-right" ng-click="del_identity(person,identity)" title="Remove {{display_name(identity)}}...">
 									<i class="fa fa-trash-o"></i>
 								</button>
 							</div>
 						</div>
+					</div>
+				</div>
+				<div class="col-sm-6" ng-show="!!person.report">
+					<div style="padding: 15px; border: 1px #08c solid; border-radius: 5px">
+						<h3 class="text-center">
+							<i class="fa fa-bar-chart-o fa-lg"></i>
+							{{ person.name }} Report
+						</h3>
+						<p>Sent {{person.report.send_stats.num_msg}} messages</p>
+						<p>Mentioned in {{person.report.rcv_stats.num_msg}} messages</p>
 					</div>
 				</div>
 			</div>
@@ -72,13 +82,6 @@
 				</div>
 			</div>
 
-
-			<!-- 
-			<h2>Reports</h2>
-			<button class="btn btn-primary btn-lg" ng-click="make_report()">
-				Make Report
-			</button>
-			-->
 		</div>
 	</div>
 

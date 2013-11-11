@@ -212,9 +212,9 @@ app.put('/api/user', users.mk_session, users.update_user);
 app.get('/api/user/twitter_id_complete', users.mk_session, users.twitter_id_complete);
 app.post('/api/person', users.mk_session, users.add_person);
 app.del('/api/person/:person_id', users.mk_session, users.del_person);
-app.post('/api/person/:person_id/sid', users.mk_session, users.add_sid);
-app.del('/api/person/:person_id/sid/:sid', users.mk_session, users.del_sid);
-app.post('/api/person/:person_id/report', users.mk_session, engine.make_person_report);
+app.post('/api/person/:person_id/identity', users.mk_session, users.add_identity);
+app.del('/api/person/:person_id/identity/:identity', users.mk_session, users.del_identity);
+app.post('/api/person/:person_id/report', users.mk_session, engine.do_report);
 app.post('/api/demo_query', users.mk_session, engine.demo_query);
 
 

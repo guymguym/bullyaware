@@ -130,16 +130,13 @@
 	});
 
 
-	bullyaware_app.directive('nbTwitterNameComplete', [
-		'$http', '$sanitize', '$rootScope',
-		function($http, $sanitize, $rootScope) {
+	bullyaware_app.directive('nbTwitterChooser', [
+		'$http', '$sanitize', '$rootScope', '$parse',
+		function($http, $sanitize, $rootScope, $parse) {
 			return {
-				// require: '=ngModel',
 				restrict: 'A', // use as attribute
-				scope: {
-					ngModel: '='
-				},
-				link: function(scope, element, attrs, ngModel) {
+				link: function(scope, element, attrs) {
+					var model = $parse(attrs.nbTwitterChooser);
 					element.autocomplete({
 						delay: 1000,
 						source: function(request, callback) {
@@ -156,9 +153,8 @@
 							return false;
 						},
 						select: function(event, ui) {
-							var val = '@' + ui.item.screen_name;
-							scope.ngModel = val;
-							attrs.$set('ngModel', val);
+							element.val('@' + ui.item.screen_name);
+							model.assign(scope, ui.item);
 							$rootScope.safe_apply();
 							return false;
 						}
@@ -588,12 +584,20 @@
 		$scope.get_id = function(x) {
 			return x._id;
 		};
+		$scope.display_name = function(identity) {
+			if (identity.type === 'twitter') {
+				return '@' + identity.profile.screen_name;
+			} else {
+				return 'Unknown Type ' + identity.type;
+			}
+		};
 
-		$scope.add_twit = function(person) {
+		$scope.add_twit_identity = function(person) {
 			var elem = $('#new_twit_id_' + person._id);
 			var show_add_twit = function() {
 				person.ng_show_add_twit = true;
-				person.ng_new_twit_id = '';
+				person.ng_new_twit_identity = null;
+				elem.val('');
 				$.when(elem.animate({
 					opacity: 1,
 					width: '200px'
@@ -602,7 +606,9 @@
 				});
 			}
 			var hide_add_twit = function() {
+				person.ng_new_twit_identity = null;
 				person.ng_show_add_twit = false;
+				elem.val('');
 				elem.animate({
 					opacity: 0,
 					width: 0
@@ -612,73 +618,56 @@
 				show_add_twit();
 				return;
 			}
-			var twit_id = person.ng_new_twit_id;
-			if (!twit_id) {
+			var twit_identity = person.ng_new_twit_identity;
+			if (!twit_identity) {
 				hide_add_twit();
 				return;
 			}
-			if (twit_id[0] !== '@') {
-				twit_id = '@' + twit_id;
-			}
 			show_loading();
-			event_log('add_twit_id', twit_id);
+			event_log('add_twit_id', twit_identity.screen_name);
 			$http({
 				method: 'POST',
-				url: '/api/person/' + person._id + '/sid',
+				url: '/api/person/' + person._id + '/identity',
 				data: {
 					type: 'twitter',
-					sid: twit_id
+					sid: twit_identity.id_str
 				}
 			}).then(function(res) {
-				console.log('ADD SID', res);
-				person.ng_new_twit_id = '';
+				console.log('ADD IDENTITY', res);
 				hide_add_twit();
 				return fetch_user_info();
 			}, function(err) {
-				console.error('FAILED ADD SID', err);
+				console.error('FAILED ADD IDENTITY', err);
 				hide_loading();
 			});
 		};
 
-		$scope.del_sid = function(person, sid) {
-			var q = 'Are you sure you want to remove the social id "' + sid.sid + '" from your account?';
+		$scope.del_identity = function(person, identity) {
+			var q = 'Are you sure you want to remove the social id "' + identity.sid + '" from your account?';
 			if (!window.confirm(q)) {
 				return;
 			}
 			show_loading();
 			return $http({
 				method: 'DELETE',
-				url: '/api/person/' + person._id + '/sid/' + sid._id
+				url: '/api/person/' + person._id + '/identity/' + identity._id
 			}).then(function(res) {
-				console.log('DEL SID', res);
+				console.log('DEL IDENTITY', res);
 				return fetch_user_info();
 			}, function(err) {
-				console.error('FAILED DEL SID', err);
+				console.error('FAILED DEL IDENTITY', err);
 				hide_loading();
 			});
 		};
 
-		$scope.make_person_report = function(person) {
+		$scope.do_report = function(person) {
 			show_loading();
 			return $http({
 				method: 'POST',
 				url: '/api/person/' + person._id + '/report'
 			}).then(function(res) {
 				console.log('MAKE REPORT', res);
-				hide_loading();
-			}, function(err) {
-				console.error('FAILED MAKE REPORT', err);
-				hide_loading();
-			});
-		};
-
-		$scope.make_report = function() {
-			show_loading();
-			return $http({
-				method: 'POST',
-				url: '/api/report'
-			}).then(function(res) {
-				console.log('MAKE REPORT', res);
+				person.report = res.data;
 				hide_loading();
 			}, function(err) {
 				console.error('FAILED MAKE REPORT', err);
@@ -686,6 +675,7 @@
 			});
 		};
 	}
+
 
 
 

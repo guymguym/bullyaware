@@ -13,7 +13,7 @@ var Session = models.Session;
 var EventLog = models.EventLog;
 var User = models.User;
 var Person = models.Person;
-var SocialID = models.SocialID;
+var Identity = models.Identity;
 
 
 // mk_session is a middleware (it takes 3 arguments and can pass execution to next)
@@ -225,7 +225,7 @@ exports.read_user = function(req, res) {
 	var user_id;
 	var user_info;
 	var persons;
-	var social_ids_map;
+	var identity_map;
 
 	return async.waterfall([
 
@@ -262,24 +262,24 @@ exports.read_user = function(req, res) {
 		function(next) {
 			var ids = [];
 			for (var i = 0; i < persons.length; i++) {
-				ids = ids.concat(persons[i].social_ids);
+				ids = ids.concat(persons[i].identities);
 			}
-			return SocialID.find({
+			return Identity.find({
 				_id: {
 					$in: ids
 				}
-			}, function(err, social_ids) {
+			}, function(err, identities) {
 				if (err) {
 					return next(err);
 				}
-				social_ids_map = _.indexBy(social_ids, '_id');
+				identity_map = _.indexBy(identities, '_id');
 				return next();
 			});
 		},
 
 		function(next) {
 			user_info.persons = persons;
-			user_info.social_ids_map = social_ids_map;
+			user_info.identity_map = identity_map;
 			return next(null, user_info);
 		}
 
@@ -308,7 +308,7 @@ exports.add_person = function(req, res) {
 	], common.reply_callback(req, res, 'ADD_PERSON ' + user_id));
 };
 
-exports.add_sid = function(req, res) {
+exports.add_identity = function(req, res) {
 	var user_id;
 	var person_id = req.params.person_id;
 	var type = req.body.type;
@@ -320,29 +320,51 @@ exports.add_sid = function(req, res) {
 
 		function(next) {
 			user_id = req.session.user.id;
+			if (type !== 'twitter') {
+				return next(null, null);
+			}
+			return twitter.showUser(sid, function(err, profiles) {
+				if (err) {
+					return next(err);
+				}
+				if (profiles.length !== 1) {
+					return next('unexpected profiles reply');
+				}
+				return next(null, profiles[0]);
+			});
+		},
+
+		function(profile, next) {
 			var data_fields = {
 				type: type,
 				sid: sid
 			};
-			return SocialID.findOneAndUpdate(data_fields, data_fields, {
+			return Identity.findOneAndUpdate({
+				type: type,
+				sid: sid
+			}, {
+				type: type,
+				sid: sid,
+				profile: profile
+			}, {
 				// using upsert to create if not exists
 				upsert: true
-			}, function(err, social_id) {
-				return next(err, social_id);
+			}, function(err, identity) {
+				return next(err, identity);
 			});
 		},
 
-		function(social_id, next) {
+		function(identity, next) {
 			Person.findByIdAndUpdate(person_id, {
 				$addToSet: {
-					social_ids: social_id.id
+					identities: identity.id
 				}
 			}, function(err) {
 				return next(err);
 			});
 		}
 
-	], common.reply_callback(req, res, 'ADD_SID ' + user_id));
+	], common.reply_callback(req, res, 'ADD_IDENTITY ' + user_id));
 };
 
 exports.del_person = function(req, res) {
@@ -353,7 +375,7 @@ exports.del_person = function(req, res) {
 
 		validate_user(req),
 
-		// TODO check if we want to remove related social_id from the db completely
+		// TODO check if we want to remove related identities from the db completely
 
 		function(next) {
 			user_id = req.session.user.id;
@@ -365,10 +387,10 @@ exports.del_person = function(req, res) {
 	], common.reply_callback(req, res, 'DEL_PERSON ' + user_id));
 };
 
-exports.del_sid = function(req, res) {
+exports.del_identity = function(req, res) {
 	var user_id;
 	var person_id = req.params.person_id;
-	var social_id = req.params.sid;
+	var identity = req.params.identity;
 
 	return async.waterfall([
 
@@ -378,16 +400,16 @@ exports.del_sid = function(req, res) {
 			user_id = req.session.user.id;
 			return Person.findByIdAndUpdate(person_id, {
 				$pull: {
-					social_ids: social_id
+					identities: identity
 				}
 			}, function(err) {
 				return next(err);
 			});
 		},
 
-		// TODO check if we want to remove social_id from the db completely
+		// TODO check if we want to remove identity from the db completely
 
-	], common.reply_callback(req, res, 'DEL_SID ' + user_id));
+	], common.reply_callback(req, res, 'DEL_IDENTITY ' + user_id));
 };
 
 

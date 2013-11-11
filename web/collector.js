@@ -4,7 +4,7 @@
 var mongoose = require('mongoose');
 var twitter = require('./lib/twitter').twitter;
 var _ = require('underscore');
-var SocialID = require('./lib/models').SocialID;
+var Identity = require('./lib/models').Identity;
 var Message = require('./lib/models').Message;
 var async = require('async');
 
@@ -23,11 +23,14 @@ function get_twitter_stream_filter(callback) {
 		'track': []
 	};
 
-	SocialID.find({
+	Identity.find({
 		type: 'twitter'
 	}, function(err, twitter_users) {
 		if (err) {
-			return callback(err, null);
+			return callback(err);
+		}
+		if (!twitter_users || !twitter_users.length) {
+			return callback(null, []);
 		}
 
 		_.each(twitter_users, function(tu) {
@@ -38,11 +41,10 @@ function get_twitter_stream_filter(callback) {
 
 		_.each(filter, function(v, k) {
 			if (filter[k].length > 0) {
-				filter.k = filter.k.join();
+				filter[k] = filter[k].join();
 			} else {
 				delete filter[k];
 			}
-
 		});
 
 		return callback(null, filter);
@@ -77,9 +79,15 @@ function collect_twits() {
 		},
 		function(filter, next) {
 			console.log('filter: ', filter);
+
+			// TODO reload filters every few minutes
+
+			// TODO limit number of messages during tests
+
 			if (!_.keys(filter).length) {
 				filter = {
-					track: ['MileyCyrus']
+					track: ['MileyCyrus'] // TEST ID
+					// track: ['SomeSKANKinMI'] // TEST ID
 					// 'locations': '-122.75,36.8,-121.75,37.8,-74,40,-73,41'
 				};
 			}

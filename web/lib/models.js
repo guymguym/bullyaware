@@ -31,11 +31,11 @@ var user_schema = new mongoose.Schema({
 var person_schema = new mongoose.Schema({
 	user: types.ObjectId,
 	name: String,
-	social_ids: [types.ObjectId]
+	identities: [types.ObjectId]
 });
 
 // @child (twitter)
-var social_id_schema = new mongoose.Schema({
+var identity_schema = new mongoose.Schema({
 	type: String,
 	sid: String,
 	profile: {}
@@ -44,8 +44,8 @@ var social_id_schema = new mongoose.Schema({
 var message_schema = new mongoose.Schema({
 	type: String,
 	data: {},
-	sender: String, // sid from social_id_schema
-	mentions: [String], // sid from social_id_schema
+	sender: String, // sid from identity_schema
+	mentions: [String], // sid from identity_schema
 	owner: types.ObjectId, // User, or empty if received through public tapping
 });
 
@@ -53,7 +53,7 @@ var report_schema = new mongoose.Schema({
 	user: types.ObjectId,
 	person: types.ObjectId,
 	person_name: String,
-	social_ids: [types.ObjectId],
+	identities: [types.ObjectId],
 	insights: [{
 		msgs: [types.ObjectId],
 		level: String,
@@ -104,7 +104,7 @@ person_schema.index({
 	unique: true
 });
 
-social_id_schema.index({
+identity_schema.index({
 	type: 1,
 	sid: 1
 }, {
@@ -145,7 +145,7 @@ var Session = mongoose.model('Session', session_schema);
 var EventLog = mongoose.model('EventLog', event_log_schema);
 var User = mongoose.model('User', user_schema);
 var Person = mongoose.model('Person', person_schema);
-var SocialID = mongoose.model('SocialID', social_id_schema);
+var Identity = mongoose.model('Identity', identity_schema);
 var Message = mongoose.model('Message', message_schema);
 var Report = mongoose.model('Report', report_schema);
 
@@ -155,7 +155,7 @@ module.exports = {
 	EventLog: EventLog,
 	User: User,
 	Person: Person,
-	SocialID: SocialID,
+	Identity: Identity,
 	Message: Message,
 	Report: Report
 };
