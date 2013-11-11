@@ -6,11 +6,12 @@ var common = require('./common');
 var async = require('async');
 var _ = require('underscore');
 var afinn = require('./afinn');
-var twitter = require('./twitter_service');
+var twitter = require('./twitter');
 var models = require('./models');
 var SocialID = models.SocialID;
 var Person = models.Person;
 var Message = models.Message;
+var Report = models.Report;
 
 
 
@@ -87,8 +88,9 @@ function create_report(messages, callback) {
 		msg.level = compute_message_score(msg);
 	}
 
-	var report = new models.Report();
+	var report = new Report();
 	// TODO fill the report
+	return callback(null, report.toObject());
 }
 
 

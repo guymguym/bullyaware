@@ -3,28 +3,21 @@
 'use strict';
 
 var async = require('async');
-var twitter = require('twitter');
 var _ = require('underscore');
-var S = require('string');
 var util = require('util');
-var twitter = require('twitter');
 var fs = require('fs');
 var path = require('path');
+// var S = require('string');
 
-var consumer_key = '1RsaHtdnJxMWAQIU5gah5Q';
-var consumer_secret = 'g7KNom2T55oiSwp66BwGi2PbzwwzP45I9Juvx3E8Q';
-var request_token_url = 'https://api.twitter.com/oauth/request_token';
-var authorize_url = 'https://api.twitter.com/oauth/authorize';
-var access_token_url = 'https://api.twitter.com/oauth/access_token';
-var access_token_key = '102069611-nhCgrP7Yhs0mpciDqhtcoTms1oFIocxQtiNymV4r';
-var access_token_secret = 'YbrTeF7x1l2gCyZnIjdeoQ63cowVHalsGdDG4MncI';
-var access_level = 'Read-only';
-var twit = new twitter({
-	consumer_key: consumer_key,
-	consumer_secret: consumer_secret,
-	access_token_key: access_token_key,
-	access_token_secret: access_token_secret
+var ntwitter = require('ntwitter');
+var twitter = new ntwitter({
+	consumer_key: process.env.TWITTER_CONSUMER_KEY,
+	consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+	access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+	access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
+
+exports.twitter = twitter;
 
 exports.tweet_search = function(search_expression, callback) {
 	var max_id;
@@ -51,16 +44,22 @@ exports.tweet_search = function(search_expression, callback) {
 	}, function(next) {
 		console.log('TWT2', num);
 		var opt = {
+			q: search_expression,
 			count: 100
 		};
 		if (max_id) {
 			opt.max_id = max_id;
 		}
-		return twit.search(search_expression, opt, function(data) {
+		// override the old url in the library for twitter api version 1.1
+		var search_tweets_url = 'https://api.twitter.com/1.1/search/tweets.json';
+		return twitter.get(search_tweets_url, opt, function(err, data) {
+			if (err) {
+				return next(err);
+			}
 			console.log('TWT3', num);
 			iterations++;
 			if (!data || !data.statuses) {
-				console.error('FAILED TO GET MORE TWEETS', data);
+				console.log('NO MORE TWEETS', data);
 				done = true;
 				return next();
 			}

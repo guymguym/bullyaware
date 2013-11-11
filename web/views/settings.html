@@ -18,18 +18,53 @@
 			<hr/>
 		</div>
 
-		<div ng-show="!user_info" class="text-center" style="font-size: 50px; padding: 30px">
-			<i class="fa fa-spinner fa-spin"></i>
-		</div>
-		<div ng-show="!!user_info" style="margin-bottom: 40px">
+		<div style="margin-bottom: 40px; position: relative">
+			<div id="loading_panel" class="text-center" style="font-size: 80px; padding: 20px; z-index: 100; background-color: rgba(255,255,255,0.9); top: 0; left: 0; min-width: 100%; min-height: 100%; position: absolute; border-radius: 10px">
+				<i class="fa fa-spinner fa-spin"></i>
+			</div>
 
+			<h2>Persons</h2>
+			<div ng-repeat="person in user_info.persons" class="row" style="margin-bottom: 20px">
+				<div class="col-sm-6">
+					<div style="padding: 15px; border: 1px #08c solid; border-radius: 5px">
+						<h3 class="text-center">
+							<i class="fa fa-user fa-lg fa-fw menu_color"></i>
+							{{ person.name }}
+						</h3>
+						<div class="btn-toolbar text-center">
+							<input ng-model="person.ng_new_twit_id" nb-twitter-name-complete id="new_twit_id_{{get_id(person)}}" class="form-control" type="text" placeholder="Twitter account" style="width: 0; display: inline-block; opacity: 0" />
+							<button class="btn btn-info" title="Add Twitter account to person" ng-click="add_twit(person)">
+								<i class="fa fa-twitter fa-lg menu_color"></i>
+								<i class="fa fa-plus menu_color"></i>
+							</button>
+							<button class="btn btn-warning" ng-click="make_person_report(person)" title="Make Report">
+								<i class="fa fa-bar-chart-o"></i>
+							</button>
+							<button class="btn btn-default" ng-click="del_person(person)" title="Remove {{person.name}}...">
+								<i class="fa fa-trash-o"></i>
+							</button>
+						</div>
+						<br/>
+						<div ng-repeat="social_id in person.social_ids" ng-init="sid=user_info.social_ids_map[social_id]" class="row">
+							<div class="col-xs-11">
+								<i class="fa fa-fw fa-twitter menu_color"></i>
+								{{ sid.sid }}
+							</div>
+							<div class="col-xs-1">
+								<button class="btn btn-default btn-xs pull-right" ng-click="del_sid(person,sid)" title="Remove {{sid.sid}}...">
+									<i class="fa fa-trash-o"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="row">
-				<div class="col-sm-4">
-					<div class="input-group" style="margin-bottom: 15px">
-						<input id="target_person" ng-model="target_person" type="text" class="form-control" placeholder="Person name" autocomplete="on" />
-						<input id="target_account" ng-model="target_account" type="text" class="form-control" placeholder="Add twitter account" autocomplete="on" />
+				<div class="col-sm-6">
+					<div class="input-group" style="margin-bottom: 20px">
+						<input id="new_person" ng-model="new_person" type="text" class="form-control" placeholder="Add Person" autocomplete="on" />
 						<div class="input-group-btn">
-							<button type="button" class="btn btn-primary" ng-click="add_twitter()">
+							<button type="button" class="btn btn-primary" ng-click="add_person(new_person)">
 								<i class="fa fa-plus fa-lg fa-fw"></i>
 							</button>
 						</div>
@@ -37,46 +72,13 @@
 				</div>
 			</div>
 
-			<div ng-repeat="person in user_info.persons" style="margin-bottom: 15px">
-				<div class="dropdown">
-					<a data-toggle="dropdown" href="#" class="btn btn-default btn-lg">
-						<h3>
-							<i class="fa fa-user fa-lg fa-fw menu_color"></i>
-							{{ person.name }}
-						</h3>
-					</a>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-						<li>
-							<a href="#" ng-click="make_person_report(person)">
-								Make Report
-							</a>
-						</li>
-						<li>
-							<a href="#" ng-click="remove_person(person)">
-								Remove...
-							</a>
-						</li>
-					</ul>
-				</div>
-				<div ng-repeat="social_id in person.social_ids">
-					<i class="fa fa-twitter fa-lg fa-fw menu_color"></i>
-					{{ social_ids_map[social_id].name }}
-				</div>
-			</div>
 
-			<div class="row" ng-show="user_role=='parent'">
-				<div class="col-sm-4">
-					<h5>We can find the account name for you if needed</h5>
-				</div>
-				<div class="col-sm-8">
-					<button class="btn btn-default" style="margin-bottom: 15px" ng-click="help_find_twitter()">Find twitter user</button>
-				</div>
-			</div>
-
-
-			<button class="btn btn-danger btn-lg" ng-click="make_report()">
+			<!-- 
+			<h2>Reports</h2>
+			<button class="btn btn-primary btn-lg" ng-click="make_report()">
 				Make Report
 			</button>
+			-->
 		</div>
 	</div>
 

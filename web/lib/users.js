@@ -6,6 +6,7 @@ var common = require('./common');
 var async = require('async');
 var _ = require('underscore');
 var mandrill = require('node-mandrill')('T4f6so795LfLb-mFVed1wg');
+var twitter = require('./twitter').twitter;
 
 var models = require('./models');
 var Session = models.Session;
@@ -307,25 +308,7 @@ exports.add_person = function(req, res) {
 	], common.reply_callback(req, res, 'ADD_PERSON ' + user_id));
 };
 
-exports.del_person = function(req, res) {
-	var user_id;
-	var person_id = req.params.person_id;
-
-	return async.waterfall([
-
-		validate_user(req),
-
-		function(next) {
-			user_id = req.session.user.id;
-			Person.findByIdAndRemove(person_id, function(err) {
-				return next(err);
-			});
-		},
-
-	], common.reply_callback(req, res, 'DEL_PERSON ' + user_id));
-};
-
-exports.add_social_id = function(req, res) {
+exports.add_sid = function(req, res) {
 	var user_id;
 	var person_id = req.params.person_id;
 	var type = req.body.type;
@@ -337,17 +320,21 @@ exports.add_social_id = function(req, res) {
 
 		function(next) {
 			user_id = req.session.user.id;
-			var social_id = new SocialID();
-			social_id.type = type;
-			social_id.sid = sid;
-			return social_id.save(function(err) {
+			var data_fields = {
+				type: type,
+				sid: sid
+			};
+			return SocialID.findOneAndUpdate(data_fields, data_fields, {
+				// using upsert to create if not exists
+				upsert: true
+			}, function(err, social_id) {
 				return next(err, social_id);
 			});
 		},
 
 		function(social_id, next) {
 			Person.findByIdAndUpdate(person_id, {
-				$push: {
+				$addToSet: {
 					social_ids: social_id.id
 				}
 			}, function(err) {
@@ -355,7 +342,66 @@ exports.add_social_id = function(req, res) {
 			});
 		}
 
-	], common.reply_callback(req, res, 'ADD_SOCIAL_ID ' + user_id));
+	], common.reply_callback(req, res, 'ADD_SID ' + user_id));
+};
+
+exports.del_person = function(req, res) {
+	var user_id;
+	var person_id = req.params.person_id;
+
+	return async.waterfall([
+
+		validate_user(req),
+
+		// TODO check if we want to remove related social_id from the db completely
+
+		function(next) {
+			user_id = req.session.user.id;
+			Person.findByIdAndRemove(person_id, function(err) {
+				return next(err);
+			});
+		},
+
+	], common.reply_callback(req, res, 'DEL_PERSON ' + user_id));
+};
+
+exports.del_sid = function(req, res) {
+	var user_id;
+	var person_id = req.params.person_id;
+	var social_id = req.params.sid;
+
+	return async.waterfall([
+
+		validate_user(req),
+
+		function(next) {
+			user_id = req.session.user.id;
+			return Person.findByIdAndUpdate(person_id, {
+				$pull: {
+					social_ids: social_id
+				}
+			}, function(err) {
+				return next(err);
+			});
+		},
+
+		// TODO check if we want to remove social_id from the db completely
+
+	], common.reply_callback(req, res, 'DEL_SID ' + user_id));
+};
+
+
+exports.twitter_id_complete = function(req, res) {
+	return async.waterfall([
+
+		function(next) {
+			if (!req.query.q) {
+				return next(null, []);
+			}
+			return twitter.searchUser(req.query.q, req.query, next);
+		}
+
+	], common.reply_callback(req, res, 'TW_ID_COMPL ' + req.query));
 };
 
 

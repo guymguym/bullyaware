@@ -6,7 +6,7 @@
 	'use strict';
 
 	// define the angular module
-	var bullyaware_app = angular.module('bullyaware_app', []);
+	var bullyaware_app = angular.module('bullyaware_app', ['ngSanitize']);
 
 
 	// safe apply handles cases when apply may fail with:
@@ -130,6 +130,48 @@
 	});
 
 
+	bullyaware_app.directive('nbTwitterNameComplete', [
+		'$http', '$sanitize', '$rootScope',
+		function($http, $sanitize, $rootScope) {
+			return {
+				// require: '=ngModel',
+				restrict: 'A', // use as attribute
+				scope: {
+					ngModel: '='
+				},
+				link: function(scope, element, attrs, ngModel) {
+					element.autocomplete({
+						delay: 1000,
+						source: function(request, callback) {
+							$http({
+								method: 'GET',
+								url: '/api/user/twitter_id_complete?q=' + escape(request.term)
+							}).then(function(res) {
+								var arr = res.data;
+								for (var i = 0; i < arr.length; i++) {
+									arr[i].value = '@' + $sanitize(arr[i].screen_name) +
+										' - ' + $sanitize(arr[i].name);
+								}
+								return callback(res.data);
+							}, function(err) {
+								return callback();
+							});
+						},
+						select: function(event, ui) {
+							var val = '@' + ui.item.screen_name;
+							scope.ngModel = val;
+							attrs.$set('ngModel', val);
+							$rootScope.safe_apply();
+							return false;
+						}
+					});
+				}
+			};
+		}
+	]);
+
+
+
 	// see http://stackoverflow.com/questions/14965968/angularjs-browser-autofill-workaround-by-using-a-directive
 	// TODO: but it still doesn't work, and angular doesn't handle autofill...
 	bullyaware_app.directive('autoFillSync', function($timeout) {
@@ -159,7 +201,7 @@
 				}
 				return $http({
 					method: 'POST',
-					url: '/event_log',
+					url: '/api/event_log',
 					data: {
 						event: event,
 						data: data
@@ -175,6 +217,11 @@
 		}
 	]);
 
+	var HIGHLIGHT_EFFECT = {
+		effect: 'highlight',
+		color: '#08c',
+		duration: 1000
+	};
 
 	function init_common_links($scope, $window, $location, event_log) {
 		function make_redirect(path) {
@@ -389,25 +436,17 @@
 
 		$scope.do_login = function() {
 			if (!$scope.user_email) {
-				$("#user_email").effect({
-					effect: 'highlight',
-					color: '#07d',
-					duration: 1000
-				}).focus();
+				$("#user_email").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
 			if (!$scope.user_password) {
-				$("#user_password").effect({
-					effect: 'highlight',
-					color: '#07d',
-					duration: 1000
-				}).focus();
+				$("#user_password").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
 			event_log('do_login', $scope.user_email);
 			$http({
 				method: 'POST',
-				url: '/user/login',
+				url: '/api/user/login',
 				data: {
 					email: $scope.user_email,
 					password: $scope.user_password
@@ -435,34 +474,22 @@
 
 		$scope.do_signup = function() {
 			if (!$scope.user_email) {
-				$("#user_email").effect({
-					effect: 'highlight',
-					color: '#07d',
-					duration: 1000
-				}).focus();
+				$("#user_email").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
 			if (!$scope.user_password) {
-				$("#user_password").effect({
-					effect: 'highlight',
-					color: '#07d',
-					duration: 1000
-				}).focus();
+				$("#user_password").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
 			if (!$scope.user_password2 || $scope.user_password2 !== $scope.user_password) {
-				$("#user_password2").effect({
-					effect: 'highlight',
-					color: '#07d',
-					duration: 1000
-				}).focus();
+				$("#user_password2").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
 			// send action log async
 			event_log('signup', $scope.user_email);
 			return $http({
 				method: 'POST',
-				url: '/user/signup',
+				url: '/api/user/signup',
 				data: {
 					email: $scope.user_email,
 					password: $scope.user_password
@@ -489,84 +516,163 @@
 		init_common_links($scope, $window, $location, event_log);
 		init_server_data($scope);
 
-		function init_user_info() {
-			$http({
+		function show_loading() {
+			$('#loading_panel').show();
+		}
+
+		function hide_loading() {
+			$('#loading_panel').hide();
+		}
+
+		function fetch_user_info() {
+			show_loading();
+			return $http({
 				method: 'GET',
-				url: '/user'
+				url: '/api/user'
 			}).then(function(res) {
 				console.log('GOT USER', res.data);
 				$scope.user_info = res.data;
-				$('#loading_sign').hide();
-				$('#getstarted_content').fadeIn(1000);
+				hide_loading();
 			}, function(err) {
 				console.error('FAILED GET USER', err);
-				$timeout(init_user_info, 1000);
+				$timeout(fetch_user_info, 1000);
 			});
 		}
-		init_user_info();
+		fetch_user_info();
 
-		// TODO sync with user object on server
-		$scope.twitter_accounts = [];
-
-		$scope.add_twitter = function() {
-			var name = $scope.target_account;
+		$scope.add_person = function(name) {
 			if (!name) {
+				$("#new_person").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
-			event_log('add_twitter', name);
-
+			show_loading();
+			event_log('add_person', name);
 			$http({
 				method: 'POST',
-				url: '/person',
+				url: '/api/person',
 				data: {
 					name: name
 				}
 			}).then(function(res) {
 				console.log('ADD PERSON', res);
-				return init_user_info();
+				$scope.new_person = '';
+				return fetch_user_info();
 			}, function(err) {
 				console.error('FAILED ADD PERSON', err);
+				hide_loading();
 			});
+		};
 
-			if (name[0] !== '@') {
-				name = '@' + name;
+		$scope.del_person = function(person) {
+			var q = 'Are you sure you want to remove the person "' +
+				person.name + '" from your account?';
+			if (!window.confirm(q)) {
+				return;
 			}
-			$scope.twitter_accounts.push(name);
-			$scope.target_account = '';
-		};
-		$scope.help_find_twitter = function() {
-			event_log('help_find_twitter');
-			alert('Coming soon');
-		};
-		$scope.remove_person = function(person) {
+			show_loading();
 			return $http({
 				method: 'DELETE',
-				url: '/person/' + person._id
+				url: '/api/person/' + person._id
 			}).then(function(res) {
 				console.log('DEL PERSON', res);
-				return init_user_info();
+				return fetch_user_info();
 			}, function(err) {
 				console.error('FAILED DEL PERSON', err);
+				hide_loading();
 			});
 		};
+
+		$scope.get_id = function(x) {
+			return x._id;
+		};
+
+		$scope.add_twit = function(person) {
+			var elem = $('#new_twit_id_' + person._id);
+			if (!person.ng_show_add_twit) {
+				person.ng_show_add_twit = true;
+				person.ng_new_twit_id = '';
+				$.when(elem.animate({
+					opacity: 1,
+					width: '200px'
+				}, 200)).then(function() {
+					elem.effect(HIGHLIGHT_EFFECT).focus();
+				});
+				return;
+			}
+			var twit_id = person.ng_new_twit_id;
+			if (!twit_id) {
+				return;
+			}
+			if (twit_id[0] !== '@') {
+				twit_id = '@' + twit_id;
+			}
+			show_loading();
+			event_log('add_twit_id', twit_id);
+			$http({
+				method: 'POST',
+				url: '/api/person/' + person._id + '/sid',
+				data: {
+					type: 'twitter',
+					sid: twit_id
+				}
+			}).then(function(res) {
+				console.log('ADD SID', res);
+				person.ng_new_twit_id = '';
+				person.ng_show_add_twit = false;
+				elem.animate({
+					opacity: 0,
+					width: 0
+				}, 200);
+				return fetch_user_info();
+			}, function(err) {
+				console.error('FAILED ADD SID', err);
+				hide_loading();
+			});
+		};
+
+		$scope.del_sid = function(person, sid) {
+			var q = 'Are you sure you want to remove the social id "' + sid.sid + '" from your account?';
+			if (!window.confirm(q)) {
+				return;
+			}
+			show_loading();
+			return $http({
+				method: 'DELETE',
+				url: '/api/person/' + person._id + '/sid/' + sid._id
+			}).then(function(res) {
+				console.log('DEL SID', res);
+				return fetch_user_info();
+			}, function(err) {
+				console.error('FAILED DEL SID', err);
+				hide_loading();
+			});
+		};
+
 		$scope.make_person_report = function(person) {
+			show_loading();
 			return $http({
 				method: 'POST',
-				url: '/person/' + person._id + '/report'
+				url: '/api/person/' + person._id + '/report'
 			}).then(function(res) {
 				console.log('MAKE REPORT', res);
+				hide_loading();
 			}, function(err) {
 				console.error('FAILED MAKE REPORT', err);
+				hide_loading();
 			});
 		};
+
 		$scope.make_report = function() {
+			show_loading();
 			return $http({
 				method: 'POST',
-				url: '/report'
+				url: '/api/report'
 			}).then(function(res) {
 				console.log('MAKE REPORT', res);
+				hide_loading();
 			}, function(err) {
 				console.error('FAILED MAKE REPORT', err);
+				hide_loading();
 			});
 		};
 	}
@@ -583,10 +689,10 @@
 		init_common_links($scope, $window, $location, event_log);
 		init_server_data($scope);
 
-		function init_user_info() {
+		function fetch_user_info() {
 			$http({
 				method: 'GET',
-				url: '/user'
+				url: '/api/user'
 			}).then(function(res) {
 				console.log('GOT USER', res.data);
 				$scope.user_info = res.data;
@@ -597,10 +703,10 @@
 				$('#getstarted_content').fadeIn(1000);
 			}, function(err) {
 				console.error('FAILED GET USER', err);
-				$timeout(init_user_info, 1000);
+				$timeout(fetch_user_info, 1000);
 			});
 		}
-		init_user_info();
+		fetch_user_info();
 
 
 		$scope.on_user_role = function(role) {
@@ -611,7 +717,7 @@
 			/*
 			$http({
 				method: 'PUT',
-				url: '/user',
+				url: '/api/user',
 				data: {
 					role: role
 				}
@@ -732,7 +838,7 @@
 		// $scope.target_account = 'jenny_sad';
 		// $scope.target_account = 'MileyCyrus';
 
-		var DEMO_ACCOUNT = 'MileyCyrus';
+		var DEMO_ACCOUNT = 'SomeSKANKinMI';
 		$scope.target_account = DEMO_ACCOUNT;
 		$scope.analyze = analyze;
 		analyze();
@@ -753,7 +859,7 @@
 			$scope.last_error = null;
 			return $http({
 				method: 'POST',
-				url: '/demo_query',
+				url: '/api/demo_query',
 				data: {
 					query: $scope.last_query
 				}
