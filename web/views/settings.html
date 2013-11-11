@@ -32,8 +32,8 @@
 							{{ person.name }}
 						</h3>
 						<div class="btn-toolbar text-center">
-							<input nb-twitter-chooser="person.ng_new_twit_identity" id="new_twit_id_{{get_id(person)}}" class="form-control" type="text" placeholder="Twitter account" style="width: 0; display: inline-block; opacity: 0" />
-							<button class="btn btn-info" title="Add Twitter account to person" ng-click="add_twit_identity(person)">
+							<input nb-twitter-chooser="add_twit_identity(person, $item)" id="new_twit_id_{{get_id(person)}}" class="form-control" type="text" placeholder="Twitter account" style="width: 0; display: inline-block; opacity: 0" />
+							<button class="btn btn-info" title="Add Twitter account to person" ng-click="toggle_add_twit(person)">
 								<i class="fa fa-twitter fa-lg menu_color"></i>
 								<i class="fa fa-plus menu_color"></i>
 							</button>

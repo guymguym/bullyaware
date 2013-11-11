@@ -136,9 +136,9 @@
 			return {
 				restrict: 'A', // use as attribute
 				link: function(scope, element, attrs) {
-					var model = $parse(attrs.nbTwitterChooser);
+					var fn = $parse(attrs.nbTwitterChooser);
 					element.autocomplete({
-						delay: 1000,
+						delay: 500,
 						source: function(request, callback) {
 							$http({
 								method: 'GET',
@@ -154,9 +154,15 @@
 						},
 						select: function(event, ui) {
 							element.val('@' + ui.item.screen_name);
-							model.assign(scope, ui.item);
-							$rootScope.safe_apply();
+							scope.$apply(function() {
+								fn(scope, {
+									$item: ui.item
+								});
+							})
 							return false;
+						},
+						search: function(event, ui) {
+							console.log('AUTOCOMPLETE', element.val());
 						}
 					}).data("ui-autocomplete")._renderItem = function(ul, item) {
 						return $("<li>")
@@ -592,37 +598,42 @@
 			}
 		};
 
-		$scope.add_twit_identity = function(person) {
+		$scope.show_add_twit = function(person) {
 			var elem = $('#new_twit_id_' + person._id);
-			var show_add_twit = function() {
-				person.ng_show_add_twit = true;
-				person.ng_new_twit_identity = null;
-				elem.val('');
-				$.when(elem.animate({
-					opacity: 1,
-					width: '200px'
-				}, 200)).then(function() {
-					elem.focus();
-				});
+			person.ng_show_add_twit = true;
+			elem.val('');
+			$.when(elem.animate({
+				opacity: 1,
+				width: '200px'
+			}, 200)).then(function() {
+				elem.focus();
+			});
+		}
+
+		$scope.hide_add_twit = function(person, force) {
+			var elem = $('#new_twit_id_' + person._id);
+			if (force !== 'force' && elem.val()) {
+				elem.autocomplete('search');
+				elem.effect(HIGHLIGHT_EFFECT).focus();
+				return;
 			}
-			var hide_add_twit = function() {
-				person.ng_new_twit_identity = null;
-				person.ng_show_add_twit = false;
-				elem.val('');
-				elem.animate({
-					opacity: 0,
-					width: 0
-				}, 100);
-			}
+			person.ng_show_add_twit = false;
+			elem.val('');
+			elem.animate({
+				opacity: 0,
+				width: 0
+			}, 100);
+		}
+
+		$scope.toggle_add_twit = function(person) {
 			if (!person.ng_show_add_twit) {
-				show_add_twit();
-				return;
+				$scope.show_add_twit(person);
+			} else {
+				$scope.hide_add_twit(person);
 			}
-			var twit_identity = person.ng_new_twit_identity;
-			if (!twit_identity) {
-				hide_add_twit();
-				return;
-			}
+		};
+
+		$scope.add_twit_identity = function(person, twit_identity) {
 			show_loading();
 			event_log('add_twit_id', twit_identity.screen_name);
 			$http({
@@ -634,7 +645,7 @@
 				}
 			}).then(function(res) {
 				console.log('ADD IDENTITY', res);
-				hide_add_twit();
+				$scope.hide_add_twit(person, 'force');
 				return fetch_user_info();
 			}, function(err) {
 				console.error('FAILED ADD IDENTITY', err);
