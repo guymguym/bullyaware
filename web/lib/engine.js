@@ -186,7 +186,9 @@ function analyze_query_messages(messages, user_map, callback) {
 	// calculate level per message
 	for (var i = 0; i < messages.length; i++) {
 		var msg = messages[i];
-		msg.level = compute_message_score(msg);
+		msg.level = compute_message_score({
+			data: msg
+		});
 	}
 
 	// group the messages by user id
