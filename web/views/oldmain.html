@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html ng-app="bullyaware_app">
+
+<head>
+	<?# def.include( 'common_head.html') ?>
+</head>
+
+<body ng-controller="WelcomeCtrl" ng-cloak>
+
+	<div class="stable">
+		<?# def.include( 'common_menu.html') ?>
+	</div>
+
+	<div class="page_content" style="display: none">
+		<div class="poster_area poster1 bgblk">
+			<div class="poster_header" style="position: absolute; top:20px; left:0; right:0">
+				<div class="container text-center">
+					<div class="col-sm-6" style="background-color: white; border-radius: 5px; padding: 10px">
+						<a href="#" ng-click="on_yahoo_hackathon()">
+							<span class="lead">Winner of Yahoo Hackathon</span>
+							<img src="/public/img/ydn.jpg" height="25px" />
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="poster_action" style="position: absolute; bottom:0; left:0; right:0">
+				<div class="container">
+					<h2 style="margin: 10px 0 0 0">Bullyaware. Always vigilant.</h2>
+					<p class="lead" style="margin: 15px 0 0 0">
+						Someone you know might be the target of cyber-bullying
+					</p>
+					<p class="lead" style="margin: 10px 0 0 0">
+						With our technology you can change that
+					</p>
+					<p class="lead" style="margin: 15px 0 15px 0">
+						<button class="btn btn-lg btn-info" ng-click="on_whatis()">
+							Learn more
+						</button>
+					</p>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="container text-center" style="margin-top: 30px">
+			<blockquote>
+				<p style="text-align: justify">
+					“I checked out the page - I think it is amazing. I have never seen any sort of bullying awareness tool like that. I will actually be using the account to help with problems with my sister as she has been a major target of bullying over the last few years. Thanks!”
+				</p>
+			</blockquote>
+		</div>
+
+		<div class="container text-center" style="margin-top: 20px">
+			<button class="btn btn-lg btn-primary" ng-click="on_getstarted()">
+				Get started
+			</button>
+		</div>
+
+	</div>
+
+	<div class="stable_foot">
+		<?# def.include( 'common_foot.html') ?>
+	</div>
+
+	<div>
+		<?# def.include( 'common_scripts.html') ?>
+	</div>
+
+</body>
+
+</html>

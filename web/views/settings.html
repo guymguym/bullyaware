@@ -11,30 +11,134 @@
 		<?# def.include( 'common_menu.html') ?>
 	</div>
 
-	<div class="container page_content" style="display: none; padding-bottom: 30px">
+	<div class="container page_content" style="display: none; padding-bottom: 30px; position: relative">
 
-		<div class="page-header">
-			<h1>Setting Up</h1>
+		<div id="loading_panel" class="text-center" style="font-size: 80px; padding: 20px; z-index: 100; background-color: rgba(255,255,255,0.6); top: 0; left: 0; min-width: 100%; min-height: 100%; position: absolute; border-radius: 10px">
+			<i class="fa fa-spinner fa-spin"></i>
 		</div>
 
-		<div style="margin-bottom: 40px; position: relative">
-			<div id="loading_panel" class="text-center" style="font-size: 80px; padding: 20px; z-index: 100; background-color: rgba(255,255,255,0.6); top: 0; left: 0; min-width: 100%; min-height: 100%; position: absolute; border-radius: 10px">
-				<i class="fa fa-spinner fa-spin"></i>
+		<div class="row">
+
+			<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3" style="padding-top: 30px">
+				<ul class="nav nav-pills nav-stacked">
+					<li ng-class="active_path('people')">
+						<a href="#people" data-toggle="tab">
+								<i class="fa fa-user fa-fw"></i>
+								People
+								<div ng-show="!!user_info.persons.length" class="badge pull-right">
+									{{user_info.persons.length}}
+								</div>
+							</a>
+					</li>
+					<li ng-class="active_path('reports')">
+						<a href="#reports" data-toggle="tab">
+								<i class="fa fa-bar-chart-o fa-fw"></i>
+								Reports
+								<div ng-show="!!user_info.reports.length" class="badge pull-right">
+									{{user_info.reports.length}}
+								</div>
+							</a>
+					</li>
+					<li ng-class="active_path('email')">
+						<a href="#email" data-toggle="tab">Email</a>
+					</li>
+				</ul>
 			</div>
 
-			<div class="row">
-				<div class="col-sm-12">
+			<div class="tab-content col-xs-12 col-sm-9 col-md-9 col-lg-9">
+
+				<div class="tab-pane fade in active" id="people">
+
+					<div ng-show="!!user_info.persons.length" class="page-header">
+						<h1>People</h1>
+					</div>
+
+					<div ng-repeat="person in user_info.persons | orderBy:return_id:false">
+						<div class="row" style="margin-bottom: 20px">
+
+							<div class="col-xs-12 col-sm-9 col-md-9">
+								<div class="panel panel-primary">
+									<div class="panel-heading text-center">
+										<h2>
+											<i class="fa fa-user fa-lg fa-fw fa-inverse"></i>
+											{{ person.name }}
+										</h2>
+									</div>
+									<div class="panel-body">
+										<div ng-repeat="identity_id in person.identities | orderBy:return_arg:false" ng-init="identity=user_info.identity_map[identity_id]" style="padding: 5px 10px; border-radius: 30px; margin-bottom: 10px" class="label-info">
+											<div class="row">
+												<div class="col-xs-8">
+													<h5>
+														<i class="fa fa-fw fa-twitter fa-lg fa-inverse"></i>
+														<span>
+															{{ identity_account_name(identity) }}
+														</span>
+													</h5>
+												</div>
+												<div class="col-xs-4 text-right">
+													<a class="btn btn-link btn-sm" ng-href="//{{identity_link(identity)}}" title="{{identity_link(identity)}}" target="_blank">
+														<i class="fa fa-share fa-inverse"></i>
+													</a>
+													<a class="btn btn-link btn-sm" ng-click="del_identity(person,identity)" title="Remove {{identity_account_name(identity)}}...">
+														<i class="fa fa-trash-o fa-inverse"></i>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="panel-footer text-center">
+										<div class="btn-toolbar">
+											<button class="btn btn-default btn-sm" ng-click="del_person(person)" title="Remove {{person.name}}...">
+												<i class="fa fa-trash-o"></i>
+											</button>
+											<button ng-show="false" class="btn btn-warning btn-sm" ng-click="do_report(person)" title="Report">
+												<i class="fa fa-bar-chart-o"></i>
+											</button>
+											<button class="btn btn-info btn-sm" title="Add Twitter account to person" ng-click="toggle_add_twit(person)">
+												<i class="fa fa-twitter fa-lg fa-inverse"></i>
+												<i class="fa fa-plus fa-inverse"></i>
+											</button>
+											<input nb-twitter-chooser="add_twit_identity(person, $item)" id="new_twit_id_{{return_id(person)}}" class="form-control" type="text" placeholder="Twitter Chooser" style="width: 0; display: inline-block; opacity: 0" />
+											<span class="twitter-chooser-spin" style="opacity: 0">
+												<i class="fa fa-spinner fa-spin"></i>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-sm-6" ng-show="!!person.report">
+								<div class="panel panel-default">
+									<div class="panel-heading text-center">
+										<h2>
+											<i class="fa fa-bar-chart-o fa-lg"></i>
+											{{ person.name }} Report
+										</h2>
+									</div>
+									<div class="panel-body">
+										<p>Sent {{person.report.send_stats.num_msg}} messages</p>
+										<p>Mentioned in {{person.report.rcv_stats.num_msg}} messages</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="page-header">
+						<h1>Setting Up</h1>
+					</div>
 					<div class="well" style="padding: 0 15px">
 						<div class="row" style="padding-top: 10px">
 							<div class="col-xs-3 col-sm-2 col-md-2 col-lg-2 text-center">
 								<span style="font-size: 100px; line-height: 1.1em; color: #ddd">1</span>
 							</div>
 							<div class="col-xs-9 col-sm-10 col-md-10 col-lg-10">
-								<h4>Create a person for each child</h4>
+								<h4>Add person</h4>
+								<p>People can be monitored for social activity of either victim or bully.</p>
 								<div class="row">
 									<div class="col-sm-6">
 										<div class="input-group" style="margin-bottom: 20px">
-											<input id="new_person" ng-model="new_person" type="text" class="form-control" placeholder="Person first name" autocomplete="on" />
+											<input id="new_person" ng-model="new_person" type="text" class="form-control" placeholder="Person Name" autocomplete="on" />
 											<div class="input-group-btn">
 												<button type="button" class="btn btn-primary" ng-click="add_person(new_person)">
 													<i class="fa fa-plus fa-lg fa-fw"></i>
@@ -45,7 +149,6 @@
 								</div>
 							</div>
 						</div>
-
 						<div class="row" style="padding-top: 10px; border-top: 2px #ddd dashed">
 							<div class="col-xs-3 col-sm-2 col-md-2 col-lg-2 text-center">
 								<span style="font-size: 100px; line-height: 1em; color: #ddd">2</span>
@@ -57,99 +160,37 @@
 										<i class="fa fa-twitter fa-lg fa-inverse"></i>
 										<i class="fa fa-plus fa-inverse"></i>
 									</button>
-									under each person to open the Twitter user chooser box, enter the user name or screen-name (@name) and choose from drop down.
+									under each person to open the twitter chooser, enter the user name or screen-name (@name) and choose from drop down.
 								</p>
 							</div>
 						</div>
-
 						<div class="row" style="padding-top: 10px; border-top: 2px #ddd dashed">
 							<div class="col-xs-3 col-sm-2 col-md-2 col-lg-2 text-center">
 								<span style="font-size: 100px; line-height: 1em; color: #ddd">3</span>
 							</div>
 							<div class="col-xs-9 col-sm-10 col-md-10 col-lg-10">
 								<h4>View reports</h4>
-								<p>Reports will be sent to your email but you can also watch the reports of each person using
-									<button class="btn btn-warning btn-xs">
-										<i class="fa fa-bar-chart-o"></i>
-									</button>
+								<p>Reports will be sent to your email but you can also watch the previous reports.
 								</p>
 							</div>
 						</div>
 					</div>
+
 				</div>
-			</div>
 
-
-			<div ng-repeat="person in user_info.persons | orderBy:return_id:false">
-				<div class="row" style="margin-bottom: 20px">
-
-					<div class="col-sm-6">
-						<div class="panel panel-primary">
-							<div class="panel-heading text-center">
-								<h2>
-									<i class="fa fa-user fa-lg fa-fw fa-inverse"></i>
-									{{ person.name }}
-								</h2>
-							</div>
-							<div class="panel-body">
-								<div ng-repeat="identity_id in person.identities | orderBy:return_arg:false" ng-init="identity=user_info.identity_map[identity_id]" style="padding: 5px 10px; border-radius: 30px; margin-bottom: 10px" class="label-info">
-									<div class="row">
-										<div class="col-xs-10">
-											<h5>
-												<i class="fa fa-fw fa-twitter fa-lg fa-inverse"></i>
-												<b>{{ identity_account_name(identity) }}</b>
-												&nbsp;
-												<!-- <img width="32" src="{{identity.profile.profile_image_url}}" /> -->
-											</h5>
-											<!-- 
-											<div style="padding-left: 30px">
-												<small>
-													{{ identity_real_name(identity) }} <u>from</u> {{ identity_location_info(identity) }}
-													<br/>{{ identity_more_info(identity) }}
-													<br/>
-												</small>
-											</div>
-											 -->
-										</div>
-										<div class="col-xs-2">
-											<a class="btn btn-link" ng-click="del_identity(person,identity)" title="Remove {{identity_account_name(identity)}}...">
-												<i class="fa fa-trash-o fa-inverse"></i>
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="panel-footer text-center">
-								<div class="btn-toolbar">
-									<button class="btn btn-default btn-sm" ng-click="del_person(person)" title="Remove {{person.name}}...">
-										<i class="fa fa-trash-o"></i>
-									</button>
-									<button class="btn btn-warning btn-sm" ng-click="do_report(person)" title="Report">
-										<i class="fa fa-bar-chart-o"></i>
-									</button>
-									<button class="btn btn-info btn-sm" title="Add Twitter account to person" ng-click="toggle_add_twit(person)">
-										<i class="fa fa-twitter fa-lg fa-inverse"></i>
-										<i class="fa fa-plus fa-inverse"></i>
-									</button>
-									<input nb-twitter-chooser="add_twit_identity(person, $item)" id="new_twit_id_{{return_id(person)}}" class="form-control input-control-sm" type="text" placeholder="Twitter user chooser" style="width: 0; display: inline-block; opacity: 0" />
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-6" ng-show="!!person.report">
-						<div style="padding: 20px; border: 1px #08c solid; border-radius: 5px">
-							<h2 class="text-center">
-								<i class="fa fa-bar-chart-o fa-lg"></i>
-								{{ person.name }} Report
-							</h2>
-							<p>Sent {{person.report.send_stats.num_msg}} messages</p>
-							<p>Mentioned in {{person.report.rcv_stats.num_msg}} messages</p>
-						</div>
+				<div class="tab-pane fade" id="reports">
+					<div class="page-header">
+						<h1>Reports</h1>
 					</div>
 				</div>
-			</div>
 
+				<div class="tab-pane fade" id="email">
+					<div class="page-header">
+						<h1>Email</h1>
+					</div>
+				</div>
+
+			</div>
 		</div>
 	</div>
 

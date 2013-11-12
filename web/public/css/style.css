@@ -3,9 +3,10 @@ body {
     /*background-color: #433b43 !important;*/
     /*color: #f8f8f8 !important;*/
 }
-h1, h2, h3, h4, h5, h6, p, a, span, div {
+h1, h2, h3, h4, h5, h6, p, a, span, div, button {
+    font-family:'Lato', sans-serif !important;
     /*font-family:'Open Sans', sans-serif !important;*/
-    font-family:'PT Sans', sans-serif !important;
+    /*font-family:'PT Sans', sans-serif !important;*/
 }
 .lead {
     font-size: 1.2em !important;
@@ -27,7 +28,7 @@ h1, h2, h3, h4, h5, h6, p, a, span, div {
     border-bottom: solid 1px black;
 }
 .menu_color {
-    color: #0096bb;
+    color: #09d;
 }
 .feature-row img {
     width:300px;

@@ -3,63 +3,143 @@
 
 <head>
 	<?# def.include( 'common_head.html') ?>
+
+		<style type="text/css">
+		html, body {
+			height: 100%;
+			min-height: 100%;
+		}
+		</style>
 </head>
 
-<body ng-controller="WelcomeCtrl" ng-cloak>
+<body ng-controller="MainCtrl" ng-cloak>
 
-	<div class="stable">
-		<?# def.include( 'common_menu.html') ?>
-	</div>
+	<div class="page_content" style="display: none; height: 100%">
 
-	<div class="page_content" style="display: none">
-		<div class="poster_area poster1 bgblk">
-			<div class="poster_header" style="position: absolute; top:20px; left:0; right:0">
-				<div class="container text-center">
-					<div class="col-sm-6" style="background-color: white; border-radius: 5px; padding: 10px">
-						<a href="#" ng-click="on_yahoo_hackathon()">
-							<span class="lead">Winner of Yahoo Hackathon</span>
-							<img src="/public/img/ydn.jpg" height="25px" />
-						</a>
+		<div class="poster1 bgblk" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0"></div>
+
+		<div style="position: absolute; top:0; left:0; min-height: 100%; background-color: rgba(50,40,50, 0.9); color: white">
+			<div style="background-color: rgba(50,40,50,0.9); padding: 10px 30px 10px 30px;">
+				<a class="menu_color">
+					<b>Contact</b>
+				</a>
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<span class="fa-stack" ng-click="on_follow_facebook()" style="cursor: pointer; font-size: 1.1em">
+					<i class="fa fa-circle fa-stack-2x menu_color"></i>
+					<i class="fa fa-facebook fa-stack-1x" style="color: black; font-size: 1.3em"></i>
+				</span>
+				<span>&nbsp;</span>
+				<span class="fa-stack" ng-click="on_follow_twitter()" style="cursor: pointer; font-size: 1.1em">
+					<i class="fa fa-circle fa-stack-2x menu_color"></i>
+					<i class="fa fa-twitter fa-stack-1x" style="color: black; font-size: 1.3em"></i>
+				</span>
+				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</div>
+			<div style="padding: 10px 30px 30px 30px;">
+				<div style="padding: 20px 0 30px 0">
+					<h1>
+						<b class="menu_color">Bully</b><b>Aware</b>
+						<small>
+							<small>Always vigilant</small>
+						</small>
+					</h1>
+				</div>
+				<div class="pull-left">
+					<div>
+						<p style="font-size: 25px; max-width: 340px; letter-spacing: 0.05em">
+							Get daily reports on your children's safety in social networks
+						</p>
+					</div>
+					<div style="padding-top: 20px">
+						<button class="btn btn-primary btn-lg" style="font-size: 30px; line-height: 1em; text-align: left; width: 150px; height: 70px" ng-click="do_start()">
+							<b>Start</b>
+							&nbsp;&nbsp;&nbsp;
+							<i class="fa fa-angle-right"></i>
+						</button>
 					</div>
 				</div>
-			</div>
-			<div class="poster_action" style="position: absolute; bottom:0; left:0; right:0">
-				<div class="container">
-					<h2 style="margin: 10px 0 0 0">Bullyaware. Always vigilant.</h2>
-					<p class="lead" style="margin: 15px 0 0 0">
-						Someone you know might be the target of cyber-bullying
-					</p>
-					<p class="lead" style="margin: 10px 0 0 0">
-						With our technology you can change that
-					</p>
-					<p class="lead" style="margin: 15px 0 15px 0">
-						<button class="btn btn-lg btn-info" ng-click="on_whatis()">
-							Learn more
+				<div class="clearfix"></div>
+				<div class="pull-left" style="padding-top: 40px">
+					<div>
+						<p style="font-size: 21px; max-width: 340px">
+							Spying is not the way - we believe in cooperation and technology
+						</p>
+					</div>
+					<div style="padding-top: 20px">
+						<button class="btn btn-default btn-lg" style="font-size: 30px; line-height: 1em; text-align: left; width: 150px; height: 70px" ng-click="do_learn()">
+							<b>Learn</b>
+							&nbsp;&nbsp;
+							<i class="fa fa-angle-right"></i>
 						</button>
-					</p>
+					</div>
 				</div>
+				<div class="clearfix"></div>
 			</div>
-		</div>
-
-
-		<div class="container text-center" style="margin-top: 30px">
-			<blockquote>
-				<p style="text-align: justify">
-					“I checked out the page - I think it is amazing. I have never seen any sort of bullying awareness tool like that. I will actually be using the account to help with problems with my sister as she has been a major target of bullying over the last few years. Thanks!”
-				</p>
-			</blockquote>
-		</div>
-
-		<div class="container text-center" style="margin-top: 20px">
-			<button class="btn btn-lg btn-primary" ng-click="on_getstarted()">
-				Get started
-			</button>
 		</div>
 
 	</div>
 
-	<div class="stable_foot">
-		<?# def.include( 'common_foot.html') ?>
+
+	<div class="modal fade" id="start_modal" tabindex="-1" role="dialog" aria-labelledby="start_modal_label" aria-hidden="true">
+		<div class="modal-dialog" style="width: 350px">
+			<div class="modal-content" style="border-radius: 0">
+				<div class="modal-header" style="background-color: #eee">
+					<button class="close pull-right" type="button" data-dismiss="modal" aria-hidden="true" style="padding: 8px 8px">
+						<i class="fa fa-times"></i>
+					</button>
+					<h4 style="padding-left: 8px">Sign up</h4>
+				</div>
+				<div class="modal-body">
+					<form ng-show="!is_signup" id="login_form" name="form" role="form" novalidate class="css-form text-center">
+						<div class="form-group input-group-lg">
+							<input id="user_email" required ng-model="user_email" auto-fill-sync type="email" class="form-control" placeholder="Email Address" autocomplete="off" name="email" />
+						</div>
+						<div class="form-group input-group-lg">
+							<input id="user_password" required ng-model="user_password" auto-fill-sync type="password" class="form-control" placeholder="Password" name="password" />
+						</div>
+						<div class="form-group input-group-lg">
+							<button class="btn btn-primary form-control" ng-click="do_login()">
+								Login
+							</button>
+						</div>
+					</form>
+					<form ng-show="!!is_signup" id="signup_form" name="form" role="form" novalidate class="css-form">
+						<div class="form-group input-group-lg">
+							<input id="first_name" required ng-model="first_name" auto-fill-sync type="text" class="form-control" placeholder="First Name" autocomplete="off" name="firstname" />
+						</div>
+						<div class="form-group input-group-lg">
+							<input id="last_name" required ng-model="last_name" auto-fill-sync type="text" class="form-control" placeholder="Last Name" autocomplete="off" name="lastname" />
+						</div>
+						<div class="form-group input-group-lg">
+							<input id="user_email" required ng-model="user_email" auto-fill-sync type="email" class="form-control" placeholder="Email Address" autocomplete="off" name="email" />
+						</div>
+						<div class="form-group input-group-lg">
+							<input id="user_password" required ng-model="user_password" auto-fill-sync type="password" class="form-control" placeholder="Password" name="password" />
+						</div>
+						<div class="form-group input-group-lg">
+							<input id="user_password2" required ng-model="user_password2" auto-fill-sync type="password" class="form-control" placeholder="Confirm Password" name="password2" />
+						</div>
+						<p>
+							<small>
+								By clicking "Sign up" you confirm that you accept the
+								<a href="#" ng-click="on_terms_of_use()">Terms of Service</a> and
+								<a href="#" ng-click="on_privacy_policy()">Privacy Policy</a>.
+							</small>
+						</p>
+						<div class="form-group input-group-lg">
+							<button class="btn btn-primary form-control" ng-click="do_signup()">
+								Sign up
+							</button>
+						</div>
+						<div class="form-group input-group-lg">
+							<button class="btn btn-default form-control" ng-click="open_login()">
+								I already have an account
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<div>

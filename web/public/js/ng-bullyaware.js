@@ -162,14 +162,21 @@
 							return false;
 						},
 						search: function(event, ui) {
-							console.log('AUTOCOMPLETE', element.val());
+							element.nextAll('.twitter-chooser-spin').css({
+								opacity: 1
+							});
+						},
+						response: function(event, ui) {
+							element.nextAll('.twitter-chooser-spin').css({
+								opacity: 0
+							});
 						}
 					}).data('ui-autocomplete')._renderItem = function(ul, item) {
 						return $('<li>').append(
 							'<a><b>@' + $sanitize(item.screen_name) +
 							'</b><br/><small><u>Name:</u> ' + $sanitize(item.name) +
-							'<br/><u>From:</u> ' + $sanitize(item.location) + 
-							'<br/><img width="40" src="' + $sanitize(item.profile_image_url) + 
+							'<br/><u>From:</u> ' + $sanitize(item.location) +
+							'<br/><img width="40" src="' + $sanitize(item.profile_image_url) +
 							'"/></small></a>'
 						).appendTo(ul);
 					};
@@ -201,12 +208,8 @@
 	bullyaware_app.factory('event_log', ['$http',
 		function($http) {
 			return function event_log(event, data) {
-				if (mixpanel && mixpanel.track) {
-					mixpanel.track(event, data);
-				}
-				if (ga) {
-					ga('send', 'event', 'general', event, data ? data.toString() : undefined);
-				}
+				// mixpanel.track(event, data);
+				ga('send', 'event', 'general', event, data ? data.toString() : undefined);
 				return $http({
 					method: 'POST',
 					url: '/api/event_log',
@@ -365,6 +368,32 @@
 		init_common_links($scope, $window, $location, event_log);
 		$scope.active_link = function(link) {
 			return (link === $window.location.pathname) ? 'active' : '';
+		};
+	}
+
+
+
+
+	bullyaware_app.controller('MainCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', MainCtrl
+	]);
+
+	function MainCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		init_common_links($scope, $window, $location, event_log);
+		init_server_data($scope);
+
+		$scope.is_signup = true;
+
+		$scope.do_start = function() {
+			event_log('main_start');
+			if ($scope.user) {
+				// TODO
+			}
+			$('.modal').modal();
+		};
+
+		$scope.do_learn = function() {
+			event_log('main_learn');
 		};
 	}
 
@@ -590,6 +619,12 @@
 			});
 		};
 
+		$scope.active_path = function(path) {
+			if ('/' + path === $location.path()) {
+				return 'active';
+			}
+		};
+
 		$scope.return_id = function(x) {
 			return x._id;
 		};
@@ -620,6 +655,12 @@
 				return identity.profile.description;
 			}
 			return '';
+		};
+		$scope.identity_link = function(identity) {
+			if (identity.type === 'twitter') {
+				return 'twitter.com/' + identity.profile.screen_name;
+			}
+			return '#';
 		};
 
 		$scope.show_add_twit = function(person) {
