@@ -1,3 +1,4 @@
+<?##def.menubar:
 <nav id="menubar" ng-controller="MenuCtrl" class="navbar navbar-default navbar-static-top" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
@@ -10,7 +11,7 @@
 			</a>
 		</div>
 		<div class="collapse navbar-collapse navbar-menu-collapse">
-			<div class="navbar-right">
+			<div class="navbar-left">
 				<ul class="nav navbar-nav navbar-left" style="margin-right: 10px">
 					<li ng-class="active_link('/features')">
 						<a href="#" ng-click="on_features()">
@@ -30,7 +31,7 @@
 						</a>
 					</li>
 				</ul>
-				<ul ng-show="!!user" class="nav navbar-nav navbar-right">
+				<ul ng-show="!!user" class="nav navbar-nav navbar-left">
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<b>{{ user.email }}</b>
@@ -68,3 +69,23 @@
 		</div>
 	</div>
 </nav>
+#?>
+
+<?##def.contact_menu:
+
+	<span class="fa-stack" ng-click="on_contact_us()" style="cursor: pointer; font-size: 1.2em" title="Contact us">
+		<i class="fa fa-circle fa-stack-2x menu_color"></i>
+		<i class="fa fa-envelope fa-stack-1x" style="color: white; font-size: 1.1em"></i>
+	</span>
+	<span>&nbsp;</span>
+	<span class="fa-stack" ng-click="on_follow_facebook()" style="cursor: pointer; font-size: 1.2em" title="Follow on facebook">
+		<i class="fa fa-circle fa-stack-2x menu_color"></i>
+		<i class="fa fa-facebook fa-stack-1x" style="color: white; font-size: 1.3em"></i>
+	</span>
+	<span>&nbsp;</span>
+	<span class="fa-stack" ng-click="on_follow_twitter()" style="cursor: pointer; font-size: 1.2em" title="Follow on twitter">
+		<i class="fa fa-circle fa-stack-2x menu_color"></i>
+		<i class="fa fa-twitter fa-stack-1x" style="color: white; font-size: 1.3em"></i>
+	</span>
+
+#?>

@@ -14,69 +14,58 @@
 
 <body ng-controller="MainCtrl" ng-cloak>
 
+	<!-- 
+	<div class="stable">
+		<?# def.include( 'common_menu.html') ?>
+	</div>
+	 -->
+
 	<div class="page_content" style="display: none; height: 100%">
 
 		<div class="poster1 bgblk" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0"></div>
 
-		<div style="position: absolute; top:0; left:0; min-height: 100%; background-color: rgba(50,40,50, 0.9); color: white">
-			<div style="background-color: rgba(50,40,50,0.9); padding: 10px 30px 10px 30px;">
-				<a class="menu_color">
-					<b>Contact</b>
-				</a>
-				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				<span class="fa-stack" ng-click="on_follow_facebook()" style="cursor: pointer; font-size: 1.1em">
-					<i class="fa fa-circle fa-stack-2x menu_color"></i>
-					<i class="fa fa-facebook fa-stack-1x" style="color: black; font-size: 1.3em"></i>
-				</span>
-				<span>&nbsp;</span>
-				<span class="fa-stack" ng-click="on_follow_twitter()" style="cursor: pointer; font-size: 1.1em">
-					<i class="fa fa-circle fa-stack-2x menu_color"></i>
-					<i class="fa fa-twitter fa-stack-1x" style="color: black; font-size: 1.3em"></i>
-				</span>
-				<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+		<div style="position: absolute; top:0; left:0; max-width: 400px; min-height: 100%; background-color: rgba(50,40,50, 0.9); color: white; padding: 10px">
+
+			<div class="container" style="max-width: 100%; padding-top: 10px;">
+				<?# def.contact_menu ?>
 			</div>
-			<div style="padding: 10px 30px 30px 30px;">
-				<div style="padding: 20px 0 30px 0">
-					<h1>
+
+			<div class="container" style="max-width: 100%;">
+				<div style="padding-top: 30px">
+					<h1 style="font-size: 48px; letter-spacing: 0.11em">
 						<b class="menu_color">Bully</b><b>Aware</b>
-						<small>
-							<small>Always vigilant</small>
-						</small>
+						<br/>
+						<b style="font-size: 26px">Keeping kids safe</b>
 					</h1>
 				</div>
-				<div class="pull-left">
-					<div>
-						<p style="font-size: 25px; max-width: 340px; letter-spacing: 0.05em">
-							Get daily reports on your children's safety in social networks
-						</p>
-					</div>
-					<div style="padding-top: 20px">
-						<button class="btn btn-primary btn-lg" style="font-size: 30px; line-height: 1em; text-align: left; width: 150px; height: 70px" ng-click="do_start()">
-							<b>Start</b>
-							&nbsp;&nbsp;&nbsp;
-							<i class="fa fa-angle-right"></i>
-						</button>
-					</div>
+				<div style="padding-top: 40px">
+					<p style="font-size: 21px; letter-spacing: 0.11em">
+						Bullyaware monitors social networks for cyber bullying
+					</p>
 				</div>
-				<div class="clearfix"></div>
-				<div class="pull-left" style="padding-top: 40px">
-					<div>
-						<p style="font-size: 21px; max-width: 340px">
-							Spying is not the way - we believe in cooperation and technology
-						</p>
-					</div>
-					<div style="padding-top: 20px">
-						<button class="btn btn-default btn-lg" style="font-size: 30px; line-height: 1em; text-align: left; width: 150px; height: 70px" ng-click="do_learn()">
-							<b>Learn</b>
-							&nbsp;&nbsp;
-							<i class="fa fa-angle-right"></i>
-						</button>
-					</div>
+				<div style="padding-top: 10px; text-align: left">
+					<p style="font-size: 21px; letter-spacing: 0.11em">
+						Get email alerts when your children are being bullied
+					</p>
 				</div>
-				<div class="clearfix"></div>
+				<div style="padding-top: 50px; text-align: left">
+					<button class="btn btn-primary btn-lg" style="font-size: 33px; line-height: 1em; letter-spacing: 0.11em; text-align: left; width: 170px; height: 60px; margin-right: 10px" ng-click="do_learn()">
+						<b>Start</b>
+						&nbsp;
+						<i class="fa fa-angle-right"></i>
+					</button>
+				</div>
+				<!-- 
+				<div style="padding-top: 40px">
+					<button class="btn btn-primary btn-lg" style="font-size: 28px; line-height: 1em; text-align: left; width: 150px; height: 50px" ng-click="do_start()">
+						<b>Start</b>
+						&nbsp;&nbsp;&nbsp;
+						<i class="fa fa-angle-right"></i>
+					</button>
+				</div>
+				 -->
 			</div>
 		</div>
-
 	</div>
 
 
