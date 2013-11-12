@@ -71,6 +71,8 @@ function save_user_in_session(req, user) {
 exports.signup = function(req, res) {
 	console.log('SIGNUP', req.body);
 	var user = new User();
+	user.first_name = req.body.first_name;
+	user.last_name = req.body.last_name;
 	user.email = req.body.email;
 	user.password = req.body.password;
 	// user.role = req.body.role;

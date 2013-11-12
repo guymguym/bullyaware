@@ -22,7 +22,8 @@ var event_log_schema = new mongoose.Schema({
 });
 
 var user_schema = new mongoose.Schema({
-	name: String,
+	first_name: String,
+	last_name: String,
 	email: String,
 	password: String
 });
