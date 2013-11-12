@@ -92,19 +92,19 @@
 				<div class="modal-body">
 					<form id="signup_form" name="form" role="form" novalidate class="css-form">
 						<div class="form-group input-group-lg">
-							<input id="first_name" required ng-model="first_name" auto-fill-sync type="text" class="form-control" placeholder="First Name" autocomplete="off" name="firstname" />
+							<input id="first_name" required ng-model="first_name" auto-fill-sync type="text" class="form-control" placeholder="First Name" autocomplete="on" name="firstname" />
 						</div>
 						<div class="form-group input-group-lg">
-							<input id="last_name" required ng-model="last_name" auto-fill-sync type="text" class="form-control" placeholder="Last Name" autocomplete="off" name="lastname" />
+							<input id="last_name" required ng-model="last_name" auto-fill-sync type="text" class="form-control" placeholder="Last Name" autocomplete="on" name="lastname" />
 						</div>
 						<div class="form-group input-group-lg">
-							<input id="user_email" required ng-model="user_email" auto-fill-sync type="email" class="form-control" placeholder="Email Address" autocomplete="off" name="email" />
+							<input id="user_email" required ng-model="user_email" auto-fill-sync type="email" class="form-control" placeholder="Email Address" autocomplete="on" name="email" />
 						</div>
 						<div class="form-group input-group-lg">
-							<input id="user_password" required ng-model="user_password" auto-fill-sync type="password" class="form-control" placeholder="Password" name="password" />
+							<input id="user_password" required ng-model="user_password" auto-fill-sync type="password" class="form-control" placeholder="Password" autocomplete="on" name="password" />
 						</div>
 						<div class="form-group input-group-lg">
-							<input id="user_password2" required ng-model="user_password2" auto-fill-sync type="password" class="form-control" placeholder="Confirm Password" name="password2" />
+							<input id="user_password2" required ng-model="user_password2" auto-fill-sync type="password" class="form-control" placeholder="Confirm Password" autocomplete="on" name="password2" />
 						</div>
 						<p id="terms">
 							<small>
@@ -126,10 +126,10 @@
 					</form>
 					<form id="login_form" name="form" role="form" novalidate class="css-form text-center" style="display: none">
 						<div class="form-group input-group-lg">
-							<input id="user_email" required ng-model="user_email" auto-fill-sync type="email" class="form-control" placeholder="Email Address" autocomplete="off" name="email" />
+							<input id="login_email" required ng-model="login_email" auto-fill-sync type="email" class="form-control" placeholder="Email Address" autocomplete="on" name="email" />
 						</div>
 						<div class="form-group input-group-lg">
-							<input id="user_password" required ng-model="user_password" auto-fill-sync type="password" class="form-control" placeholder="Password" name="password" />
+							<input id="login_password" required ng-model="login_password" auto-fill-sync type="password" class="form-control" placeholder="Password" autocomplete="on" name="password" />
 						</div>
 						<div class="form-group input-group-lg">
 							<button class="btn btn-primary form-control" ng-click="do_login()">

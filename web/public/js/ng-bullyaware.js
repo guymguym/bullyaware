@@ -409,8 +409,75 @@
 				login.show(effect);
 			} else {
 				signup.show(effect);
-				login.hide(effect);				
+				login.hide(effect);
 			}
+		};
+
+		$scope.do_login = function() {
+			if (!$scope.login_email) {
+				$("#login_email").effect(HIGHLIGHT_EFFECT).focus();
+				return;
+			}
+			if (!$scope.login_password) {
+				$("#login_password").effect(HIGHLIGHT_EFFECT).focus();
+				return;
+			}
+			event_log('do_login', $scope.login_email);
+			$http({
+				method: 'POST',
+				url: '/api/user/login',
+				data: {
+					email: $scope.login_email,
+					password: $scope.login_password
+				}
+			}).then(function(res) {
+				console.log('USER LOGIN DONE', res);
+				$scope.on_getstarted();
+			}, function(err) {
+				console.error('USER LOGIN FAILED', err);
+				alert('Login failed. Please try again later');
+			});
+		};
+
+		$scope.do_signup = function() {
+			if (!$scope.first_name) {
+				$("#first_name").effect(HIGHLIGHT_EFFECT).focus();
+				return;
+			}
+			if (!$scope.last_name) {
+				$("#last_name").effect(HIGHLIGHT_EFFECT).focus();
+				return;
+			}
+			if (!$scope.user_email) {
+				$("#user_email").effect(HIGHLIGHT_EFFECT).focus();
+				return;
+			}
+			if (!$scope.user_password) {
+				$("#user_password").effect(HIGHLIGHT_EFFECT).focus();
+				return;
+			}
+			if (!$scope.user_password2 || $scope.user_password2 !== $scope.user_password) {
+				$("#user_password2").effect(HIGHLIGHT_EFFECT).focus();
+				return;
+			}
+			// send action log async
+			event_log('signup', $scope.user_email);
+			return $http({
+				method: 'POST',
+				url: '/api/user/signup',
+				data: {
+					first_name: $scope.first_name,
+					last_name: $scope.last_name,
+					email: $scope.user_email,
+					password: $scope.user_password
+				}
+			}).then(function(res) {
+				console.log('USER CREATED', res);
+				$scope.on_getstarted();
+			}, function(err) {
+				console.error('USER CREATE FAILED', err);
+				alert('Signup failed. Please try again later');
+			});
 		};
 	}
 
