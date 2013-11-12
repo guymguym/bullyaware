@@ -389,11 +389,28 @@
 			if ($scope.user) {
 				// TODO
 			}
-			$('.modal').modal();
+			$('#start_modal').modal();
 		};
 
 		$scope.do_learn = function() {
 			event_log('main_learn');
+		};
+
+		$scope.toggle_login_signup = function(l) {
+			var m = $('#start_modal');
+			var signup = m.find('#signup_form');
+			var login = m.find('#login_form');
+			var effect = {
+				effect: 'blind',
+				duration: 400
+			};
+			if (l) {
+				signup.hide(effect);
+				login.show(effect);
+			} else {
+				signup.show(effect);
+				login.hide(effect);				
+			}
 		};
 	}
 
