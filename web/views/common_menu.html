@@ -11,27 +11,25 @@
 			</a>
 		</div>
 		<div class="collapse navbar-collapse navbar-menu-collapse">
-			<div class="navbar-left">
+			<div class="navbar-right">
 				<ul class="nav navbar-nav navbar-left" style="margin-right: 10px">
 					<li ng-class="active_link('/features')">
 						<a href="#" ng-click="on_features()">
-							<b class="menu_color">Features</b>
+							Features
 						</a>
 					</li>
 					<li ng-class="active_link('/whatis')">
 						<a href="#" ng-click="on_whatis()">
-							<b class="menu_color">What is</b>
-							<span>Bullyaware</span>
+							What is Bullyaware
 						</a>
 					</li>
 					<li ng-class="active_link('/about')">
 						<a href="#" ng-click="on_about()">
-							<b class="menu_color">About</b>
-							<span>us</span>
+							About
 						</a>
 					</li>
 				</ul>
-				<ul ng-show="!!user" class="nav navbar-nav navbar-left">
+				<ul ng-show="!!user" class="nav navbar-nav navbar-right">
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<b>{{ user.email }}</b>
