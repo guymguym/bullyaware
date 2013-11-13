@@ -237,9 +237,11 @@
 	function init_common_links($scope, $window, $location, event_log) {
 		function make_redirect(path) {
 			return function() {
-				$.when($('body').children().not('.stable').fadeOut(300)).then(function() {
+				var duration = 200;
+				$('body').children().not('.stable').fadeOut(duration);
+				setTimeout(function() {
 					$window.location = path;
-				});
+				}, duration);
 			};
 		}
 		$scope.on_main = $scope.on_main || make_redirect('/');

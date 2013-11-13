@@ -43,7 +43,7 @@ var dot_emc_app = dot_emc.init({
 });
 dot.templateSettings.strip = false;
 dot.templateSettings.cache = ('development' != app.get('env'));
-// replace dot regexp to use <% %> to avoid collision with angular {{ }}
+// replace dot regexp to use <? ?> to avoid collision with angular {{ }}
 for (var i in dot.templateSettings) {
 	var reg = dot.templateSettings[i];
 	if (!(reg instanceof RegExp)) {
