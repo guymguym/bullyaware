@@ -23,9 +23,10 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
 #menubar {
     left: 0;
     right: 0;
-    background-color: white;
     margin: 0;
     border-bottom: solid 1px black;
+    /*background-color: white;*/
+    background-color: rgba(50,40,50,0.85);
 }
 .menu_color {
     color: #09d;
@@ -42,11 +43,6 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     left: 0;
     right: 0;
     height: 300px;
-}
-#anti_features {
-    /*  
-background-color:#778899;
-*/
 }
 @media all and (min-height: 700px) {
     .poster_area {
