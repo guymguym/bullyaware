@@ -21,8 +21,8 @@
 	 -->
 
 	<div class="page_content poster1" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0"></div>
-	
-	<div class="page_content stable" style="display: none; height: 100%">
+
+	<div class="page_content" style="display: none; height: 100%">
 
 		<div style="position: absolute; top:0; left:0; max-width: 400px; min-height: 100%; background-color: rgba(50,40,50, 0.9); color: white; padding: 10px">
 
@@ -54,21 +54,12 @@
 					Get email alerts when your children are being bullied
 				</p>
 				<div style="padding-top: 50px; text-align: left">
-					<button class="btn btn-primary btn-lg" style="font-size: 30px; line-height: 1em; letter-spacing: 0.11em; text-align: left; width: 150px; height: 60px; margin-right: 10px" ng-click="do_learn()">
+					<button class="btn btn-primary btn-lg" style="font-size: 30px; line-height: 1em; letter-spacing: 0.11em; text-align: left; width: 150px; height: 60px; margin-right: 10px" ng-click="do_start()">
 						<b>Next</b>
 						&nbsp;
 						<i class="fa fa-angle-right"></i>
 					</button>
 				</div>
-				<!-- 
-				<div style="padding-top: 40px">
-					<button class="btn btn-primary btn-lg" style="font-size: 28px; line-height: 1em; text-align: left; width: 150px; height: 50px" ng-click="do_start()">
-						<b>Start</b>
-						&nbsp;&nbsp;&nbsp;
-						<i class="fa fa-angle-right"></i>
-					</button>
-				</div>
-				 -->
 			</div>
 		</div>
 	</div>
@@ -84,7 +75,7 @@
 					<h4 style="padding-left: 8px">Sign up</h4>
 				</div>
 				<div class="modal-body">
-					<form id="signup_form" name="form" role="form" novalidate class="css-form">
+					<form id="signup_form" style="display: none" name="form" role="form" novalidate class="css-form">
 						<div class="form-group input-group-lg">
 							<input id="first_name" required ng-model="first_name" auto-fill-sync type="text" class="form-control" placeholder="First Name" autocomplete="on" name="firstname" />
 						</div>
@@ -113,12 +104,12 @@
 							</button>
 						</div>
 						<div id="open_login_button" class="form-group input-group-lg">
-							<button class="btn btn-default form-control" ng-click="toggle_login_signup(true)">
+							<button class="btn btn-link form-control" ng-click="toggle_login_signup(true)">
 								I already have an account
 							</button>
 						</div>
 					</form>
-					<form id="login_form" name="form" role="form" novalidate class="css-form text-center" style="display: none">
+					<form id="login_form" name="form" role="form" novalidate class="css-form text-center">
 						<div class="form-group input-group-lg">
 							<input id="login_email" required ng-model="login_email" auto-fill-sync type="email" class="form-control" placeholder="Email Address" autocomplete="on" name="email" />
 						</div>
@@ -131,7 +122,7 @@
 							</button>
 						</div>
 						<div id="open_login_button" class="form-group input-group-lg">
-							<button class="btn btn-default form-control" ng-click="toggle_login_signup(false)">
+							<button class="btn btn-link form-control" ng-click="toggle_login_signup(false)">
 								I don't have an account
 							</button>
 						</div>

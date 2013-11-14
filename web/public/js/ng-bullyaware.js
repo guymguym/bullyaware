@@ -384,18 +384,9 @@
 		init_common_links($scope, $window, $location, event_log);
 		init_server_data($scope);
 
-		$scope.is_signup = true;
-
 		$scope.do_start = function() {
 			event_log('main_start');
-			if ($scope.user) {
-				// TODO
-			}
 			$('#start_modal').modal();
-		};
-
-		$scope.do_learn = function() {
-			event_log('main_learn');
 		};
 
 		$scope.toggle_login_signup = function(l) {
