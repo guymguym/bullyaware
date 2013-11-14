@@ -5,20 +5,20 @@
 	<?# def.include( 'common_head.html') ?>
 </head>
 
-<body ng-controller="ContactCtrl" ng-cloak class="bgwht">
+<body ng-controller="MainCtrl" ng-cloak class="bgwht">
 
-	<div class="stable">
+	<div>
 		<?# def.include( 'common_menu.html') ?>
 		<?# def.menubar ?>
 	</div>
 
-	<div class="page_content container" style="display: none">
+	<div class="show_on_load hide_on_unload container">
 		<div class="page-header">
 			<h1>Contact Us</h1>
 		</div>
 
 		<p class="lead">
-			We are always happy to get feedback!
+			We are very interested to get your feedback.
 		</p>
 		<p class="lead">
 			You are welcome to send us email to 
@@ -27,19 +27,8 @@
 			</a>
 		</p>
 		<p class="lead">
-			Follow us on facebook and twitter
-			<span>&nbsp;</span>
-			<span class="fa-stack" ng-click="on_follow_facebook()" style="cursor: pointer; font-size: 1.1em">
-				<i class="fa fa-circle fa-stack-2x" style="color: #ddd"></i>
-				<i class="fa fa-facebook fa-stack-1x" style="color: #66b; font-size: 1.3em"></i>
-			</span>
-			<span>&nbsp;</span>
-			<span class="fa-stack" ng-click="on_follow_twitter()" style="cursor: pointer; font-size: 1.1em">
-				<i class="fa fa-circle fa-stack-2x" style="color: #ddd"></i>
-				<i class="fa fa-twitter fa-stack-1x" style="color: #7af; font-size: 1.3em"></i>
-			</span>
+			<i>- The Bullyaware team</i>
 		</p>
-
 		<!-- 
 		<br/>
 		<h3>Contact Information</h3>
@@ -56,7 +45,7 @@
 		-->
 	</div>
 
-	<div class="stable_foot">
+	<div>
 		<?# def.include( 'common_foot.html') ?>
 	</div>
 

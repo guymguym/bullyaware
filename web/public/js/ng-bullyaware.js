@@ -228,27 +228,37 @@
 		}
 	]);
 
+
+
+
+
 	var HIGHLIGHT_EFFECT = {
 		effect: 'highlight',
 		color: '#08c',
 		duration: 1000
 	};
 
-	function init_common_links($scope, $window, $location, event_log) {
+
+	bullyaware_app.controller('MainCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', MainCtrl
+	]);
+
+	function MainCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
 		function make_redirect(path) {
 			return function() {
 				var duration = 200;
-				$('body').children().not('.stable').fadeOut(duration);
+				$('.hide_on_unload').fadeOut(duration);
 				setTimeout(function() {
 					$window.location = path;
 				}, duration);
 			};
 		}
 		$scope.on_main = $scope.on_main || make_redirect('/');
-		$scope.on_whatis = $scope.on_whatis || make_redirect('/whatis');
 		$scope.on_features = $scope.on_features || make_redirect('/features');
+		$scope.on_whatis = $scope.on_whatis || make_redirect('/whatis');
 		$scope.on_about = $scope.on_about || make_redirect('/about');
 		$scope.on_login = $scope.on_login || make_redirect('/login');
+		$scope.on_signup = $scope.on_signup || make_redirect('/signup');
 		$scope.on_getstarted = $scope.on_getstarted || make_redirect('/getstarted');
 		$scope.on_settings = $scope.on_settings || make_redirect('/settings');
 		$scope.on_demo = $scope.on_demo || make_redirect('/demo');
@@ -294,99 +304,8 @@
 			alert('The privacy policy is being finalized and will soon be available');
 		};
 
-		if (!$scope.page_loaded) {
-			$scope.page_loaded = true;
-
-			// start animations on page load
-			$('.page_content').fadeIn(1000);
-
-			event_log('page', $location.absUrl());
-		}
-	}
-
-	function init_server_data($scope) {
-		var server_data_raw = $('#server_data').html();
-		$scope.server_data = server_data_raw ? JSON.parse(server_data_raw) : {};
-		$scope.session_id = $scope.server_data.session;
-		$scope.user = $scope.server_data.user;
-		// console.log('USER', $scope.user, 'DATA', $scope.server_data);
-		// init_intercom_io($scope.user);
-	}
-
-	function init_intercom_io(user) {
-		window.intercomSettings = {
-			// TODO: The current logged in user's email address.
-			email: user ? user.email : 'guest@bullyaware.co',
-			// TODO: The current logged in user's sign-up date as a Unix timestamp.
-			created_at: 0,
-			app_id: "3372acc94990a1532f4a3488f3c3fa49932b7ddf",
-			"widget": {
-				// "activator": "#IntercomDefaultWidget",
-				"activator": "#Intercom",
-			},
-		};
-		(function() {
-			var w = window;
-			var ic = w.Intercom;
-			if (typeof ic === "function") {
-				ic('reattach_activator');
-				ic('update', intercomSettings);
-			} else {
-				var d = document;
-				var i = function() {
-					i.c(arguments);
-				};
-				i.q = [];
-				i.c = function(args) {
-					i.q.push(args);
-				};
-				w.Intercom = i;
-
-				var l = function() {
-					var s = d.createElement('script');
-					s.type = 'text/javascript';
-					s.async = true;
-					s.src = 'https://static.intercomcdn.com/intercom.v1.js';
-					var x = d.getElementsByTagName('script')[0];
-					x.parentNode.insertBefore(s, x);
-				};
-				if (w.attachEvent) {
-					w.attachEvent('onload', l);
-				} else {
-					w.addEventListener('load', l, false);
-				}
-			}
-		})();
-	}
-
-
-
-
-	bullyaware_app.controller('MenuCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', MenuCtrl
-	]);
-
-	function MenuCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		init_common_links($scope, $window, $location, event_log);
 		$scope.active_link = function(link) {
 			return (link === $window.location.pathname) ? 'active' : '';
-		};
-	}
-
-
-
-
-	bullyaware_app.controller('MainCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', MainCtrl
-	]);
-
-	function MainCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		init_common_links($scope, $window, $location, event_log);
-		init_server_data($scope);
-
-		$scope.do_start = function() {
-			event_log('main_start');
-			$('#start_modal').modal();
 		};
 
 		$scope.toggle_login_signup = function(l) {
@@ -472,18 +391,37 @@
 				alert('Signup failed. Please try again later');
 			});
 		};
-	}
 
+		$scope.do_start = function() {
+			event_log('main_start');
+			var effect = {
+				effect: 'blind',
+				duration: 1000
+			};
+			$.when($('#initial_quotes').fadeOut(500)).then(function() {
+				return $('#quote1').fadeIn(700);
+			}).then(function() {
+				return $('#quote2').fadeIn(700);
+			}).then(function() {
+				return $('#signup_form').fadeIn(1500);
+			});
+		};
 
+		if (!$scope.page_loaded) {
+			$scope.page_loaded = true;
 
+			var server_data_raw = $('#server_data').html();
+			$scope.server_data = server_data_raw ? JSON.parse(server_data_raw) : {};
+			$scope.session_id = $scope.server_data.session;
+			$scope.user = $scope.server_data.user;
+			// console.log('USER', $scope.user, 'DATA', $scope.server_data);
+			// init_intercom_io($scope.user);
 
-	bullyaware_app.controller('WelcomeCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', WelcomeCtrl
-	]);
+			// start animations on page load
+			$('.show_on_load').fadeIn(1000);
 
-	function WelcomeCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		init_common_links($scope, $window, $location, event_log);
-		init_server_data($scope);
+			event_log('page', $location.absUrl());
+		}
 	}
 
 
@@ -494,128 +432,9 @@
 	]);
 
 	function WhatisCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		init_common_links($scope, $window, $location, event_log);
-		init_server_data($scope);
 
 		// start animations on page load
 		$('.poster_area').fadeIn(1000);
-	}
-
-
-
-
-	bullyaware_app.controller('FeaturesCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', FeaturesCtrl
-	]);
-
-	function FeaturesCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		init_common_links($scope, $window, $location, event_log);
-		init_server_data($scope);
-	}
-
-
-
-
-	bullyaware_app.controller('AboutCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', AboutCtrl
-	]);
-
-	function AboutCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		init_common_links($scope, $window, $location, event_log);
-		init_server_data($scope);
-	}
-
-
-
-
-	bullyaware_app.controller('ContactCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', ContactCtrl
-	]);
-
-	function ContactCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		init_common_links($scope, $window, $location, event_log);
-		init_server_data($scope);
-	}
-
-
-
-
-	bullyaware_app.controller('LoginCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', LoginCtrl
-	]);
-
-	function LoginCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		init_common_links($scope, $window, $location, event_log);
-		init_server_data($scope);
-
-		$scope.do_login = function() {
-			if (!$scope.user_email) {
-				$("#user_email").effect(HIGHLIGHT_EFFECT).focus();
-				return;
-			}
-			if (!$scope.user_password) {
-				$("#user_password").effect(HIGHLIGHT_EFFECT).focus();
-				return;
-			}
-			event_log('do_login', $scope.user_email);
-			$http({
-				method: 'POST',
-				url: '/api/user/login',
-				data: {
-					email: $scope.user_email,
-					password: $scope.user_password
-				}
-			}).then(function(res) {
-				console.log('USER LOGIN DONE', res);
-				$scope.on_getstarted();
-			}, function(err) {
-				console.error('USER LOGIN FAILED', err);
-				alert('Login failed. Please try again later');
-			});
-		};
-	}
-
-
-
-
-	bullyaware_app.controller('SignupCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', SignupCtrl
-	]);
-
-	function SignupCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		init_common_links($scope, $window, $location, event_log);
-		init_server_data($scope);
-
-		$scope.do_signup = function() {
-			if (!$scope.user_email) {
-				$("#user_email").effect(HIGHLIGHT_EFFECT).focus();
-				return;
-			}
-			if (!$scope.user_password) {
-				$("#user_password").effect(HIGHLIGHT_EFFECT).focus();
-				return;
-			}
-			if (!$scope.user_password2 || $scope.user_password2 !== $scope.user_password) {
-				$("#user_password2").effect(HIGHLIGHT_EFFECT).focus();
-				return;
-			}
-			// send action log async
-			event_log('signup', $scope.user_email);
-			return $http({
-				method: 'POST',
-				url: '/api/user/signup',
-				data: {
-					email: $scope.user_email,
-					password: $scope.user_password
-				}
-			}).then(function(res) {
-				console.log('USER CREATED', res);
-				$scope.on_getstarted();
-			}, function(err) {
-				console.error('USER CREATE FAILED', err);
-				alert('Signup failed. Please try again later');
-			});
-		};
 	}
 
 
@@ -627,8 +446,6 @@
 	]);
 
 	function SettingsCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		init_common_links($scope, $window, $location, event_log);
-		init_server_data($scope);
 
 		function show_loading() {
 			$('#loading_panel').show();
@@ -839,8 +656,6 @@
 	]);
 
 	function GetStartedCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		init_common_links($scope, $window, $location, event_log);
-		init_server_data($scope);
 
 		function fetch_user_info() {
 			$http({
@@ -982,8 +797,6 @@
 	]);
 
 	function DemoCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		init_common_links($scope, $window, $location, event_log);
-		init_server_data($scope);
 
 		// $scope.target_account = 'elizabeth_tice';
 		// $scope.target_account = 'yahoomail';
@@ -1115,6 +928,53 @@
 
 
 
+
+
+	function init_intercom_io(user) {
+		window.intercomSettings = {
+			// TODO: The current logged in user's email address.
+			email: user ? user.email : 'guest@bullyaware.co',
+			// TODO: The current logged in user's sign-up date as a Unix timestamp.
+			created_at: 0,
+			app_id: "3372acc94990a1532f4a3488f3c3fa49932b7ddf",
+			"widget": {
+				// "activator": "#IntercomDefaultWidget",
+				"activator": "#Intercom",
+			},
+		};
+		(function() {
+			var w = window;
+			var ic = w.Intercom;
+			if (typeof ic === "function") {
+				ic('reattach_activator');
+				ic('update', intercomSettings);
+			} else {
+				var d = document;
+				var i = function() {
+					i.c(arguments);
+				};
+				i.q = [];
+				i.c = function(args) {
+					i.q.push(args);
+				};
+				w.Intercom = i;
+
+				var l = function() {
+					var s = d.createElement('script');
+					s.type = 'text/javascript';
+					s.async = true;
+					s.src = 'https://static.intercomcdn.com/intercom.v1.js';
+					var x = d.getElementsByTagName('script')[0];
+					x.parentNode.insertBefore(s, x);
+				};
+				if (w.attachEvent) {
+					w.attachEvent('onload', l);
+				} else {
+					w.addEventListener('load', l, false);
+				}
+			}
+		})();
+	}
 
 
 

@@ -5,14 +5,14 @@
 	<?# def.include( 'common_head.html') ?>
 </head>
 
-<body ng-controller="SignupCtrl" ng-cloak>
+<body ng-controller="MainCtrl" ng-cloak>
 
-	<div class="stable">
+	<div>
 		<?# def.include( 'common_menu.html') ?>
 		<?# def.menubar ?>
 	</div>
 
-	<div class="page_content container" style="display: none; padding-bottom: 30px">
+	<div class="show_on_load hide_on_unload container" style="padding-bottom: 30px">
 		<div class="page-header">
 			<h1>Get started in 3 quick steps:</h1>
 		</div>
@@ -30,6 +30,7 @@
 				</div>
 			</div>
 		</div>
+		
 		<div class="col-sm-6">
 			<div style="background-color: #eef; border-radius: 10px; margin-bottom: 20px; padding: 20px">
 				<form id="signup_form" name="form" role="form" novalidate class="css-form">
@@ -54,7 +55,7 @@
 	</div>
 
 
-	<div class="stable_foot">
+	<div>
 		<?# def.include( 'common_foot.html') ?>
 	</div>
 

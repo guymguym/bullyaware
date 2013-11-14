@@ -5,14 +5,14 @@
 	<?# def.include( 'common_head.html') ?>
 </head>
 
-<body ng-controller="SettingsCtrl" ng-cloak>
+<body ng-controller="MainCtrl" ng-cloak>
 
-	<div class="stable">
+	<div>
 		<?# def.include( 'common_menu.html') ?>
 		<?# def.menubar ?>
 	</div>
 
-	<div class="container page_content" style="display: none; padding-bottom: 30px; position: relative">
+	<div ng-controller="SettingsCtrl" class="container show_on_load hide_on_unload" style="padding-bottom: 30px; position: relative">
 
 		<div id="loading_panel" class="text-center" style="font-size: 80px; padding: 20px; z-index: 100; background-color: rgba(255,255,255,0.6); top: 0; left: 0; min-width: 100%; min-height: 100%; position: absolute; border-radius: 10px">
 			<i class="fa fa-spinner fa-spin"></i>
@@ -196,7 +196,7 @@
 	</div>
 
 
-	<div class="stable_foot">
+	<div>
 		<?# def.include( 'common_foot.html') ?>
 	</div>
 

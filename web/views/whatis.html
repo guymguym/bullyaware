@@ -9,14 +9,14 @@
 		</style>
 </head>
 
-<body ng-controller="WhatisCtrl" ng-cloak>
+<body ng-controller="MainCtrl" ng-cloak>
 
-	<div class="stable">
+	<div>
 		<?# def.include( 'common_menu.html') ?>
 		<?# def.menubar ?>
 	</div>
 
-	<div class="page_content" style="display: none">
+	<div ng-controller="WhatisCtrl" class="show_on_load hide_on_unload">
 		<div class="poster_area poster2 bgblk">
 			<div class="poster_header" style="position: absolute; top:20px; left:0; right:0">
 				<div class="container text-center">
@@ -116,7 +116,7 @@
 		</div>
 	</div>
 
-	<div class="stable_foot">
+	<div>
 		<?# def.include( 'common_foot.html') ?>
 	</div>
 

@@ -1,5 +1,5 @@
 <?##def.menubar: <i></i>
-<nav id="menubar" ng-controller="MenuCtrl" class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
+<nav id="menubar" class="navbar navbar-default navbar-inverse navbar-static-top bgc" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menu-collapse">
@@ -60,7 +60,7 @@
 				<button ng-show="!user" type="button" class="btn btn-primary navbar-btn" ng-click="on_getstarted()">
 					Get started
 				</button>
-				<button ng-show="!user" type="button" class="btn btn-default navbar-btn" ng-click="on_login()">
+				<button ng-show="!user" type="button" class="btn btn-default navbar-btn" style="margin-left: 10px" ng-click="on_login()">
 					Login
 				</button>
 			</div>

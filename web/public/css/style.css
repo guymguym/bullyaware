@@ -1,12 +1,33 @@
 body {
     /*padding-top: 100px;*/
-    /*background-color: #433b43 !important;*/
-    /*color: #f8f8f8 !important;*/
 }
 h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     font-family:'Lato', sans-serif !important;
     /*font-family:'Open Sans', sans-serif !important;*/
     /*font-family:'PT Sans', sans-serif !important;*/
+}
+.btn {
+    border-radius: 0 !important;
+}
+.bgco {
+    background-color: rgba(50, 40, 50, 0.9);
+    color: white;
+}
+.bgc {
+    background-color: rgb(60, 50, 60) !important;
+    color: white;
+}
+.H1 {
+    font-size: 48px;
+    letter-spacing: 0.11em;
+}
+.H2 {
+    font-size: 30px;
+    letter-spacing: 0.11em;
+}
+.H3 {
+    font-size: 21px;
+    letter-spacing: 0.11em;
 }
 .lead {
     font-size: 1.2em !important;
@@ -25,8 +46,9 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     right: 0;
     margin: 0;
     border-bottom: solid 1px black;
-    /*background-color: white;*/
-    background-color: rgba(50,40,50,0.85);
+}
+.show_on_load {
+    display: none;
 }
 .menu_color {
     color: #09d;
