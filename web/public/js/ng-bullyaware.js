@@ -394,16 +394,17 @@
 
 		$scope.do_start = function() {
 			event_log('main_start');
-			var effect = {
-				effect: 'blind',
-				duration: 1000
-			};
-			$.when($('#initial_quotes').fadeOut(500)).then(function() {
-				return $('#quote1').fadeIn(700);
+			var duration = 1200;
+			$.when($('#initial_quotes').fadeOut(duration/2)).then(function() {
+				return $('#quote1').fadeIn(duration);
 			}).then(function() {
-				return $('#quote2').fadeIn(700);
+				return $('#quote2').fadeIn(duration);
 			}).then(function() {
-				return $('#signup_form').fadeIn(1500);
+				return $('#quote3').fadeIn(duration);
+			}).then(function() {
+				return $('#quote4').fadeIn(duration);
+			}).then(function() {
+				return $('#signup_form').fadeIn(duration);
 			});
 		};
 

@@ -9,6 +9,11 @@
 			height: 100%;
 			min-height: 100%;
 		}
+		.quote {
+			display: none;
+			font-size: 16px;
+			letter-spacing: 0.11em;
+		}
 		</style>
 </head>
 
@@ -62,17 +67,23 @@
 					</div>
 				</div>
 
-					<p id="quote1" style="display: none; padding-top: 40px; font-size: 19px; letter-spacing: 0.11em">
-						<i class="fa fa-quote-left fa-fw" style="vertical-align: top"></i>
-						Around half of teens have been the victims of cyber bullying
-						<i class="fa fa-quote-right fa-fw" style="vertical-align: top"></i>
-					</p>
-					<p id="quote2" style="display: none; padding-top: 10px; font-size: 19px; letter-spacing: 0.11em">
-						<i class="fa fa-quote-left fa-fw" style="vertical-align: top"></i>
-						Only 1 in 10 teens tells a parent if they have been a cyber bully victim
-						<i class="fa fa-quote-right fa-fw" style="vertical-align: top"></i>
-					</p>
-				
+				<p id="quote1" class="quote" style="padding-top: 40px">
+					<i class="fa fa-quote-left fa-fw" style="vertical-align: top"></i>
+					Around half of teens have been the victims of cyber bullying
+					<i class="fa fa-quote-right fa-fw" style="vertical-align: top"></i>
+				</p>
+				<p id="quote2" class="quote" style="padding-top: 10px">
+					<i class="fa fa-quote-left fa-fw" style="vertical-align: top"></i>
+					Only 1 in 10 teens tells a parent if they have been a cyber bully victim
+					<i class="fa fa-quote-right fa-fw" style="vertical-align: top"></i>
+				</p>
+				<p id="quote3" class="quote">
+					Bullyaware's technology detects the early signs and notifies a responsible parent.
+				</p>
+				<p id="quote4" class="quote">
+					Sign up for free and get email alerts when your children are being bullied.
+				</p>
+
 				<form id="signup_form" name="form" role="form" novalidate class="css-form" style="display: none; padding-top: 10px">
 					<div class="form-group Xinput-group-lg">
 						<input id="first_name" required ng-model="first_name" auto-fill-sync type="text" class="form-control" placeholder="First Name" autocomplete="on" name="firstname" />
