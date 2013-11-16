@@ -81,13 +81,6 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
 .gap-50 {
     padding-top: 50px;
 }
-.poster-fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
 .poster_area {
     position: relative;
     top: 0;
@@ -112,6 +105,14 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     background-color: rgba(0, 0, 0, 0.5);
     /*padding: 10px 20px 10px 20px;*/
     color: white;
+}
+.poster-fixed {
+    /*position: fixed;*/
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 .poster1 {
     background-image: url('/public/img/5907015_l.jpg');
