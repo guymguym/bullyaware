@@ -133,6 +133,18 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     -moz-background-size: cover;
     -o-background-size: cover;
 }
+.report_alert {
+    background-color: rgb(220, 200, 200);
+    padding: 10px;
+    border: 1px #aaa solid;
+    border-radius: 10px;
+}
+.report_warning {
+    background-color: rgb(220, 220, 200);
+    padding: 10px;
+    border: 1px #aaa solid;
+    border-radius: 10px;
+}
 .css-form input.ng-invalid
 /*.ng-dirty*/
  {
