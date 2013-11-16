@@ -3,60 +3,127 @@
 
 <head>
 	<?# def.include( 'common_head.html') ?>
+
+		<style type="text/css">
+		html, body {
+			height: 100%;
+			min-height: 100%;
+		}
+		</style>
 </head>
 
 <body ng-controller="MainCtrl" ng-cloak>
 
 	<div>
 		<?# def.include( 'common_menu.html') ?>
-		<?# def.menubar ?>
 	</div>
 
-	<div class="show_on_load hide_on_unload container" style="padding-bottom: 30px">
-		<div class="page-header">
-			<h1>Get started in 3 quick steps:</h1>
-		</div>
+	<div class="show_on_load hide_on_unload poster1 poster-fixed"></div>
 
-		<div class="col-sm-6">
-			<div style="background-color: #eef; border-radius: 10px; margin-bottom: 20px; padding: 20px">
-				<h4><b><i class="fa fa-caret-right fa-fw"></i> Create a personal account</b>
-				</h4>
-				<h4><i class="fa fa-caret-right fa-fw"></i> Setup social accounts to monitor</h4>
-				<h4><i class="fa fa-caret-right fa-fw"></i> Subscribe and get 30 days free trial</h4>
-				<div style="padding: 45px 0 20px 0">
-					<a type="button" class="btn btn-success" href="/demo" target="_blank">
-						See Risk Analysis Example
-					</a>
+	<div class="show_on_load hide_on_unload" style="height: 100%; min-height: 100%;">
+
+		<div class="bgco col-sm-6 col-md-4" style="min-height: 100%; padding: 10px 20px; border-right: 1px white solid">
+
+			<div class="pad-10">
+				<?# def.compact_menu ?>
+			</div>
+
+			<div class="gap-30"></div>
+			<h1 class="H1">
+				<b class="menu_color">Bully</b><b>Aware</b>
+			</h1>
+			<p class="H2" style="width: 400px">
+				<b>Keeping kids safe</b>
+			</p>
+			<div class="gap-40"></div>
+
+			<p class="H3">
+				Sign up for free:
+				<!-- and get email alerts when your children are being bullied. -->
+			</p>
+
+			<div class="gap-10"></div>
+			<form id="signup_form" name="form" role="form" novalidate class="css-form">
+				<div class="form-group input-group-lg">
+					<input id="first_name" required ng-model="first_name" auto-fill-sync type="text" class="form-control" placeholder="First Name" autocomplete="on" name="firstname" />
 				</div>
+				<div class="form-group input-group-lg">
+					<input id="last_name" required ng-model="last_name" auto-fill-sync type="text" class="form-control" placeholder="Last Name" autocomplete="on" name="lastname" />
+				</div>
+				<div class="form-group input-group-lg">
+					<input id="user_email" required ng-model="user_email" auto-fill-sync type="email" class="form-control" placeholder="Email Address" autocomplete="on" name="email" />
+				</div>
+				<div class="form-group input-group-lg">
+					<input id="user_password" required ng-model="user_password" auto-fill-sync type="password" class="form-control" placeholder="Password" autocomplete="on" name="password" />
+				</div>
+				<div class="form-group input-group-lg">
+					<input id="user_password2" required ng-model="user_password2" auto-fill-sync type="password" class="form-control" placeholder="Confirm Password" autocomplete="on" name="password2" />
+				</div>
+				<div id="signup_button" class="form-group input-group-lg">
+					<button class="btn btn-primary form-control" ng-click="do_signup()">
+						Sign up
+					</button>
+				</div>
+				<p>
+					<small>
+						By clicking "Sign up" you confirm that you accept the
+						<br/>
+						<a href="#" ng-click="on_terms_of_use()">Terms of Service</a> and
+						<a href="#" ng-click="on_privacy_policy()">Privacy Policy</a>.
+					</small>
+				</p>
+			</form>
+		</div>
+
+		<div class="col-sm-6 col-md-8" style="min-height: 100%; padding: 20px; border-right: 1px white solid; background-color: white">
+			<div class="well well-lg">
+				<h3 Xclass="text-center">About Cyber Bullying</h3>
+				<div class="gap-20"></div>
+				<p class="lead">
+					<i class="fa fa-quote-left fa-fw" style="vertical-align: top"></i>
+					Around half of teens have been the victims of cyber bullying
+					<i class="fa fa-quote-right fa-fw" style="vertical-align: top"></i>
+				</p>
+				<div class="gap-10"></div>
+				<p class="lead">
+					<i class="fa fa-quote-left fa-fw" style="vertical-align: top"></i>
+					Only 1 in 10 teens tells a parent if they have been a cyber bully victim
+					<i class="fa fa-quote-right fa-fw" style="vertical-align: top"></i>
+				</p>
+			</div>
+			<hr/>
+			<div class="well well-lg" style="border: 2px black dashed">
+				<h3>Bullyaware report</h3>
+				<p>
+					Dear Sir or Madam
+				</p>
+				<p>
+					Bullyaware's technology detects cyber bullying by analyzing activity in social networks.
+				</p>
+				<p>
+					This is an email report about your child.
+				</p>
+				<div style="background-color: rgb(180,150,150); padding: 5px 10px; border: 1px white solid">
+					Your child appears to be a repeating target to offensive messages
+				</div>
+				<div class="gap-10"></div>
+				<div style="background-color: rgb(180,150,150); padding: 5px 10px; border: 1px white solid">
+					Your child appears to be repeatingly sending offensive messages
+				</div>
+				<div class="gap-10"></div>
+				<div style="background-color: rgb(180,180,150); padding: 5px 10px; border: 1px white solid">
+					Significant increase in number of messages sent/mentioning your child
+				</div>
+				<div class="gap-10"></div>
+				<div style="background-color: rgb(180,180,150); padding: 5px 10px; border: 1px white solid">
+					Significant increase of profanities in messages sent/mentioning your child
+				</div>
+				<div class="gap-10"></div>
+				. . .
 			</div>
 		</div>
-		
-		<div class="col-sm-6">
-			<div style="background-color: #eef; border-radius: 10px; margin-bottom: 20px; padding: 20px">
-				<form id="signup_form" name="form" role="form" novalidate class="css-form">
-					<div class="form-group">
-						<input id="user_email" required ng-model="user_email" auto-fill-sync type="email" class="form-control" placeholder="Your email address" autocomplete="off" name="email" />
-					</div>
-					<div class="form-group">
-						<input id="user_password" required ng-model="user_password" auto-fill-sync type="password" class="form-control" placeholder="Choose password" name="password" />
-					</div>
-					<div class="form-group">
-						<input id="user_password2" required ng-model="user_password2" auto-fill-sync type="password" class="form-control" placeholder="Retype password" name="password2" />
-					</div>
-					<div class="form-group">
-						<button class="btn btn-primary form-control" ng-click="do_signup()">
-							Signup <i class="fa fa-arrow-right fa-lg fa-fw"></i>
-						</button>
-					</div>
-				</form>
-			</div>
-		</div>
 
-	</div>
-
-
-	<div>
-		<?# def.include( 'common_foot.html') ?>
+		<div class="clearfix"></div>
 	</div>
 
 	<div>

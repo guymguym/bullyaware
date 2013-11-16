@@ -233,17 +233,22 @@ app.get('/admin', admin_auth, function(req, res, next) {
 });
 
 
-function page_context(req) {
-	return {
-		session: req.session.session_id,
-		user: req.session.user
-	};
+function page_context(req, ctx) {
+	ctx = ctx || {};
+	ctx.session = req.session.session_id;
+	ctx.user = req.session.user;
+	return ctx;
 }
 
 app.get('/', users.mk_session, function(req, res) {
 	return res.render('main.html', page_context(req));
 });
-
+app.get('/signup', users.mk_session, function(req, res) {
+	return res.render('signup.html', page_context(req));
+});
+app.get('/login', users.mk_session, function(req, res) {
+	return res.render('login.html', page_context(req));
+});
 app.get('/features', users.mk_session, function(req, res) {
 	return res.render('features.html', page_context(req));
 });
@@ -259,20 +264,11 @@ app.get('/contact', users.mk_session, function(req, res) {
 app.get('/getstarted', users.mk_session, function(req, res) {
 	return res.render('getstarted.html', page_context(req));
 });
-app.get('/signup', users.mk_session, function(req, res) {
-	if (req.session.user) {
-		return res.redirect('/settings');
-	}
-	return res.render('signup.html', page_context(req));
-});
 app.get('/settings', users.mk_session, function(req, res) {
 	if (!req.session.user) {
 		return res.redirect('/signup');
 	}
 	return res.render('settings.html', page_context(req));
-});
-app.get('/login', users.mk_session, function(req, res) {
-	return res.render('login.html', page_context(req));
 });
 app.get('/demo', users.mk_session, function(req, res) {
 	return res.render('demo.html', page_context(req));

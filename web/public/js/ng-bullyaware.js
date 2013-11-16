@@ -233,9 +233,10 @@
 
 
 	var HIGHLIGHT_EFFECT = {
-		effect: 'highlight',
-		color: '#08c',
-		duration: 1000
+		effect: 'pulsate',
+		// color: '#0c8',
+		times: 2,
+		duration: 500
 	};
 
 
@@ -389,22 +390,6 @@
 			}, function(err) {
 				console.error('USER CREATE FAILED', err);
 				alert('Signup failed. Please try again later');
-			});
-		};
-
-		$scope.do_start = function() {
-			event_log('main_start');
-			var duration = 1200;
-			$.when($('#initial_quotes').fadeOut(duration/2)).then(function() {
-				return $('#quote1').fadeIn(duration);
-			}).then(function() {
-				return $('#quote2').fadeIn(duration);
-			}).then(function() {
-				return $('#quote3').fadeIn(duration);
-			}).then(function() {
-				return $('#quote4').fadeIn(duration);
-			}).then(function() {
-				return $('#signup_form').fadeIn(duration);
 			});
 		};
 

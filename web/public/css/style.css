@@ -9,8 +9,15 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
 .btn {
     border-radius: 0 !important;
 }
+.form-group input {
+    border-radius: 0 !important;
+}
 .bgco {
     background-color: rgba(50, 40, 50, 0.9);
+    color: white;
+}
+.bgco2 {
+    background-color: rgba(50, 100, 150, 0.9);
     color: white;
 }
 .bgc {
@@ -59,6 +66,28 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
 .feature-row {
     margin-bottom: 50px;
 }
+.gap-10 {
+    padding-top: 10px;
+}
+.gap-20 {
+    padding-top: 20px;
+}
+.gap-30 {
+    padding-top: 30px;
+}
+.gap-40 {
+    padding-top: 40px;
+}
+.gap-50 {
+    padding-top: 50px;
+}
+.poster-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
 .poster_area {
     position: relative;
     top: 0;
@@ -104,11 +133,13 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     -moz-background-size: cover;
     -o-background-size: cover;
 }
-.css-form input.ng-invalid.ng-dirty {
-    background-color: rgba(250, 150, 150, 0.5);
+.css-form input.ng-invalid
+/*.ng-dirty*/
+ {
+    background-color: white;
 }
 .css-form input.ng-valid.ng-dirty {
-    background-color: rgba(230, 240, 255, 0.5);
+    background-color: rgb(160, 200, 250);
 }
 .axis path, .axis line {
     fill: none;
