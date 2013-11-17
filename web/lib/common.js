@@ -19,7 +19,7 @@ function reply_callback(req, res, debug_info) {
 			) {
 				return res.json(status, data);
 			} else {
-				return res.json(500, err);
+				return res.json(500, data);
 			}
 		}
 		if (!res.headerSent) {

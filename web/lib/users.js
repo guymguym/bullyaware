@@ -311,7 +311,18 @@ exports.add_person = function(req, res) {
 			person.user = user_id;
 			person.name = name;
 			return person.save(function(err) {
-				return next(err);
+				if (err) {
+					if (err.code === 11000) { // duplicate key
+						return next({
+							status: 409 // conflict
+						});
+					} else {
+						return next(err);
+					}
+				}
+				return next(null, {
+					id: person.id
+				});
 			});
 		},
 

@@ -250,6 +250,14 @@
 
 	function MainCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
 
+		// utils to insert data directly into html
+		$scope.return_id = function(x) {
+			return x._id;
+		};
+		$scope.return_arg = function(x) {
+			return x;
+		};
+
 		function make_redirect(path) {
 			return function() {
 				var duration = 200;
@@ -279,7 +287,10 @@
 			}
 		};
 
-		$scope.on_getstarted = make_redirect('/getstarted');
+
+		$scope.on_dashboard = make_redirect('/settings');
+
+		$scope.on_getstarted = make_redirect('/signup');
 		$scope.on_settings = make_redirect('/settings');
 		$scope.on_demo = make_redirect('/demo');
 
@@ -393,6 +404,145 @@
 				alert('Signup failed. Please try again later');
 			});
 		};
+
+		function add_person(name) {
+			event_log('add_person', name);
+			return $http({
+				method: 'POST',
+				url: '/api/person',
+				data: {
+					name: name
+				}
+			}).then(function(res) {
+				console.log('ADD PERSON', res);
+				return res;
+			}, function(err) {
+				console.error('FAILED ADD PERSON', err);
+				throw err;
+			});
+		}
+
+		function add_identity(person_id, type, sid) {
+			event_log('add_identity', type + ':' + sid);
+			return $http({
+				method: 'POST',
+				url: '/api/person/' + person_id + '/identity',
+				data: {
+					type: type,
+					sid: sid
+				}
+			}).then(function(res) {
+				console.log('ADD IDENTITY', res);
+				return res;
+			}, function(err) {
+				console.error('FAILED ADD IDENTITY', err);
+				throw err;
+			});
+		}
+
+		$scope.create_person = function() {
+			if (!$scope.create_person_name) {
+				$("#create_person_name").effect(HIGHLIGHT_EFFECT).focus();
+				return;
+			}
+			if (!$scope.create_twitter_identity || !$scope.create_twitter_identity.id_str) {
+				$("#create_twitter_identity").effect(HIGHLIGHT_EFFECT).focus();
+				return;
+			}
+			return add_person($scope.create_person_name).then(function(res) {
+				return add_identity(res.data.id, 'twitter', $scope.create_twitter_identity.id_str);
+			}, function(err) {
+				if (err.status === 409) {
+					alert('Person name already exists');
+					return false;
+				} else {
+					throw err;
+				}
+			}).then(function(res) {
+				if (res) {
+					return $scope.on_dashboard();
+				}
+			}, function(err) {
+				alert('Something didn\'t work');
+			});
+		};
+
+		$scope.set_twitter_identity = function(item) {
+			$scope.create_twitter_identity = item;
+		};
+
+		$scope.account_types = [
+			/*{
+			name: 'Twitter',
+			icon: 'fa-twitter-square',
+			color: '#7af'
+			}, */
+			{
+				name: 'Facebook',
+				icon: 'fa-facebook-square',
+				color: '#46b'
+			}, {
+				name: 'Google+',
+				icon: 'fa-google-plus-square',
+				color: '#d44'
+			}, {
+				name: 'Youtube',
+				icon: 'fa-youtube-square',
+				color: '#d00'
+			}, {
+				name: 'Instagram',
+				icon: 'fa-instagram',
+				color: '#dd7'
+			}, {
+				name: 'Tumblr',
+				icon: 'fa-tumblr-square',
+				color: '#33b'
+			}, {
+				name: 'Flickr',
+				icon: 'fa-flickr',
+				color: '#b3b'
+			}, {
+				name: 'Pinterest',
+				icon: 'fa-pinterest-square',
+				color: '#b33'
+			}, {
+				name: 'Other',
+				icon: 'fa-question-circle',
+				color: '#777'
+			}
+		];
+
+		$scope.on_click_account_type = function(type, event) {
+			$(event.target).effect({
+				effect: 'pulsate',
+				times: 2
+			});
+			type.checked = !type.checked;
+			if (type.checked) {
+				event_log('account_type_set', type.name);
+			} else {
+				event_log('account_type_unset', type.name);
+			}
+		};
+
+		function fetch_user_info() {
+			$http({
+				method: 'GET',
+				url: '/api/user'
+			}).then(function(res) {
+				console.log('GOT USER', res.data);
+				$scope.user_info = res.data;
+				if ($scope.user_info.role) {
+					$scope.user_role = $scope.user_info.role;
+				}
+				$('#loading_sign').hide();
+				$('#getstarted_content').fadeIn(1000);
+			}, function(err) {
+				console.error('FAILED GET USER', err);
+				$timeout(fetch_user_info, 1000);
+			});
+		}
+		// fetch_user_info();
 
 		if (!$scope.page_loaded) {
 			$scope.page_loaded = true;

@@ -38,66 +38,81 @@
 			</p>
 			<div class="gap-40"></div>
 
-			<p class="H3">
-				Enter child name
-			</p>
-			<div class="form-group input-group-lg">
-				<input class="form-control" type="text" placeholder="Child Name" />
-			</div>
+			<form name="form" role="form" novalidate class="css-form">
 
-			<div class="gap-20"></div>
+				<p class="H3">
+					Enter child name
+				</p>
+				<div class="form-group input-group-lg">
+					<input class="form-control" type="text" placeholder="Child Name" required ng-model="create_person_name" id="create_person_name" />
+				</div>
 
-			<p class="H3">
-				<i class="fa fa-twitter fa-lg" style="color: #0cf"></i>
-				Twitter account chooser
-			</p>
-			<div class="form-group input-group-lg">
-				<input nb-twitter-chooser="add_twit_identity(person, $item)" class="form-control" type="text" placeholder="Twitter Chooser" />
-				<span class="twitter-chooser-spin" style="opacity: 0">
-					<i class="fa fa-spinner fa-spin"></i>
-				</span>
-			</div>
+				<div class="gap-20"></div>
 
-			<div class="gap-20"></div>
+				<p class="H3">
+					<i class="fa fa-twitter fa-lg" style="color: #0cf"></i>
+					Twitter account chooser
+				</p>
+				<div class="form-group input-group-lg">
+					<input nb-twitter-chooser="set_twitter_identity($item)" class="form-control" type="text" placeholder="Twitter Chooser" required id="create_twitter_identity"/>
+					<span class="twitter-chooser-spin" style="opacity: 0">
+						<i class="fa fa-spinner fa-spin"></i>
+					</span>
+				</div>
 
-			<div class="form-group input-group-lg">
-				<button class="btn btn-primary form-control">
-					Finish
-				</button>
-			</div>
+				<p class="H3">
+					Which other networks interest you
+				</p>
+				<div class="form-group">
+					<span ng-repeat="type in account_types" title="{{type.name}}" ng-click="on_click_account_type(type, $event)" style="cursor: pointer">
+						<i style="color: {{(type.checked || type.hover) && type.color || '#d0d0d0'}}" class="fa {{type.icon}} fa-2x fa-fw" ng-mouseenter="type.hover = true" ng-mouseleave="type.hover = false"></i>
+					</span>
+				</div>
+
+				<div class="gap-20"></div>
+
+				<div class="form-group input-group-lg">
+					<button class="btn btn-primary form-control" ng-click="create_person()">
+						Finish
+					</button>
+				</div>
+			</form>
 		</div>
 
 		<div class="col-sm-6 col-md-8" style="min-height: 100%; padding: 0; background-color: white">
 			<div style="padding: 20px">
-				<div style="opacity: 0.6">
-					<h3>
-						<span class="fa-stack" style="font-size: 40px">
+				<div class="row" style="font-size: 40px">
+					<div class="col-xs-3 text-center" style="opacity: 0.6">
+						<div class="fa-stack">
 							<i class="fa fa-circle fa-stack-2x" style="color: #ddd"></i>
 							<span class="fa-stack-1x">1</span>
-						</span>
-						Sign Up
-					</h3>
-				</div>
-				<div>
-					<h3>
-						<span class="fa-stack" style="font-size: 40px">
+						</div>
+						<h3>Sign Up</h3>
+					</div>
+					<div class="col-xs-1 text-center">
+						<i class="fa fa-angle-double-right" style="font-size: 1.5em; line-height: 1.2em; color: #ddd"></i>
+					</div>
+					<div class="col-xs-4 text-center">
+						<div class="fa-stack">
 							<i class="fa fa-circle fa-stack-2x" style="color: #ddd"></i>
 							<span class="fa-stack-1x">2</span>
-						</span>
-						Choose Social Accounts
-					</h3>
-				</div>
-				<div>
-					<h3 style="opacity: 0.6">
-						<span class="fa-stack" style="font-size: 40px">
+						</div>
+						<h3>Choose Social Accounts</h3>
+					</div>
+					<div class="col-xs-1 text-center">
+						<i class="fa fa-angle-double-right" style="font-size: 1.5em; line-height: 1.2em; color: #ddd"></i>
+					</div>
+					<div class="col-xs-3 text-center" style="opacity: 0.6">
+						<div class="fa-stack">
 							<i class="fa fa-circle fa-stack-2x" style="color: #ddd"></i>
 							<span class="fa-stack-1x">3</span>
-						</span>
-						Get Alerts
-					</h3>
-					<div class="well well-lg" style="border: 2px #bbb groove; opacity: 0.6">
-						<?# def.include( 'report_example.html') ?>
+						</div>
+						<h3>Get Alerts</h3>
 					</div>
+				</div>
+				<div class="gap-10"></div>
+				<div class="well well-lg" style="border: 2px #bbb groove; opacity: 0.6">
+					<?# def.include( 'report_example.html') ?>
 				</div>
 			</div>
 		</div>
