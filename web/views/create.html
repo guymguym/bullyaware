@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html ng-app="bullyaware_app">
+
+<head>
+	<?# def.include( 'common_head.html') ?>
+
+		<style type="text/css">
+		html, body {
+			height: 100%;
+			min-height: 100%;
+		}
+		</style>
+</head>
+
+<body ng-controller="MainCtrl" ng-cloak>
+
+	<div>
+		<?# def.include( 'common_menu.html') ?>
+	</div>
+
+	<div class="show_on_load hide_on_unload poster1 poster-fixed"></div>
+
+	<div class="show_on_load hide_on_unload" style="height: 100%; min-height: 100%;">
+
+		<div class="bgco col-sm-6 col-md-4" style="min-height: 100%; padding: 10px 20px">
+
+
+			<div class="pad-10">
+				<?# def.compact_menu ?>
+			</div>
+
+			<div class="gap-30"></div>
+			<h1 class="H1" style="max-width: 400px; text-overflow: clip">
+				<b class="menu_color">Bully</b><b>Aware</b>
+			</h1>
+			<p class="H2" style="max-width: 400px; text-overflow: clip">
+				<b>Keeping kids safe</b>
+			</p>
+			<div class="gap-40"></div>
+
+			<p class="H3">
+				Enter child name
+			</p>
+			<div class="form-group Xinput-group-lg">
+				<input class="form-control" type="text" placeholder="Child Name" />
+			</div>
+
+			<div class="gap-20"></div>
+
+			<p class="H3">
+				<i class="fa fa-twitter fa-lg" style="color: #0cf"></i>
+				Twitter account chooser
+			</p>
+			<div class="form-group Xinput-group-lg">
+				<input nb-twitter-chooser="add_twit_identity(person, $item)" class="form-control" type="text" placeholder="Twitter Chooser" />
+				<span class="twitter-chooser-spin" style="opacity: 0">
+					<i class="fa fa-spinner fa-spin"></i>
+				</span>
+			</div>
+
+			<div class="gap-20"></div>
+
+			<button class="btn btn-primary btn-lg">
+				Finish
+			</button>
+		</div>
+
+		<div class="col-sm-6 col-md-8" style="min-height: 100%; padding: 0; background-color: white">
+			<div style="padding: 20px">
+				<div style="opacity: 0.6">
+					<h3>
+						<span class="fa-stack" style="font-size: 40px">
+							<i class="fa fa-circle fa-stack-2x" style="color: #ddd"></i>
+							<span class="fa-stack-1x">1</span>
+						</span>
+						Sign Up
+					</h3>
+				</div>
+				<div>
+					<h3>
+						<span class="fa-stack" style="font-size: 40px">
+							<i class="fa fa-circle fa-stack-2x" style="color: #ddd"></i>
+							<span class="fa-stack-1x">2</span>
+						</span>
+						Choose Social Accounts
+					</h3>
+				</div>
+				<div>
+					<h3 style="opacity: 0.6">
+						<span class="fa-stack" style="font-size: 40px">
+							<i class="fa fa-circle fa-stack-2x" style="color: #ddd"></i>
+							<span class="fa-stack-1x">3</span>
+						</span>
+						Get Alerts
+					</h3>
+					<div class="well well-lg" style="border: 2px #bbb groove; opacity: 0.6">
+						<?# def.include( 'report_example.html') ?>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+	</div>
+
+	<div>
+		<?# def.include( 'common_scripts.html') ?>
+	</div>
+
+</body>
+
+</html>

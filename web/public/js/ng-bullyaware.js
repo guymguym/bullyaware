@@ -240,11 +240,16 @@
 	};
 
 
+
+
+
 	bullyaware_app.controller('MainCtrl', [
 		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', MainCtrl
 	]);
 
+
 	function MainCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+		
 		function make_redirect(path) {
 			return function() {
 				var duration = 200;
@@ -254,79 +259,72 @@
 				}, duration);
 			};
 		}
-		
-		$scope.on_main = $scope.on_main || make_redirect('/');
-		$scope.on_contact_us = $scope.on_contact_us || make_redirect('/contact');
-		$scope.on_signup = $scope.on_signup || make_redirect('/signup');
-		
-		$scope.on_features = $scope.on_features || make_redirect('/features');
-		$scope.on_whatis = $scope.on_whatis || make_redirect('/whatis');
-		$scope.on_about = $scope.on_about || make_redirect('/about');
-		
-		$scope.on_login = $scope.on_login || make_redirect('/login');
-		$scope.on_getstarted = $scope.on_getstarted || make_redirect('/getstarted');
-		$scope.on_settings = $scope.on_settings || make_redirect('/settings');
-		$scope.on_demo = $scope.on_demo || make_redirect('/demo');
 
-		$scope.on_yahoo_hackathon = $scope.on_yahoo_hackathon || function() {
+		$scope.on_main = make_redirect('/');
+		$scope.on_contact_us = make_redirect('/contact');
+		$scope.on_signup = make_redirect('/signup');
+		$scope.on_create = make_redirect('/create');
+
+		$scope.on_features = make_redirect('/features');
+		$scope.on_whatis = make_redirect('/whatis');
+		$scope.on_about = make_redirect('/about');
+
+		$scope.on_login_redirect = make_redirect('/login');
+		$scope.on_login = function() {
+			var m = $('#login_modal');
+			if (m.length) {
+				m.modal();
+			} else {
+				$scope.on_login_redirect();
+			}
+		};
+
+		$scope.on_getstarted = make_redirect('/getstarted');
+		$scope.on_settings = make_redirect('/settings');
+		$scope.on_demo = make_redirect('/demo');
+
+		$scope.on_yahoo_hackathon = function() {
 			event_log('yahoo_hackathon');
 			var url = 'http://yahoodevelopers.tumblr.com/post/64404445568/yahoo-hack-israel-winning-hacks';
 			$window.open(url, '_blank');
 		};
 
-		$scope.on_send_mail = $scope.on_send_mail || function() {
+		$scope.on_send_mail = function() {
 			event_log('send_mail');
 			var url = 'mailto:info@bullyaware.co?subject=Request for info';
 			$window.open(url, '_blank');
 		};
 
-		$scope.on_support_call = $scope.on_support_call || function() {
+		$scope.on_support_call = function() {
 			event_log('support_call');
 			var url = 'mailto:info@bullyaware.co?subject=Support call';
 			$window.open(url, '_blank');
 		};
 
-		$scope.on_follow_facebook = $scope.on_follow_facebook || function() {
+		$scope.on_follow_facebook = function() {
 			event_log('follow_facebook');
 			var url = 'https://www.facebook.com/Bullyaware.co';
 			$window.open(url, '_blank');
 		};
 
-		$scope.on_follow_twitter = $scope.on_follow_twitter || function() {
+		$scope.on_follow_twitter = function() {
 			event_log('follow_twitter');
 			var url = 'https://twitter.com/bullyawareco';
 			$window.open(url, '_blank');
 		};
 
-		$scope.on_terms_of_use = $scope.on_terms_of_use || function() {
+		$scope.on_terms_of_use = function() {
 			event_log('terms_of_use');
 			alert('The terms of use are being finalized and will soon be available');
 		};
 
-		$scope.on_privacy_policy = $scope.on_privacy_policy || function() {
+		$scope.on_privacy_policy = function() {
 			event_log('privacy_policy');
 			alert('The privacy policy is being finalized and will soon be available');
 		};
 
 		$scope.active_link = function(link) {
 			return (link === $window.location.pathname) ? 'active' : '';
-		};
-
-		$scope.toggle_login_signup = function(l) {
-			var m = $('#start_modal');
-			var signup = m.find('#signup_form');
-			var login = m.find('#login_form');
-			var effect = {
-				effect: 'blind',
-				duration: 400
-			};
-			if (l) {
-				signup.hide(effect);
-				login.show(effect);
-			} else {
-				signup.show(effect);
-				login.hide(effect);
-			}
 		};
 
 		$scope.do_login = function() {
@@ -348,10 +346,10 @@
 				}
 			}).then(function(res) {
 				console.log('USER LOGIN DONE', res);
-				$scope.on_getstarted();
+				$scope.on_create();
 			}, function(err) {
 				console.error('USER LOGIN FAILED', err);
-				alert('Login failed. Please try again later');
+				alert('Login failed. Please check your password and try again later');
 			});
 		};
 
@@ -389,7 +387,7 @@
 				}
 			}).then(function(res) {
 				console.log('USER CREATED', res);
-				$scope.on_getstarted();
+				$scope.on_create();
 			}, function(err) {
 				console.error('USER CREATE FAILED', err);
 				alert('Signup failed. Please try again later');
