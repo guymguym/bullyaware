@@ -254,12 +254,14 @@
 				}, duration);
 			};
 		}
+		
 		$scope.on_main = $scope.on_main || make_redirect('/');
+		$scope.on_signup = $scope.on_signup || make_redirect('/signup');
+		
 		$scope.on_features = $scope.on_features || make_redirect('/features');
 		$scope.on_whatis = $scope.on_whatis || make_redirect('/whatis');
 		$scope.on_about = $scope.on_about || make_redirect('/about');
 		$scope.on_login = $scope.on_login || make_redirect('/login');
-		$scope.on_signup = $scope.on_signup || make_redirect('/signup');
 		$scope.on_getstarted = $scope.on_getstarted || make_redirect('/getstarted');
 		$scope.on_settings = $scope.on_settings || make_redirect('/settings');
 		$scope.on_demo = $scope.on_demo || make_redirect('/demo');

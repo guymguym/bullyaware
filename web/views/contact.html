@@ -3,33 +3,54 @@
 
 <head>
 	<?# def.include( 'common_head.html') ?>
+
+		<style type="text/css">
+		html, body {
+			height: 100%;
+		}
+		</style>
 </head>
 
-<body ng-controller="MainCtrl" ng-cloak class="bgwht">
+<body ng-controller="MainCtrl" ng-cloak>
 
 	<div>
 		<?# def.include( 'common_menu.html') ?>
-		<?# def.menubar ?>
 	</div>
 
-	<div class="show_on_load hide_on_unload container">
-		<div class="page-header">
-			<h1>Contact Us</h1>
-		</div>
+	<div class="show_on_load hide_on_unload poster2 poster-fixed"></div>
 
-		<p class="lead">
-			We are very interested to get your feedback.
-		</p>
-		<p class="lead">
-			You are welcome to send us email to 
-			<a href="#" ng-click="on_send_mail()">
-				info@bullyaware.co
-			</a>
-		</p>
-		<p class="lead">
-			<i>- The Bullyaware team</i>
-		</p>
-		<!-- 
+	<div class="show_on_load hide_on_unload" style="height: 100%">
+
+		<div class="bgco col-sm-6 col-md-4" style="min-height: 100%; padding: 10px 20px">
+
+			<div class="pad-10">
+				<?# def.compact_menu ?>
+			</div>
+
+			<div class="gap-30"></div>
+			<h1 class="H1" style="max-width: 400px; text-overflow: clip">
+				<b class="menu_color">Bully</b><b>Aware</b>
+			</h1>
+			<p class="H2" style="max-width: 400px; text-overflow: clip">
+				<b>Keeping kids safe</b>
+			</p>
+			<div class="gap-40"></div>
+
+			<p class="H3" style="max-width: 330px; text-overflow: clip">
+				We are very interested to get your feedback.
+			</p>
+			<div class="gap-10"></div>
+			<p class="H3" style="max-width: 340px; text-overflow: clip">
+				You are welcome to send us emails to
+				<a href="#" ng-click="on_send_mail()">
+					info@bullyaware.co
+				</a>
+			</p>
+			<div class="gap-10"></div>
+			<p class="H3">
+				<i>- The Bullyaware team</i>
+			</p>
+			<!-- 
 		<br/>
 		<h3>Contact Information</h3>
 		<div style="text-align: justify">
@@ -43,10 +64,13 @@
 			</p>
 		</div>
 		-->
-	</div>
-
-	<div>
-		<?# def.include( 'common_foot.html') ?>
+			<div class="gap-20"></div>
+			<button class="btn btn-default btn-lg" ng-click="on_main()">
+				<i class="fa fa-angle-left"></i>
+				&nbsp; Back
+			</button>
+			<div class="gap-20"></div>
+		</div>
 	</div>
 
 	<div>
