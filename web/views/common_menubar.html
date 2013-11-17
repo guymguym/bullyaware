@@ -9,33 +9,35 @@
 				<b class="menu_color">Bully</b><b>Aware</b>
 			</a>
 		</div>
-		<div class="collapse navbar-collapse navbar-menu-collapse">
-			<ul class="nav navbar-nav">
-				<li ng-class="active_link('/whatis')">
-					<a href="#" ng-click="on_whatis()">What is Bullyaware</a>
-				</li>
-				<li ng-class="active_link('/features')">
-					<a href="#" ng-click="on_features()">Features</a>
-				</li>
-				<li ng-class="active_link('/about')">
-					<a href="#" ng-click="on_about()">About</a>
-				</li>
-				<li ng-class="active_link('/demo')">
-					<a href="#" ng-click="on_demo()">Demo</a>
-				</li>
-				<li ng-class="active_link('/login')" ng-show="!user">
-					<a href="#" ng-click="on_login()">Login</a>
-				</li>
-				<li ng-class="active_link('/dashboard')" ng-show="!!user">
-					<a href="#" ng-click="on_dashboard()">{{user.first_name}}'s Dashboard</a>
-				</li>
-				<li ng-show="!!user">
-					<a href="#" ng-click="on_logout()">Logout</a>
-				</li>
-			</ul>
-			<button ng-show="!user" type="button" class="btn btn-primary navbar-btn" ng-click="on_getstarted()">
-				Get started
-			</button>
+		<div class="collapse navbar-collapse navbar-menu-collapse ">
+			<div class="navbar-right">
+				<ul class="nav navbar-nav">
+					<li ng-class="active_link('/whatis')">
+						<a href="#" ng-click="on_whatis()">What is Bullyaware</a>
+					</li>
+					<li ng-class="active_link('/features')">
+						<a href="#" ng-click="on_features()">Features</a>
+					</li>
+					<li ng-class="active_link('/about')">
+						<a href="#" ng-click="on_about()">About</a>
+					</li>
+					<li ng-class="active_link('/demo')">
+						<a href="#" ng-click="on_demo()">Demo</a>
+					</li>
+					<li ng-class="active_link('/login')" ng-show="!user">
+						<a href="#" ng-click="on_login()">Login</a>
+					</li>
+					<li ng-class="active_link('/dashboard')" ng-show="!!user">
+						<a href="#" ng-click="on_dashboard()">{{user.first_name}}'s Dashboard</a>
+					</li>
+					<li ng-show="!!user">
+						<a href="#" ng-click="on_logout()">Logout</a>
+					</li>
+				</ul>
+				<button ng-show="!user" type="button" class="btn btn-primary navbar-btn" ng-click="on_getstarted()">
+					Get started
+				</button>
+			</div>
 		</div>
 	</div>
 </nav>
