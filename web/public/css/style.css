@@ -101,29 +101,19 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     right: 0;
     height: 250px;
 }
-@media all and (min-height: 700px) {
+@media all and (min-height: 500px) {
     .poster_area {
         height: 350px;
     }
 }
 .poster_area .poster_header {
-    color: white;
-}
-.poster_area .poster_action {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     background-color: rgba(0, 0, 0, 0.3);
-    /*padding: 10px 20px 10px 20px;*/
     color: white;
-}
-.poster_area .poster_action .container {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
 }
 .poster-fixed {
     /*position: fixed;*/

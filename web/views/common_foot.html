@@ -1,25 +1,21 @@
-<div class="bgc" style="margin-top: 30px; padding: 30px 0; border-top: 1px black solid; border-bottom: 1px black solid; position: relative; bottom: 0; width: 100%">
+<div id="footer" class="bgc" style="margin-top: 30px; padding: 30px 0; border-top: 1px black solid; border-bottom: 1px black solid; position: relative; bottom: 0; width: 100%">
 	<div class="container">
-		<div class="pull-left">
-			<!-- <b>Bullyaware.co</b> -->
-			<!-- </div> -->
-			<!-- <div class="text-right"> -->
-			<!-- 
-			<span>
-				<?# def.contact_menu ?>
-			</span>
-			 -->
-
-			<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-
-			<a href="#" ng-click="on_terms_of_use()">
-				Terms of use
-			</a>
-			<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-
-			<a href="#" ng-click="on_privacy_policy()">
-				Privacy policy
-			</a>
+		<div class="col-sm-4">
+			<h4 style="color: #ddd">Bullyaware.co</h4>
+			<p><a href="#" ng-click="on_signup()">Sign up</a></p>
+			<p><a href="#" ng-click="on_login()">Login</a></p>
+			<p><a href="#" ng-click="on_logout()">Logout</a></p>
+		</div>
+		<div class="col-sm-4">
+			<h4 style="color: #ddd">Stay in touch</h4>
+			<p><a href="#" ng-click="on_contact_us()">Contact</a></p>
+			<p><a href="#" ng-click="on_follow_facebook()">Facebook</a></p>
+			<p><a href="#" ng-click="on_follow_twitter()">Twitter</a></p>
+		</div>
+		<div class="col-sm-4">
+			<h4 style="color: #ddd">Legal</h4>
+			<p><a href="#" ng-click="on_terms_of_use()">Terms of use</a></p>
+			<p><a href="#" ng-click="on_privacy_policy()">Privacy policy</a></p>
 		</div>
 	</div>
 </div>

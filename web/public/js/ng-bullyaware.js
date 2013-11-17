@@ -52,12 +52,6 @@
 			return JSON.stringify(o);
 		};
 
-		jQuery.fn.redraw = function() {
-			$(this).each(function() {
-				var redraw = this.offsetHeight;
-			});
-			return this;
-		};
 		jQuery.fn.focusWithoutScrolling = function() {
 			var x = window.scrollX;
 			var y = window.scrollY;
@@ -290,7 +284,7 @@
 				return;
 			}
 			var m = $('#login_modal');
-			if (m.length) {
+			if (m.length && typeof m.modal === 'function') {
 				m.modal();
 			} else {
 				$scope.on_login_redirect();
@@ -582,18 +576,6 @@
 		}
 	}
 
-
-
-
-	bullyaware_app.controller('WhatisCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', WhatisCtrl
-	]);
-
-	function WhatisCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-
-		// start animations on page load
-		$('.poster_area').fadeIn(1000);
-	}
 
 
 
