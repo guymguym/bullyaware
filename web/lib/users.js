@@ -66,7 +66,9 @@ exports.event_log = function(req, res) {
 function save_user_in_session(req, user) {
 	req.session.user = {
 		id: user.id,
-		email: user.email
+		email: user.email,
+		first_name: user.first_name,
+		last_name: user.last_name
 	};
 }
 

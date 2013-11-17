@@ -1,4 +1,5 @@
-body {
+/* override some things in bootstrap */
+ body {
     /*padding-top: 100px;*/
 }
 h1, h2, h3, h4, h5, h6, p, a, span, div, button {
@@ -12,7 +13,16 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
 .form-group input {
     border-radius: 0 !important;
 }
-.bgco {
+.thumbnail {
+    border: none !important;
+}
+.lead {
+    font-size: 1.2em !important;
+}
+/**/
+
+/* our styes */
+ .bgco {
     background-color: rgba(50, 40, 50, 0.9);
     color: white;
 }
@@ -36,9 +46,6 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     font-size: 21px;
     letter-spacing: 0.11em;
 }
-.lead {
-    font-size: 1.2em !important;
-}
 .bgblk {
     background-color: black;
 }
@@ -54,14 +61,20 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     margin: 0;
     border-bottom: solid 1px black;
 }
+#menubar .nav.navbar-nav li a {
+    color: white !important;
+}
+#menubar .nav.navbar-nav li:hover a {
+    color: #aaa !important;
+}
+#menubar .nav.navbar-nav li.active a {
+    color: black !important;
+}
 .show_on_load {
     display: none;
 }
 .menu_color {
     color: #09d;
-}
-.feature-row img {
-    width:300px;
 }
 .feature-row {
     margin-bottom: 50px;
@@ -86,25 +99,31 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     top: 0;
     left: 0;
     right: 0;
-    height: 300px;
+    height: 250px;
 }
 @media all and (min-height: 700px) {
     .poster_area {
-        height: 400px;
-    }
-}
-@media all and (min-height: 800px) {
-    .poster_area {
-        height: 500px;
+        height: 350px;
     }
 }
 .poster_area .poster_header {
     color: white;
 }
 .poster_area .poster_action {
-    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.3);
     /*padding: 10px 20px 10px 20px;*/
     color: white;
+}
+.poster_area .poster_action .container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 .poster-fixed {
     /*position: fixed;*/
@@ -146,15 +165,10 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     border: 1px #aaa solid;
     border-radius: 10px;
 }
-.css-form input.ng-invalid
-/*.ng-dirty*/
- {
-    background-color: white;
-}
-.css-form input.ng-valid.ng-dirty {
-    background-color: rgb(160, 200, 250);
-}
-.axis path, .axis line {
+/**/
+
+/* d3 styles */
+ .axis path, .axis line {
     fill: none;
     stroke: black;
     shape-rendering: crispEdges;
@@ -163,7 +177,10 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     font-family: sans-serif;
     font-size: 11px;
 }
-.ui-autocomplete {
+/**/
+
+/* jqueryui styles */
+ .ui-autocomplete {
     max-height: 300px;
     overflow-y: auto;
     /* prevent horizontal scrollbar */
@@ -174,6 +191,17 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
  */
  * html .ui-autocomplete {
     height: 200px;
+}
+/**/
+
+/* angular form styles */
+ .css-form input.ng-invalid
+/*.ng-dirty*/
+ {
+    background-color: white;
+}
+.css-form input.ng-valid.ng-dirty {
+    background-color: rgb(160, 200, 250);
 }
 /*
 Allow angular.js to be loaded in body, hiding cloaked elements until 
@@ -193,6 +221,8 @@ other selectors that are more specific or come later and might alter display.
         width: 1000px !important;
     }
 }
+/**/
+
 /* http://getbootstrap.com/examples/non-responsive/
  * 
  * Non-responsive overrides
@@ -258,3 +288,4 @@ other selectors that are more specific or come later and might alter display.
     color: #999 !important;
     background-color: transparent !important;
 }
+/**/

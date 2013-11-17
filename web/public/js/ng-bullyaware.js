@@ -261,7 +261,9 @@
 		function make_redirect(path) {
 			return function() {
 				var duration = 200;
-				$('.hide_on_unload').fadeOut(duration);
+				$('.hide_on_unload').animate({
+					opacity: 0
+				}, duration);
 				setTimeout(function() {
 					$window.location = path;
 				}, duration);
@@ -273,6 +275,7 @@
 		$scope.on_create = make_redirect('/create');
 		$scope.on_dashboard = make_redirect('/dashboard');
 		$scope.on_login_redirect = make_redirect('/login');
+		$scope.on_logout = make_redirect('/api/user/logout');
 
 		$scope.on_getstarted = function() {
 			if ($scope.user) {
@@ -569,12 +572,13 @@
 			$scope.session_id = $scope.server_data.session;
 			$scope.user = $scope.server_data.user;
 			// console.log('USER', $scope.user, 'DATA', $scope.server_data);
-			// init_intercom_io($scope.user);
 
 			// start animations on page load
 			$('.show_on_load').fadeIn(1000);
 
 			event_log('page', $location.absUrl());
+			
+			// init_intercom_io($scope.user);
 		}
 	}
 
