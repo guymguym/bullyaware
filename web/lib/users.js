@@ -15,6 +15,10 @@ var User = models.User;
 var Person = models.Person;
 var Identity = models.Identity;
 
+function is_testing(req) {
+	var host = req.get('host');
+	return host.substring(0, 9) === '127.0.0.1';
+}
 
 // mk_session is a middleware (it takes 3 arguments and can pass execution to next)
 // it makes sure that the current cookie session will have a DB session
@@ -105,6 +109,10 @@ exports.signup = function(req, res) {
 		},
 
 		function(next) {
+			if (is_testing(req)) {
+				// dont send emails when testing
+				return next();
+			}
 			return mandrill('/messages/send', {
 				message: {
 					to: [{
