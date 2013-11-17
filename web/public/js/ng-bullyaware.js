@@ -172,12 +172,12 @@
 							});
 						}
 					}).data('ui-autocomplete')._renderItem = function(ul, item) {
-						return $('<li>').append(
-							'<a><b>@' + $sanitize(item.screen_name) +
-							'</b><br/><small><u>Name:</u> ' + $sanitize(item.name) +
-							'<br/><u>From:</u> ' + $sanitize(item.location) +
-							'<br/><img width="40" src="' + $sanitize(item.profile_image_url) +
-							'"/></small></a>'
+						return $('<li>').append('<a style="border-bottom: 1px #eee solid">' +
+							'<b>@' + $sanitize(item.screen_name) + '</b>' +
+							'<img class="pull-right" width="40" src="' + $sanitize(item.profile_image_url) + '"/>' +
+							'<br/><small>' + $sanitize(item.name) +
+							(item.location ? '<br/>' + $sanitize(item.location) : '') +
+							'</small></a>'
 						).appendTo(ul);
 					};
 				}
@@ -249,7 +249,7 @@
 
 
 	function MainCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-		
+
 		function make_redirect(path) {
 			return function() {
 				var duration = 200;
