@@ -256,16 +256,17 @@
 		}
 		
 		$scope.on_main = $scope.on_main || make_redirect('/');
+		$scope.on_contact_us = $scope.on_contact_us || make_redirect('/contact');
 		$scope.on_signup = $scope.on_signup || make_redirect('/signup');
 		
 		$scope.on_features = $scope.on_features || make_redirect('/features');
 		$scope.on_whatis = $scope.on_whatis || make_redirect('/whatis');
 		$scope.on_about = $scope.on_about || make_redirect('/about');
+		
 		$scope.on_login = $scope.on_login || make_redirect('/login');
 		$scope.on_getstarted = $scope.on_getstarted || make_redirect('/getstarted');
 		$scope.on_settings = $scope.on_settings || make_redirect('/settings');
 		$scope.on_demo = $scope.on_demo || make_redirect('/demo');
-		$scope.on_contact_us = $scope.on_contact_us || make_redirect('/contact');
 
 		$scope.on_yahoo_hackathon = $scope.on_yahoo_hackathon || function() {
 			event_log('yahoo_hackathon');
@@ -355,36 +356,36 @@
 		};
 
 		$scope.do_signup = function() {
-			if (!$scope.first_name) {
-				$("#first_name").effect(HIGHLIGHT_EFFECT).focus();
+			if (!$scope.signup_first_name) {
+				$("#signup_first_name").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
-			if (!$scope.last_name) {
-				$("#last_name").effect(HIGHLIGHT_EFFECT).focus();
+			if (!$scope.signup_last_name) {
+				$("#signup_last_name").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
-			if (!$scope.user_email) {
-				$("#user_email").effect(HIGHLIGHT_EFFECT).focus();
+			if (!$scope.signup_email) {
+				$("#signup_email").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
-			if (!$scope.user_password) {
-				$("#user_password").effect(HIGHLIGHT_EFFECT).focus();
+			if (!$scope.signup_password) {
+				$("#signup_password").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
-			if (!$scope.user_password2 || $scope.user_password2 !== $scope.user_password) {
-				$("#user_password2").effect(HIGHLIGHT_EFFECT).focus();
+			if (!$scope.signup_password2 || $scope.signup_password2 !== $scope.signup_password) {
+				$("#signup_password2").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
 			// send action log async
-			event_log('signup', $scope.user_email);
+			event_log('signup', $scope.signup_email);
 			return $http({
 				method: 'POST',
 				url: '/api/user/signup',
 				data: {
-					first_name: $scope.first_name,
-					last_name: $scope.last_name,
-					email: $scope.user_email,
-					password: $scope.user_password
+					first_name: $scope.signup_first_name,
+					last_name: $scope.signup_last_name,
+					email: $scope.signup_email,
+					password: $scope.signup_password
 				}
 			}).then(function(res) {
 				console.log('USER CREATED', res);
