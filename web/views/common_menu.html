@@ -69,40 +69,35 @@
 </nav>
 #?>
 
-<?##def.contact_menu: <i></i>
+<?##def.compact_menu: <i></i>
 
-<span class="fa-stack" ng-click="on_contact_us()" style="cursor: pointer; font-size: 1.2em" title="Contact us">
+<span class="fa-stack" ng-click="on_main()" style="cursor: pointer; font-size: 1.2em" title="Home">
+	<i class="fa fa-circle fa-stack-2x menu_color"></i>
+	<i class="fa fa-home fa-stack-1x" style="color: white; font-size: 1.1em"></i>
+</span>
+<span class="fa-stack" ng-click="on_features()" style="cursor: pointer; font-size: 1.2em; margin-left: 10px" title="Info">
+	<i class="fa fa-circle fa-stack-2x menu_color"></i>
+	<i class="fa fa-info fa-stack-1x" style="color: white; font-size: 1.1em"></i>
+</span>
+<span class="fa-stack" ng-click="on_contact_us()" style="cursor: pointer; font-size: 1.2em; margin-left: 10px" title="Contact us">
 	<i class="fa fa-circle fa-stack-2x menu_color"></i>
 	<i class="fa fa-envelope fa-stack-1x" style="color: white; font-size: 1.1em"></i>
 </span>
-<span>&nbsp;</span>
-<span class="fa-stack" ng-click="on_follow_facebook()" style="cursor: pointer; font-size: 1.2em" title="Follow on facebook">
+<span class="fa-stack" ng-click="on_follow_facebook()" style="cursor: pointer; font-size: 1.2em; margin-left: 10px" title="Follow on facebook">
 	<i class="fa fa-circle fa-stack-2x menu_color"></i>
 	<i class="fa fa-facebook fa-stack-1x" style="color: white; font-size: 1.3em"></i>
 </span>
-<span>&nbsp;</span>
-<span class="fa-stack" ng-click="on_follow_twitter()" style="cursor: pointer; font-size: 1.2em" title="Follow on twitter">
+<span class="fa-stack" ng-click="on_follow_twitter()" style="cursor: pointer; font-size: 1.2em; margin-left: 10px" title="Follow on twitter">
 	<i class="fa fa-circle fa-stack-2x menu_color"></i>
 	<i class="fa fa-twitter fa-stack-1x" style="color: white; font-size: 1.3em"></i>
+</span>
+<span class="fa-stack" ng-click="on_login()" style="cursor: pointer; font-size: 1.2em; margin-left: 10px" title="Login">
+	<i class="fa fa-circle fa-stack-2x menu_color"></i>
+	<i class="fa fa-user fa-stack-1x" style="color: white; font-size: 1.3em"></i>
 </span>
 
 #?>
 
-
-<?##def.compact_menu: <i></i>
-	<span>
-		<?# def.contact_menu ?>
-	</span>
-	<a style="color: #ccc; letter-spacing: 0.11em; font-size: 13px; margin-left: 25px" href="#" ng-click="on_main()">
-		HOME
-	</a>
-	<a style="color: #ccc; letter-spacing: 0.11em; font-size: 13px; margin-left: 8px" href="#" ng-click="on_features()">
-		INFO
-	</a>
-	<a style="color: #ccc; letter-spacing: 0.11em; font-size: 13px; margin-left: 8px" href="#" ng-click="on_login()">
-		LOGIN
-	</a>
-#?>
 
 <div class="modal fade" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="login_modal_label" aria-hidden="true">
 	<div class="modal-dialog" style="width: 350px">

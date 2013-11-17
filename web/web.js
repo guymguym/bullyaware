@@ -243,9 +243,6 @@ function page_context(req, ctx) {
 app.get('/', users.mk_session, function(req, res) {
 	return res.render('main.html', page_context(req));
 });
-app.get('/contact', users.mk_session, function(req, res) {
-	return res.render('contact.html', page_context(req));
-});
 
 app.get('/signup', users.mk_session, function(req, res) {
 	return res.render('signup.html', page_context(req));
@@ -255,6 +252,12 @@ app.get('/create', users.mk_session, function(req, res) {
 		return res.redirect('/signup');
 	}
 	return res.render('create.html', page_context(req));
+});
+app.get('/dashboard', users.mk_session, function(req, res) {
+	if (!req.session.user) {
+		return res.redirect('/signup');
+	}
+	return res.render('settings.html', page_context(req));
 });
 
 app.get('/features', users.mk_session, function(req, res) {
@@ -266,21 +269,18 @@ app.get('/whatis', users.mk_session, function(req, res) {
 app.get('/about', users.mk_session, function(req, res) {
 	return res.render('about.html', page_context(req));
 });
+app.get('/demo', users.mk_session, function(req, res) {
+	return res.render('demo.html', page_context(req));
+});
+app.get('/contact', users.mk_session, function(req, res) {
+	return res.render('contact.html', page_context(req));
+});
 
 app.get('/login', users.mk_session, function(req, res) {
 	return res.render('login.html', page_context(req));
 });
 app.get('/getstarted', users.mk_session, function(req, res) {
 	return res.render('getstarted.html', page_context(req));
-});
-app.get('/settings', users.mk_session, function(req, res) {
-	if (!req.session.user) {
-		return res.redirect('/signup');
-	}
-	return res.render('settings.html', page_context(req));
-});
-app.get('/demo', users.mk_session, function(req, res) {
-	return res.render('demo.html', page_context(req));
 });
 
 

@@ -269,16 +269,23 @@
 		}
 
 		$scope.on_main = make_redirect('/');
-		$scope.on_contact_us = make_redirect('/contact');
 		$scope.on_signup = make_redirect('/signup');
 		$scope.on_create = make_redirect('/create');
-
-		$scope.on_features = make_redirect('/features');
-		$scope.on_whatis = make_redirect('/whatis');
-		$scope.on_about = make_redirect('/about');
-
+		$scope.on_dashboard = make_redirect('/dashboard');
 		$scope.on_login_redirect = make_redirect('/login');
+
+		$scope.on_getstarted = function() {
+			if ($scope.user) {
+				$scope.on_dashboard();
+			} else {
+				$scope.on_signup();
+			}
+		};
 		$scope.on_login = function() {
+			if ($scope.user) {
+				$scope.on_dashboard();
+				return;
+			}
 			var m = $('#login_modal');
 			if (m.length) {
 				m.modal();
@@ -287,12 +294,13 @@
 			}
 		};
 
-
-		$scope.on_dashboard = make_redirect('/settings');
-
-		$scope.on_getstarted = make_redirect('/signup');
-		$scope.on_settings = make_redirect('/settings');
+		$scope.on_features = make_redirect('/features');
+		$scope.on_whatis = make_redirect('/whatis');
+		$scope.on_about = make_redirect('/about');
+		$scope.on_contact_us = make_redirect('/contact');
 		$scope.on_demo = make_redirect('/demo');
+
+
 
 		$scope.on_yahoo_hackathon = function() {
 			event_log('yahoo_hackathon');
@@ -357,7 +365,7 @@
 				}
 			}).then(function(res) {
 				console.log('USER LOGIN DONE', res);
-				$scope.on_create();
+				$scope.on_dashboard();
 			}, function(err) {
 				console.error('USER LOGIN FAILED', err);
 				alert('Login failed. Please check your password and try again later');
@@ -385,6 +393,8 @@
 				$("#signup_password2").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
+			var btn = $(window.event.target);
+			var loading = $('<i class="fa fa-spinner fa-spin fa-lg">').appendTo(btn);
 			// send action log async
 			event_log('signup', $scope.signup_email);
 			return $http({
@@ -398,9 +408,11 @@
 				}
 			}).then(function(res) {
 				console.log('USER CREATED', res);
+				loading.remove();
 				$scope.on_create();
 			}, function(err) {
 				console.error('USER CREATE FAILED', err);
+				loading.remove();
 				alert('Signup failed. Please try again later');
 			});
 		};
@@ -440,7 +452,7 @@
 			});
 		}
 
-		$scope.create_person = function() {
+		$scope.finish_create = function() {
 			if (!$scope.create_person_name) {
 				$("#create_person_name").effect(HIGHLIGHT_EFFECT).focus();
 				return;
@@ -449,9 +461,12 @@
 				$("#create_twitter_identity").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
+			var btn = $(window.event.target);
+			var loading = $('<i class="fa fa-spinner fa-spin fa-lg">').appendTo(btn);
 			return add_person($scope.create_person_name).then(function(res) {
 				return add_identity(res.data.id, 'twitter', $scope.create_twitter_identity.id_str);
 			}, function(err) {
+				loading.remove();
 				if (err.status === 409) {
 					alert('Person name already exists');
 					return false;
@@ -459,10 +474,12 @@
 					throw err;
 				}
 			}).then(function(res) {
+				loading.remove();
 				if (res) {
 					return $scope.on_dashboard();
 				}
 			}, function(err) {
+				loading.remove();
 				alert('Something didn\'t work');
 			});
 		};
