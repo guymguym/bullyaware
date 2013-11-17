@@ -257,7 +257,7 @@ app.get('/dashboard', users.mk_session, function(req, res) {
 	if (!req.session.user) {
 		return res.redirect('/signup');
 	}
-	return res.render('settings.html', page_context(req));
+	return res.render('dashboard.html', page_context(req));
 });
 
 app.get('/features', users.mk_session, function(req, res) {

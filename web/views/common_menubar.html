@@ -1,0 +1,68 @@
+<nav id="menubar" class="navbar navbar-default navbar-inverse navbar-static-top bgc" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menu-collapse">
+				Menu
+				<i class="caret"></i>
+			</button>
+			<a class="navbar-brand" href="#" ng-click="on_main()" style="color: white">
+				<b class="menu_color">Bully</b><b>Aware</b>
+			</a>
+		</div>
+		<div class="collapse navbar-collapse navbar-menu-collapse">
+			<div class="navbar-right">
+				<ul class="nav navbar-nav navbar-left" style="margin-right: 10px">
+					<li ng-class="active_link('/features')">
+						<a href="#" ng-click="on_features()">
+							Features
+						</a>
+					</li>
+					<li ng-class="active_link('/whatis')">
+						<a href="#" ng-click="on_whatis()">
+							What is Bullyaware
+						</a>
+					</li>
+					<li ng-class="active_link('/about')">
+						<a href="#" ng-click="on_about()">
+							About
+						</a>
+					</li>
+				</ul>
+				<ul ng-show="!!user" class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<b>{{ user.email }}</b>
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li>
+								<a href="#" ng-click="on_settings()">
+									Settings
+								</a>
+							</li>
+							<li>
+								<a href="#" ng-click="on_getstarted()">
+									Get Started
+								</a>
+							</li>
+							<li>
+								<a href="#" ng-click="on_demo()">
+									Example
+								</a>
+							</li>
+							<li class="divider"></li>
+							<li><a href="/api/user/logout">Logout</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<button ng-show="!user" type="button" class="btn btn-primary navbar-btn" ng-click="on_getstarted()">
+					Get started
+				</button>
+				<button ng-show="!user" type="button" class="btn btn-default navbar-btn" style="margin-left: 10px" ng-click="on_login()">
+					Login
+				</button>
+			</div>
+		</div>
+	</div>
+</nav>
