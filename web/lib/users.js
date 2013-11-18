@@ -237,7 +237,7 @@ exports.read_user = function(req, res) {
 	var user_id;
 	var user_info;
 	var persons;
-	var identity_map;
+	var identities;
 
 	return async.waterfall([
 
@@ -280,18 +280,18 @@ exports.read_user = function(req, res) {
 				_id: {
 					$in: ids
 				}
-			}, function(err, identities) {
+			}).lean().exec(function(err, identity_list) {
 				if (err) {
 					return next(err);
 				}
-				identity_map = _.indexBy(identities, '_id');
+				identities = identity_list;
 				return next();
 			});
 		},
 
 		function(next) {
 			user_info.persons = persons;
-			user_info.identity_map = identity_map;
+			user_info.identities = identities;
 			return next(null, user_info);
 		}
 

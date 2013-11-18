@@ -116,8 +116,8 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     color: white;
 }
 .poster-fixed {
-    /*position: fixed;*/
-    position: absolute;
+    position: fixed;
+    /*position: absolute;*/
     top: 0;
     left: 0;
     right: 0;
@@ -210,6 +210,33 @@ other selectors that are more specific or come later and might alter display.
     .container {
         width: 1000px !important;
     }
+}
+.enter-fade, .view-animate.ng-enter {
+    -webkit-transition: 0.3s linear opacity;
+    -moz-transition: 0.3s linear opacity;
+    -o-transition: 0.3s linear opacity;
+    transition: 0.3s linear opacity;
+    opacity: 0;
+}
+.enter-fade.enter-fade-active, .view-animate.ng-enter.ng-enter-active {
+    opacity: 1;
+}
+.view-animate.ng-leave {
+    -webkit-transition: 0.3s linear opacity;
+    -moz-transition: 0.3s linear opacity;
+    -o-transition: 0.3s linear opacity;
+    transition: 0.3s linear opacity;
+    opacity: 1;
+}
+.view-animate.ng-leave.ng-leave-active {
+    opacity: 0;
+}
+.view-animate {
+    position: absolute;
+    top: 20px;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;    
 }
 /**/
 

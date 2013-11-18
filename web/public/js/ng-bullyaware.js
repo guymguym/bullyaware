@@ -6,7 +6,7 @@
 	'use strict';
 
 	// define the angular module
-	var bullyaware_app = angular.module('bullyaware_app', ['ngSanitize']);
+	var bullyaware_app = angular.module('bullyaware_app', ['ngSanitize', 'ngRoute', 'ngAnimate']);
 
 
 	// safe apply handles cases when apply may fail with:
@@ -342,6 +342,9 @@
 		$scope.active_link = function(link) {
 			return (link === $window.location.pathname) ? 'active' : '';
 		};
+		$scope.active_link_hash = function(link) {
+			return (link === $window.location.hash) ? 'active' : '';
+		};
 
 		$scope.do_login = function() {
 			if (!$scope.login_email) {
@@ -539,24 +542,22 @@
 			}
 		};
 
-		function fetch_user_info() {
-			$http({
+		$scope.get_user_info = function() {
+			return $http({
 				method: 'GET',
 				url: '/api/user'
 			}).then(function(res) {
 				console.log('GOT USER', res.data);
 				$scope.user_info = res.data;
-				if ($scope.user_info.role) {
-					$scope.user_role = $scope.user_info.role;
-				}
-				$('#loading_sign').hide();
-				$('#getstarted_content').fadeIn(1000);
+				$scope.user_info.person_map = _.indexBy($scope.user_info.persons, '_id');
+				$scope.user_info.identity_map = _.indexBy($scope.user_info.identities, '_id');
+				return res;
 			}, function(err) {
 				console.error('FAILED GET USER', err);
-				$timeout(fetch_user_info, 1000);
+				return $timeout($scope.get_user_info, 1000);
 			});
-		}
-		// fetch_user_info();
+		};
+
 
 		if (!$scope.page_loaded) {
 			$scope.page_loaded = true;
@@ -571,7 +572,7 @@
 			$('.show_on_load').fadeIn(1000);
 
 			event_log('page', $location.absUrl());
-			
+
 			// init_intercom_io($scope.user);
 		}
 	}
@@ -579,13 +580,26 @@
 
 
 
-
-
-	bullyaware_app.controller('SettingsCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', SettingsCtrl
+	bullyaware_app.config(['$routeProvider', '$locationProvider',
+		function($routeProvider, $locationProvider) {
+			$routeProvider.when('/person/:person_id', {
+				templateUrl: '/person.html',
+				controller: ['$scope', '$routeParams',
+					function($scope, $routeParams) {
+						$scope.person_id = $routeParams.person_id;
+						$scope.person = $scope.user_info ?
+							$scope.user_info.person_map[$scope.person_id] : null;
+					}
+				]
+			});
+		}
 	]);
 
-	function SettingsCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
+	bullyaware_app.controller('SettingsCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', '$route', SettingsCtrl
+	]);
+
+	function SettingsCtrl($scope, $http, $q, $timeout, $window, $location, event_log, $route) {
 
 		function show_loading() {
 			$('#loading_panel').show();
@@ -595,21 +609,26 @@
 			$('#loading_panel').hide();
 		}
 
-		function fetch_user_info() {
+		function reset_person_route() {
+			if (!$route.current) {
+				return;
+			}
+			if (!($route.current.params.person_id in $scope.user_info.person_map)) {
+				$location.hash('');
+			}
+			$route.reload();
+		}
+
+		function reload_user_info() {
 			show_loading();
-			return $http({
-				method: 'GET',
-				url: '/api/user'
-			}).then(function(res) {
-				console.log('GOT USER', res.data);
-				$scope.user_info = res.data;
+			return $scope.get_user_info().then(function() {
+				reset_person_route();
 				hide_loading();
-			}, function(err) {
-				console.error('FAILED GET USER', err);
-				$timeout(fetch_user_info, 1000);
 			});
 		}
-		fetch_user_info();
+
+		reset_person_route();
+		reload_user_info();
 
 		$scope.add_person = function(name) {
 			if (!name) {
@@ -627,7 +646,7 @@
 			}).then(function(res) {
 				console.log('ADD PERSON', res);
 				$scope.new_person = '';
-				return fetch_user_info();
+				return reload_user_info();
 			}, function(err) {
 				console.error('FAILED ADD PERSON', err);
 				hide_loading();
@@ -646,24 +665,11 @@
 				url: '/api/person/' + person._id
 			}).then(function(res) {
 				console.log('DEL PERSON', res);
-				return fetch_user_info();
+				return reload_user_info();
 			}, function(err) {
 				console.error('FAILED DEL PERSON', err);
 				hide_loading();
 			});
-		};
-
-		$scope.active_path = function(path) {
-			if ('/' + path === $location.path()) {
-				return 'active';
-			}
-		};
-
-		$scope.return_id = function(x) {
-			return x._id;
-		};
-		$scope.return_arg = function(x) {
-			return x;
 		};
 
 		$scope.identity_account_name = function(identity) {
@@ -732,6 +738,12 @@
 			}
 		};
 
+		$scope.click_add_twit = function(person) {
+			var elem = $('#new_twit_id_' + person._id);
+			elem.autocomplete('search');
+			elem.effect(HIGHLIGHT_EFFECT).focus();
+		};
+
 		$scope.add_twit_identity = function(person, twit_identity) {
 			show_loading();
 			event_log('add_twit_id', twit_identity.screen_name);
@@ -745,7 +757,7 @@
 			}).then(function(res) {
 				console.log('ADD IDENTITY', res);
 				$scope.hide_add_twit(person, 'force');
-				return fetch_user_info();
+				return reload_user_info();
 			}, function(err) {
 				console.error('FAILED ADD IDENTITY', err);
 				hide_loading();
@@ -763,7 +775,7 @@
 				url: '/api/person/' + person._id + '/identity/' + identity._id
 			}).then(function(res) {
 				console.log('DEL IDENTITY', res);
-				return fetch_user_info();
+				return reload_user_info();
 			}, function(err) {
 				console.error('FAILED DEL IDENTITY', err);
 				hide_loading();
@@ -789,144 +801,6 @@
 
 
 
-
-
-	bullyaware_app.controller('GetStartedCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', GetStartedCtrl
-	]);
-
-	function GetStartedCtrl($scope, $http, $q, $timeout, $window, $location, event_log) {
-
-		function fetch_user_info() {
-			$http({
-				method: 'GET',
-				url: '/api/user'
-			}).then(function(res) {
-				console.log('GOT USER', res.data);
-				$scope.user_info = res.data;
-				if ($scope.user_info.role) {
-					$scope.user_role = $scope.user_info.role;
-				}
-				$('#loading_sign').hide();
-				$('#getstarted_content').fadeIn(1000);
-			}, function(err) {
-				console.error('FAILED GET USER', err);
-				$timeout(fetch_user_info, 1000);
-			});
-		}
-		fetch_user_info();
-
-
-		$scope.on_user_role = function(role) {
-			if (role === $scope.user_role) {
-				return;
-			}
-			event_log('user_role', role);
-			/*
-			$http({
-				method: 'PUT',
-				url: '/api/user',
-				data: {
-					role: role
-				}
-			}).then(function(res) {
-				console.log('UPDATED ROLE', res);
-				$scope.user_role = role;
-			}, function(err) {
-				console.error('FAILED UPDATE ROLE', err);
-			});
-			*/
-			$scope.user_role = role;
-		};
-
-
-		$scope.account_types = [{
-			name: 'Twitter',
-			icon: 'fa-twitter-square',
-			color: '#7af'
-		}, {
-			name: 'Facebook',
-			icon: 'fa-facebook-square',
-			color: '#66b'
-		}, {
-			name: 'Google+',
-			icon: 'fa-google-plus-square',
-			color: '#c33'
-		}, {
-			name: 'Youtube',
-			icon: 'fa-youtube-square',
-			color: '#a66'
-		}, {
-			name: 'Instagram',
-			icon: 'fa-instagram',
-			color: '#881'
-		}, {
-			name: 'Tumblr',
-			icon: 'fa-tumblr-square',
-			color: '#33b'
-		}, {
-			name: 'Flickr',
-			icon: 'fa-flickr',
-			color: '#b3b'
-		}, {
-			name: 'Pinterest',
-			icon: 'fa-pinterest-square',
-			color: '#b33'
-		}, {
-			name: 'Other',
-			icon: 'fa-question-circle',
-			color: '#777'
-		}];
-
-
-		// TODO sync with user object on server
-		$scope.twitter_accounts = [];
-
-		$scope.add_twitter = function() {
-			var name = $scope.target_account;
-			if (!name) {
-				return;
-			}
-			event_log('add_twitter', name);
-			if (name[0] !== '@') {
-				name = '@' + name;
-			}
-			$scope.twitter_accounts.push(name);
-			$scope.target_account = '';
-		};
-		$scope.help_find_twitter = function() {
-			event_log('help_find_twitter');
-			alert('Coming soon');
-		};
-		$scope.done_twitter = function() {
-			event_log('done_twitter');
-			$scope.is_done_twitter = true;
-		};
-
-
-		$scope.on_click_account_type = function(type, event) {
-			$(event.target).effect({
-				effect: 'pulsate',
-				times: 2
-			});
-			type.checked = !type.checked;
-			if (type.checked) {
-				event_log('account_type_set', type.name);
-			} else {
-				event_log('account_type_unset', type.name);
-			}
-		};
-		$scope.done_others = function() {
-			event_log('done_others');
-			$scope.is_done_others = true;
-		};
-
-
-		$scope.subscribe = function(time) {
-			event_log('subscribe', time);
-			alert('Thanks! We will contact you shortly');
-		};
-	}
 
 
 
