@@ -35,11 +35,11 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     color: white;
 }
 .H1 {
-    font-size: 48px;
+    font-size: 35px;
     letter-spacing: 0.11em;
 }
 .H2 {
-    font-size: 30px;
+    font-size: 22px;
     letter-spacing: 0.11em;
 }
 .H3 {
@@ -79,6 +79,16 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
 .feature-row {
     margin-bottom: 50px;
 }
+.under_space {
+    min-height: 100%;
+    height: auto;
+    margin-bottom: -160px;
+    padding-bottom: 160px;
+}
+.lrpad {
+    padding-left: 40px;
+    padding-right: 40px;
+}
 .gap-10 {
     padding-top: 10px;
 }
@@ -93,6 +103,21 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
 }
 .gap-50 {
     padding-top: 50px;
+}
+.gap-60 {
+    padding-top: 60px;
+}
+.gap-70 {
+    padding-top: 70px;
+}
+.gap-80 {
+    padding-top: 80px;
+}
+.gap-90 {
+    padding-top: 90px;
+}
+.gap-100 {
+    padding-top: 100px;
 }
 .poster_area {
     position: relative;
@@ -125,7 +150,7 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
 }
 .poster1 {
     background-image: url('/public/img/5907015_l.jpg');
-    background-position: bottom right;
+    background-position: top right;
     background-attachment: scroll;
     background-repeat: no-repeat;
     background-size: cover;
@@ -236,7 +261,7 @@ other selectors that are more specific or come later and might alter display.
     top: 20px;
     bottom: 20px;
     left: 20px;
-    right: 20px;    
+    right: 20px;
 }
 /**/
 

@@ -17,46 +17,51 @@
 
 	<div class="show_on_load hide_on_unload" style="height: 100%">
 
-		<div class="bgc col-sm-6 col-md-4" style="min-height: 100%; padding: 10px 20px">
+		<div class="col-sm-6 col-md-4" style="height: 100%; padding: 0">
 
-			<div class="pad-10">
-				<?# def.include( 'common_menu.html') ?>
+			<div class="under_space bgc lrpad">
+
+				<div class="gap-10">
+					<?# def.include( 'common_menu.html') ?>
+				</div>
+
+				<div class="gap-60"></div>
+				<p class="H3">
+					Login to your account:
+				</p>
+
+				<div class="gap-20"></div>
+				<form name="form" role="form" novalidate class="css-form text-center" autocomplete="on">
+					<div class="form-group Xinput-group-lg">
+						<input id="login_email" required ng-model="login_email" auto-fill-sync type="email" class="form-control" placeholder="Email Address" autocomplete="on" name="email" />
+					</div>
+					<div class="form-group Xinput-group-lg">
+						<input id="login_password" required ng-model="login_password" auto-fill-sync type="password" class="form-control" placeholder="Password" autocomplete="on" name="password" />
+					</div>
+					<div class="form-group Xinput-group-lg">
+						<button class="btn btn-primary form-control" ng-click="do_login()">
+							Login
+						</button>
+					</div>
+					<div id="open_login_button" class="form-group Xinput-group-lg">
+						<button class="btn btn-link form-control" ng-click="on_signup()">
+							I don't have an account
+						</button>
+					</div>
+				</form>
 			</div>
 
-			<div class="gap-30"></div>
-			<h1 class="H1" style="max-width: 400px; text-overflow: clip">
-				<b class="menu_color">Bully</b><b>Aware</b>
-			</h1>
-			<p class="H2" style="max-width: 400px; text-overflow: clip">
-				<b>Keeping kids safe</b>
-			</p>
-			<div class="gap-40"></div>
-
-			<p class="H3">
-				Login to your account:
-			</p>
-
-			<div class="gap-10"></div>
-			<form name="form" role="form" novalidate class="css-form text-center" autocomplete="on">
-				<div class="form-group input-group-lg">
-					<input id="login_email" required ng-model="login_email" auto-fill-sync type="email" class="form-control" placeholder="Email Address" autocomplete="on" name="email" />
-				</div>
-				<div class="form-group input-group-lg">
-					<input id="login_password" required ng-model="login_password" auto-fill-sync type="password" class="form-control" placeholder="Password" autocomplete="on" name="password" />
-				</div>
-				<div class="form-group input-group-lg">
-					<button class="btn btn-primary form-control" ng-click="do_login()">
-						Login
-					</button>
-				</div>
-				<div id="open_login_button" class="form-group input-group-lg">
-					<button class="btn btn-link form-control" ng-click="on_signup()">
-						I don't have an account
-					</button>
-				</div>
-			</form>
-
-			<div class="gap-10"></div>
+			<div class="bgc lrpad">
+				<div class="gap-10"></div>
+				<hr/>
+				<h1 class="H1 text-center">
+					<b class="menu_color">Bully</b><b>Aware</b>
+				</h1>
+				<p class="H2 text-center">
+					<b>Keeping kids safe</b>
+				</p>
+				<hr/>
+			</div>
 		</div>
 	</div>
 

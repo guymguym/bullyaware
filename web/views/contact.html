@@ -17,36 +17,36 @@
 
 	<div class="show_on_load hide_on_unload" style="height: 100%">
 
-		<div class="bgco col-sm-6 col-md-4" style="min-height: 100%; padding: 10px 20px">
+		<div class="col-sm-6 col-md-4" style="height: 100%; padding: 0">
 
-			<div class="pad-10">
-				<?# def.include( 'common_menu.html') ?>
-			</div>
+			<div class="under_space bgco lrpad">
+				<div class="gap-10">
+					<?# def.include( 'common_menu.html') ?>
+				</div>
 
-			<div class="gap-30"></div>
-			<h1 class="H1" style="max-width: 400px; text-overflow: clip">
-				<b class="menu_color">Bully</b><b>Aware</b>
-			</h1>
-			<p class="H2" style="max-width: 400px; text-overflow: clip">
-				<b>Keeping kids safe</b>
-			</p>
-			<div class="gap-40"></div>
+				<div class="gap-60"></div>
+				<p class="H3" style="max-width: 330px; text-overflow: clip">
+					We are very interested in your feedback.
+				</p>
 
-			<p class="H3" style="max-width: 330px; text-overflow: clip">
-				We are very interested in your feedback.
-			</p>
-			<div class="gap-10"></div>
-			<p class="H3" style="max-width: 340px; text-overflow: clip">
-				You are welcome to send us emails to
-				<a href="#" ng-click="on_send_mail()">
-					info@bullyaware.co
-				</a>
-			</p>
-			<div class="gap-10"></div>
-			<p class="H3">
-				<i>- The Bullyaware team</i>
-			</p>
-			<!-- 
+				<div class="gap-20"></div>
+				<p class="H3" style="max-width: 340px; text-overflow: clip">
+					You are welcome to send us emails to
+					<a href="#" ng-click="on_send_mail()">
+						info@bullyaware.co
+					</a>
+				</p>
+
+				<div class="gap-40"></div>
+				<div>
+					<button class="btn btn-primary btn-lg" style="font-size: 30px; line-height: 1em; letter-spacing: 0.11em; height: 60px" ng-click="on_getstarted()">
+						<b>START FREE</b>
+						&nbsp;
+						<i class="fa fa-angle-right"></i>
+					</button>
+				</div>
+
+				<!-- 
 		<br/>
 		<h3>Contact Information</h3>
 		<div style="text-align: justify">
@@ -60,12 +60,19 @@
 			</p>
 		</div>
 		-->
-			<div class="gap-20"></div>
-			<button class="btn btn-default btn-lg" ng-click="on_main()">
-				<i class="fa fa-angle-left"></i>
-				&nbsp; Back
-			</button>
-			<div class="gap-20"></div>
+			</div>
+
+			<div class="bgco lrpad">
+				<div class="gap-10"></div>
+				<hr/>
+				<h1 class="H1 text-center">
+					<b class="menu_color">Bully</b><b>Aware</b>
+				</h1>
+				<p class="H2 text-center">
+					<b>Keeping kids safe</b>
+				</p>
+				<hr/>
+			</div>
 		</div>
 	</div>
 

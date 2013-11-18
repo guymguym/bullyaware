@@ -591,6 +591,10 @@
 							$scope.user_info.person_map[$scope.person_id] : null;
 					}
 				]
+			}).when('/preferences', {
+				templateUrl: '/prefs.html'
+			}).when('/', {
+				templateUrl: '/status.html'
 			});
 		}
 	]);

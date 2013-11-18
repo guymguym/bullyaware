@@ -7,7 +7,6 @@
 		<style type="text/css">
 		html, body {
 			height: 100%;
-			min-height: 100%;
 		}
 		</style>
 </head>
@@ -16,64 +15,69 @@
 
 	<!-- <div class="show_on_load hide_on_unload poster1 poster-fixed"></div> -->
 
-	<div class="show_on_load hide_on_unload" style="height: 100%; min-height: 100%;">
+	<div class="show_on_load hide_on_unload" style="height: 100%">
 
-		<div class="bgc col-sm-6 col-md-4" style="min-height: 100%; padding: 10px 20px">
+		<div class="col-sm-6 col-md-4" style="height: 100%; padding: 0">
 
+			<div class="under_space bgc lrpad">
 
-			<div class="pad-10">
-				<?# def.include( 'common_menu.html') ?>
-			</div>
+				<div class="gap-10">
+					<?# def.include( 'common_menu.html') ?>
+				</div>
 
-			<div class="gap-30"></div>
-			<h1 class="H1" style="max-width: 400px; text-overflow: clip">
-				<b class="menu_color">Bully</b><b>Aware</b>
-			</h1>
-			<p class="H2" style="max-width: 400px; text-overflow: clip">
-				<b>Keeping kids safe</b>
-			</p>
-			<div class="gap-40"></div>
-
-			<p class="H3">
-				Sign up for free:
-			</p>
-
-			<div class="gap-10"></div>
-			<form name="form" role="form" novalidate class="css-form" autocomplete="on">
-				<div class="form-group input-group-lg">
-					<input id="signup_first_name" required ng-model="signup_first_name" auto-fill-sync type="text" class="form-control" placeholder="First Name" autocomplete="on" name="firstname" />
-				</div>
-				<div class="form-group input-group-lg">
-					<input id="signup_last_name" required ng-model="signup_last_name" auto-fill-sync type="text" class="form-control" placeholder="Last Name" autocomplete="on" name="lastname" />
-				</div>
-				<div class="form-group input-group-lg">
-					<input id="signup_email" required ng-model="signup_email" auto-fill-sync type="email" class="form-control" placeholder="Email Address" autocomplete="on" name="email" />
-				</div>
-				<div class="form-group input-group-lg">
-					<input id="signup_password" required ng-model="signup_password" auto-fill-sync type="password" class="form-control" placeholder="Password" autocomplete="on" name="password" />
-				</div>
-				<div class="form-group input-group-lg">
-					<input id="signup_password2" required ng-model="signup_password2" auto-fill-sync type="password" class="form-control" placeholder="Confirm Password" autocomplete="on" name="password2" />
-				</div>
-				<div class="form-group input-group-lg">
-					<button class="btn btn-primary form-control" ng-click="do_signup()">
-						Sign up
-					</button>
-				</div>
-				<p>
-					<small>
-						By clicking "Sign up" you confirm that you accept the
-						<br/>
-						<a href="#" ng-click="on_terms_of_use()">Terms of Service</a> and
-						<a href="#" ng-click="on_privacy_policy()">Privacy Policy</a>.
-					</small>
+				<div class="gap-60"></div>
+				<p class="H3">
+					Sign up for free:
 				</p>
-			</form>
+
+				<div class="gap-20"></div>
+				<form name="form" role="form" novalidate class="css-form" autocomplete="on">
+					<div class="form-group Xinput-group-lg">
+						<input id="signup_first_name" required ng-model="signup_first_name" auto-fill-sync type="text" class="form-control" placeholder="First Name" autocomplete="on" name="firstname" />
+					</div>
+					<div class="form-group Xinput-group-lg">
+						<input id="signup_last_name" required ng-model="signup_last_name" auto-fill-sync type="text" class="form-control" placeholder="Last Name" autocomplete="on" name="lastname" />
+					</div>
+					<div class="form-group Xinput-group-lg">
+						<input id="signup_email" required ng-model="signup_email" auto-fill-sync type="email" class="form-control" placeholder="Email Address" autocomplete="on" name="email" />
+					</div>
+					<div class="form-group Xinput-group-lg">
+						<input id="signup_password" required ng-model="signup_password" auto-fill-sync type="password" class="form-control" placeholder="Password" autocomplete="on" name="password" />
+					</div>
+					<div class="form-group Xinput-group-lg">
+						<input id="signup_password2" required ng-model="signup_password2" auto-fill-sync type="password" class="form-control" placeholder="Confirm Password" autocomplete="on" name="password2" />
+					</div>
+					<div class="form-group Xinput-group-lg">
+						<button class="btn btn-primary form-control" ng-click="do_signup()">
+							Sign up
+						</button>
+					</div>
+					<p>
+						<small>
+							By clicking "Sign up" you confirm that you accept the
+							<br/>
+							<a href="#" ng-click="on_terms_of_use()">Terms of Service</a> and
+							<a href="#" ng-click="on_privacy_policy()">Privacy Policy</a>.
+						</small>
+					</p>
+				</form>
+			</div>
+			<div class="bgc lrpad">
+				<div class="gap-10"></div>
+				<hr/>
+				<h1 class="H1 text-center">
+					<b class="menu_color">Bully</b><b>Aware</b>
+				</h1>
+				<p class="H2 text-center">
+					<b>Keeping kids safe</b>
+				</p>
+				<hr/>
+			</div>
 		</div>
 
 		<div class="col-sm-6 col-md-8" style="min-height: 100%; padding: 0; background-color: white">
 
-			<div style="display: block; padding: 20px; background-color: #cccccc; color: #333333">
+			<div style="display: none; padding: 20px; background-color: #cccccc; color: #333333">
 				<h3>About Cyber Bullying</h3>
 				<div class="gap-10"></div>
 				<p class="lead">
@@ -88,7 +92,7 @@
 				</p>
 			</div>
 
-			<div style="padding: 20px">
+			<div style="padding: 20px 40px">
 				<div class="row" style="font-size: 40px">
 					<div class="col-xs-3 text-center">
 						<div class="fa-stack">

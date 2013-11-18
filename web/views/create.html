@@ -7,7 +7,6 @@
 		<style type="text/css">
 		html, body {
 			height: 100%;
-			min-height: 100%;
 		}
 		</style>
 </head>
@@ -16,63 +15,69 @@
 
 	<!-- <div class="show_on_load hide_on_unload poster1 poster-fixed"></div> -->
 
-	<div class="show_on_load hide_on_unload" style="height: 100%; min-height: 100%;">
+	<div class="show_on_load hide_on_unload" style="height: 100%">
 
-		<div class="bgc col-sm-6 col-md-4" style="min-height: 100%; padding: 10px 20px">
+		<div class="col-sm-6 col-md-4" style="height: 100%; padding: 0">
 
+			<div class="under_space bgc lrpad">
 
-			<div class="pad-10">
-				<?# def.include( 'common_menu.html') ?>
+				<div class="gap-10">
+					<?# def.include( 'common_menu.html') ?>
+				</div>
+
+				<div class="gap-60"></div>
+				<form name="form" role="form" novalidate class="css-form">
+
+					<p class="H3">
+						Enter child name
+					</p>
+					<div class="form-group Xinput-group-lg">
+						<input class="form-control" type="text" placeholder="Child Name" required ng-model="create_person_name" id="create_person_name" />
+					</div>
+
+					<div class="gap-20"></div>
+
+					<p class="H3">
+						<i class="fa fa-twitter fa-lg" style="color: #0cf"></i>
+						Twitter account chooser
+					</p>
+					<div class="form-group Xinput-group-lg">
+						<input nb-twitter-chooser="set_twitter_identity($item)" class="form-control" type="text" placeholder="Twitter Chooser" required id="create_twitter_identity" />
+						<span class="twitter-chooser-spin" style="opacity: 0">
+							<i class="fa fa-spinner fa-spin"></i>
+						</span>
+					</div>
+
+					<p class="H3">
+						Which networks interest you
+					</p>
+					<div class="form-group">
+						<span ng-repeat="type in account_types" title="{{type.name}}" ng-click="on_click_account_type(type, $event)" style="cursor: pointer">
+							<i style="color: {{(type.checked || type.hover) && type.color || '#d0d0d0'}}" class="fa {{type.icon}} fa-2x fa-fw" ng-mouseenter="type.hover = true" ng-mouseleave="type.hover = false"></i>
+						</span>
+					</div>
+
+					<div class="gap-20"></div>
+
+					<div class="form-group Xinput-group-lg">
+						<button class="btn btn-primary form-control" ng-click="finish_create()" data-loading-text="Loading...">
+							Finish
+						</button>
+					</div>
+				</form>
 			</div>
 
-			<div class="gap-30"></div>
-			<h1 class="H1" style="max-width: 400px; text-overflow: clip">
-				<b class="menu_color">Bully</b><b>Aware</b>
-			</h1>
-			<p class="H2" style="max-width: 400px; text-overflow: clip">
-				<b>Keeping kids safe</b>
-			</p>
-			<div class="gap-40"></div>
-
-			<form name="form" role="form" novalidate class="css-form">
-
-				<p class="H3">
-					Enter child name
+			<div class="bgc lrpad">
+				<div class="gap-10"></div>
+				<hr/>
+				<h1 class="H1 text-center">
+					<b class="menu_color">Bully</b><b>Aware</b>
+				</h1>
+				<p class="H2 text-center">
+					<b>Keeping kids safe</b>
 				</p>
-				<div class="form-group input-group-lg">
-					<input class="form-control" type="text" placeholder="Child Name" required ng-model="create_person_name" id="create_person_name" />
-				</div>
-
-				<div class="gap-20"></div>
-
-				<p class="H3">
-					<i class="fa fa-twitter fa-lg" style="color: #0cf"></i>
-					Twitter account chooser
-				</p>
-				<div class="form-group input-group-lg">
-					<input nb-twitter-chooser="set_twitter_identity($item)" class="form-control" type="text" placeholder="Twitter Chooser" required id="create_twitter_identity"/>
-					<span class="twitter-chooser-spin" style="opacity: 0">
-						<i class="fa fa-spinner fa-spin"></i>
-					</span>
-				</div>
-
-				<p class="H3">
-					Which other networks interest you
-				</p>
-				<div class="form-group">
-					<span ng-repeat="type in account_types" title="{{type.name}}" ng-click="on_click_account_type(type, $event)" style="cursor: pointer">
-						<i style="color: {{(type.checked || type.hover) && type.color || '#d0d0d0'}}" class="fa {{type.icon}} fa-2x fa-fw" ng-mouseenter="type.hover = true" ng-mouseleave="type.hover = false"></i>
-					</span>
-				</div>
-
-				<div class="gap-20"></div>
-
-				<div class="form-group input-group-lg">
-					<button class="btn btn-primary form-control" ng-click="finish_create()" data-loading-text="Loading...">
-						Finish
-					</button>
-				</div>
-			</form>
+				<hr/>
+			</div>
 		</div>
 
 		<div class="col-sm-6 col-md-8" style="min-height: 100%; padding: 0; background-color: white">

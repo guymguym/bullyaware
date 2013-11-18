@@ -21,57 +21,51 @@
 
 	<div ng-controller="SettingsCtrl" class="show_on_load hide_on_unload" style="height: 100%">
 
-		<div class="bgc col-sm-6 col-md-4" style="min-height: 100%; padding: 10px 20px">
+		<div class="col-sm-6 col-md-4" style="height: 100%; padding: 0">
 
-			<div class="pad-10">
-				<?# def.include( 'common_menu.html') ?>
+			<div class="under_space bgc lrpad">
+
+				<div class="gap-10">
+					<?# def.include( 'common_menu.html') ?>
+				</div>
+
+				<div class="gap-60"></div>
+				<ul class="list-group" style="color: black">
+					<li class="list-group-item">
+						<a href="#"><b>Status</b></a>
+					</li>
+					<li ng-if="false" class="list-group-item" href="#">
+						<a href="#/preferences"><b>Preferences</b></a>
+					</li>
+					<li class="list-group-item">
+						<b>Children</b>
+						<div class="gap-10"></div>
+						<ul class="nav nav-pills nav-stacked">
+							<li ng-repeat="person in user_info.persons | orderBy:return_id:false" class="{{active_link_hash('#/person/'+return_id(person))}}">
+								<a href="#/person/{{return_id(person)}}">
+									<i class="fa fa-user fa-fw"></i>
+									{{person.name}}
+								</a>
+							</li>
+							<li>
+								<a href="#" ng-click="on_create()">Create...</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</div>
 
-			<div class="gap-30"></div>
-			<h1 class="H1" style="max-width: 400px; text-overflow: clip">
-				<b class="menu_color">Bully</b><b>Aware</b>
-			</h1>
-			<p class="H2" style="max-width: 400px; text-overflow: clip">
-				<b>Keeping kids safe</b>
-			</p>
-			<div class="gap-40"></div>
-
-			<ul class="list-group" style="color: black">
-				<li class="list-group-item">
-					<b>Children</b>
-					<div class="badge pull-right">
-						{{user_info.persons.length || 0}}
-					</div>
-					<div class="gap-10"></div>
-					<ul class="nav nav-pills nav-stacked">
-						<li ng-repeat="person in user_info.persons | orderBy:return_id:false" class="{{active_link_hash('#/person/'+return_id(person))}}">
-							<a href="#/person/{{return_id(person)}}">
-								<i class="fa fa-user fa-fw"></i>
-								{{person.name}}
-							</a>
-						</li>
-						<li>
-							<a href="#" ng-click="on_create()">Create...</a>
-						</li>
-					</ul>
-				</li>
-				<li ng-if="false" class="list-group-item">
-					<b>Reports</b>
-					<div class="badge pull-right">
-						{{user_info.reports.length || 0}}
-					</div>
-					<div class="gap-10"></div>
-					<ul class="nav nav-pills nav-stacked">
-						<li ng-repeat="report in user_info.reports | orderBy:return_id:false">
-							<a href="#">{{report.name}}</a>
-						</li>
-					</ul>
-				</li>
-				<li ng-if="false" class="list-group-item" href="#">
-					<b>Preferences</b>
-				</li>
-			</ul>
-
+			<div class="bgc lrpad">
+				<div class="gap-10"></div>
+				<hr/>
+				<h1 class="H1 text-center">
+					<b class="menu_color">Bully</b><b>Aware</b>
+				</h1>
+				<p class="H2 text-center">
+					<b>Keeping kids safe</b>
+				</p>
+				<hr/>
+			</div>
 		</div>
 
 		<div class="col-sm-6 col-md-8" style="min-height: 100%; padding: 0; background-color: white">
@@ -84,9 +78,24 @@
 
 
 	<div>
+		<?='<script type="text/ng-template" id="/status.html">' ?>
+			<div>
+				<h1>STATUS</h1>
+			</div>
+			<?='</script>' ?>
+	</div>
+
+	<div>
+		<?='<script type="text/ng-template" id="/prefs.html">' ?>
+			<div>
+				<h1>PREFS</h1>
+			</div>
+			<?='</script>' ?>
+	</div>
+
+	<div>
 		<?='<script type="text/ng-template" id="/person.html">' ?>
 			<div ng-if="person">
-
 				<h2>
 					<i class="fa fa-user fa-fw"></i>
 					{{person.name}}
