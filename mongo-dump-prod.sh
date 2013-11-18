@@ -1,0 +1,1 @@
+mongodump --host hanso.mongohq.com --port 10016 --db app18786653 --username heroku  --password pQPb0rAeh99L7yaeo1OXP-OH-suNiRkDd7onWnilTIRVe8O8K2FCGQE9fwfwne4nKDtX2SVnQoTRFwL78FwYkw --out ./mongohq-dump
