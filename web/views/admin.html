@@ -14,38 +14,31 @@
 		</style>
 </head>
 
-<body ng-controller="AdminCtrl" ng-cloak>
-
-	<div>
-		<?# def.include( 'common_menubar.html') ?>
-	</div>
+<body ng-controller="AdminCtrl" ng-cloak class="bgc">
 
 	<div class="container" style="margin-top: 20px">
-
-		<a data-toggle="collapse" data-target="#combinations" href="#">
-			<h3>Events Combinations Stats</h3>
-		</a>
-		<div id="combinations" class="collapse">
-			<div ng-repeat="(desc,count) in event_stats">
-				{{ count }} sessions ==> {{ desc }}
-			</div>
-		</div>
 
 		<a data-toggle="collapse" data-target="#users_list" href="#">
 			<h3>Users - total {{data.users.length}}</h3>
 		</a>
 		<div id="users_list" class="collapse">
-			<div ng-repeat="user in data.users | orderBy:'_id':true">
-				USER {{stringify(user)}}
+			<div ng-repeat="user in data.users | orderBy:return_id:true">
+				USER - {{user.first_name}} {{user.last_name}} - {{user.email}}
+				<div ng-repeat="person in persons[return_id(user)]" style="padding-left: 30px">
+					{{person.name}}
+					<div ng-repeat="identity in person.identities" style="padding-left: 30px">
+						@{{identities[identity].profile.screen_name}}
+					</div>
+				</div>
 			</div>
 		</div>
 
-		<a data-toggle="collapse" data-target="#events_list" href="#">
-			<h3>Events - total {{data.event_logs.length}}</h3>
+		<a data-toggle="collapse" data-target="#identity_list" href="#">
+			<h3>Identities - total {{data.identities.length}}</h3>
 		</a>
-		<div id="events_list" class="collapse">
-			<div ng-repeat="event in data.event_logs | orderBy:'_id':true">
-				Session {{event.session}} - {{event.event}}: {{event.data}}
+		<div id="identity_list" class="collapse">
+			<div ng-repeat="identity in data.identities | orderBy:return_id:true">
+				@{{identity.profile.screen_name}}
 			</div>
 		</div>
 
@@ -53,22 +46,46 @@
 			<h3>Sessions - total {{data.sessions.length}}</h3>
 		</a>
 		<div id="sessions_list" class="collapse">
-			<div ng-repeat="session in data.sessions | orderBy:'_id':true" ng-show="!!session_events[session._id].length">
-				<div class="hdr">
+			<div ng-repeat="session in data.sessions | orderBy:return_id:true" ng-show="!!session_events[return_id(session)].length" class="panel panel-default">
+				<div class="panel-heading">
 					<span>Session #{{ data.sessions.length-$index }}</span>
 					&nbsp;
 					<span>{{ users[session.user].email && ('EMAIL ' + users[session.user].email) || ''}}</span>
 					&nbsp;
-					<span>({{ session._id }},{{ session.user }})</span>
+					<span>({{ return_id(session) }},{{ session.user }})</span>
 				</div>
-				<div>
-					<div ng-repeat="event in session_events[session._id] | orderBy:'_id':true">
-						<span>#{{data.sessions.length - $parent.$index}}.{{session_events[session._id].length - $index}}</span>
+				<div class="panel-body" style="color: black">
+					<div ng-repeat="event in session_events[return_id(session)] | orderBy:return_id:true">
+						<span>#{{data.sessions.length - $parent.$index}}.{{session_events[return_id(session)].length - $index}}</span>
 						&nbsp; {{event.event}}: {{event.data}}
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<!--
+		<a data-toggle="collapse" data-target="#events_list" href="#">
+			<h3>Events - total {{data.event_logs.length}}</h3>
+		</a>
+		<div id="events_list" class="collapse">
+			<div ng-repeat="event in data.event_logs | orderBy:return_id:true">
+				Session {{event.session}} - {{event.event}}: {{event.data}}
+			</div>
+		</div>
+-->
+
+		<a data-toggle="collapse" data-target="#combinations" href="#">
+			<h3>Events Combinations Stats</h3>
+		</a>
+		<div id="combinations" class="collapse">
+			<div ng-repeat="(desc,count) in event_stats | orderBy:count:true">
+				{{ count }} sessions ==>
+				<div style="padding-left: 30px">
+					{{ desc }}
+				</div>
+			</div>
+		</div>
+
 	</div>
 
 	<div>
@@ -86,9 +103,16 @@
 			$scope.data = JSON.parse($('#server_data').html());
 			$scope.data.sessions.reverse();
 
-			$scope.users = _.indexBy($scope.data.users, '_id');
+			// for (var key in $scope.data) {
+			// console.log('KEY', key, $scope.data[key]);
+			// }
+
 			$scope.sessions = _.indexBy($scope.data.sessions, '_id');
 			$scope.session_events = _.groupBy($scope.data.event_logs, 'session');
+
+			$scope.users = _.indexBy($scope.data.users, '_id');
+			$scope.persons = _.groupBy($scope.data.persons, 'user');
+			$scope.identities = _.indexBy($scope.data.identities, '_id');
 
 			$scope.event_stats = {};
 			_.each($scope.session_events, function(events, session_id) {
@@ -107,6 +131,10 @@
 					$scope.event_stats[desc] = 1;
 				}
 			});
+
+			$scope.return_id = function(x) {
+				return x._id;
+			}
 		}
 	})();
 	</script>

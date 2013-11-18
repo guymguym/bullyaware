@@ -460,6 +460,12 @@ exports.fetch_all = function(callback) {
 		},
 		users: function(next) {
 			return User.find().lean().exec(next);
+		},
+		persons: function(next) {
+			return Person.find().lean().exec(next);
+		},
+		identities: function(next) {
+			return Identity.find().lean().exec(next);
 		}
 	}, callback);
 };
