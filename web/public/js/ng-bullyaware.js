@@ -703,39 +703,9 @@
 			return '#';
 		};
 
-		$scope.show_add_twit = function(person) {
+		$scope.clear_add_twit = function(person) {
 			var elem = $('#new_twit_id_' + person._id);
-			person.ng_show_add_twit = true;
 			elem.val('');
-			$.when(elem.animate({
-				opacity: 1,
-				width: '200px'
-			}, 200)).then(function() {
-				elem.focus();
-			});
-		};
-
-		$scope.hide_add_twit = function(person, force) {
-			var elem = $('#new_twit_id_' + person._id);
-			if (force !== 'force' && elem.val()) {
-				elem.autocomplete('search');
-				elem.effect(HIGHLIGHT_EFFECT).focus();
-				return;
-			}
-			person.ng_show_add_twit = false;
-			elem.val('');
-			elem.animate({
-				opacity: 0,
-				width: 0
-			}, 100);
-		};
-
-		$scope.toggle_add_twit = function(person) {
-			if (!person.ng_show_add_twit) {
-				$scope.show_add_twit(person);
-			} else {
-				$scope.hide_add_twit(person);
-			}
 		};
 
 		$scope.click_add_twit = function(person) {
@@ -756,7 +726,7 @@
 				}
 			}).then(function(res) {
 				console.log('ADD IDENTITY', res);
-				$scope.hide_add_twit(person, 'force');
+				$scope.clear_add_twit(person);
 				return reload_user_info();
 			}, function(err) {
 				console.error('FAILED ADD IDENTITY', err);
