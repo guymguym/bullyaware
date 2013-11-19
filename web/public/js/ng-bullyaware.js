@@ -254,7 +254,7 @@
 
 		function make_redirect(path) {
 			return function() {
-				var duration = 200;
+				var duration = 100;
 				$('.hide_on_unload').animate({
 					opacity: 0
 				}, duration);
@@ -569,7 +569,7 @@
 			// console.log('USER', $scope.user, 'DATA', $scope.server_data);
 
 			// start animations on page load
-			$('.show_on_load').fadeIn(1000);
+			$('.show_on_load').fadeIn(400);
 
 			event_log('page', $location.absUrl());
 
