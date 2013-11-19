@@ -253,7 +253,7 @@ app.get('/create', users.mk_session, function(req, res) {
 	}
 	return res.render('create.html', page_context(req));
 });
-app.get('/dashboard', users.mk_session, function(req, res) {
+app.get('/home', users.mk_session, function(req, res) {
 	if (!req.session.user) {
 		return res.redirect('/signup');
 	}

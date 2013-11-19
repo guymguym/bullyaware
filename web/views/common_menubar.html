@@ -5,7 +5,7 @@
 				Menu
 				<i class="fa fa-caret-down fa-inverse"></i>
 			</button>
-			<a class="navbar-brand" href="#" ng-click="on_main()" style="color: white">
+			<a class="navbar-brand" href="#" ng-click="goto_main()" style="color: white">
 				<b class="menu_color">Bully</b><b>Aware</b>
 			</a>
 		</div>
@@ -25,13 +25,13 @@
 						<a href="#" ng-click="on_demo()">Demo</a>
 					</li>
 					<li ng-class="active_link('/login')" ng-show="!user">
-						<a href="#" ng-click="on_login()">Login</a>
+						<a href="#" ng-click="open_login()">Login</a>
 					</li>
-					<li ng-class="active_link('/dashboard')" ng-show="!!user">
-						<a href="#" ng-click="on_dashboard()">{{user.first_name}}'s Dashboard</a>
+					<li ng-class="active_link('/home')" ng-show="!!user">
+						<a href="#" ng-click="goto_user_home()">Home</a>
 					</li>
 					<li ng-show="!!user">
-						<a href="#" ng-click="on_logout()">Logout</a>
+						<a href="#" ng-click="goto_logout()">Logout</a>
 					</li>
 				</ul>
 				<button ng-show="!user" type="button" class="btn btn-primary navbar-btn" ng-click="on_getstarted()">

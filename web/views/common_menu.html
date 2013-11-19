@@ -1,29 +1,20 @@
-<div class="text-left" style="font-size: 14px; color: white">
-	<span ng-click="on_main()" Xclass="fa-stack" style="cursor: pointer; font-size: 14px" title="Home">
-		<b class="menu_color">Bully</b><b>Aware</b>
+<div class="text-center wide_text menu_color" style="font-size: 14px">
+	<span ng-click="goto_main()" style="cursor: pointer; font-size: 15px">
+		<b class="menu_color">Bully</b><b style="color: white">Aware</b>
 	</span>
-	<span ng-click="on_whatis()" class="fa-stack" style="cursor: pointer; margin-left: 3px" title="Info">
-		<i class="fa fa-circle fa-stack-2x menu_color"></i>
-		<i class="fa fa-info fa-stack-1x"></i>
+	<span ng-click="on_whatis()" Xclass="fa-stack" style="cursor: pointer; margin-left: 20px">
+		<!-- <i class="fa fa-circle fa-stack-2x menu_color"></i> -->
+		<!-- <i class="fa fa-info fa-stack-1x"></i> -->
+		INFO
 	</span>
-	<span ng-click="on_contact_us()" class="fa-stack" style="cursor: pointer; margin-left: 3px" title="Contact us">
-		<i class="fa fa-circle fa-stack-2x menu_color"></i>
-		<i class="fa fa-envelope fa-stack-1x"></i>
+	<span ng-show="!user" ng-click="open_login()" Xclass="fa-stack" style="cursor: pointer; margin-left: 20px">
+		<!-- <i class="fa fa-circle fa-stack-2x menu_color"></i> -->
+		<!-- <i class="fa fa-sign-in fa-stack-1x"></i> -->
+		LOGIN
 	</span>
-	<span ng-click="on_follow_facebook()" class="fa-stack" style="cursor: pointer; margin-left: 3px" title="Follow on facebook">
-		<i class="fa fa-circle fa-stack-2x menu_color"></i>
-		<i class="fa fa-facebook fa-stack-1x"></i>
-	</span>
-	<span ng-click="on_follow_twitter()" class="fa-stack" style="cursor: pointer; margin-left: 3px" title="Follow on twitter">
-		<i class="fa fa-circle fa-stack-2x menu_color"></i>
-		<i class="fa fa-twitter fa-stack-1x"></i>
-	</span>
-	<span ng-show="!!user" ng-click="on_logout()" class="fa-stack" style="cursor: pointer; margin-left: 3px" title="Logout {{user.email}}">
-		<i class="fa fa-circle fa-stack-2x menu_color"></i>
-		<i class="fa fa-sign-out fa-stack-1x"></i>
-	</span>
-	<span ng-click="on_login()" class="fa-stack" style="cursor: pointer; margin-left: 3px" title="{{user && (user.first_name + '\'s Dashboard') || 'Login'}}">
-		<i class="fa fa-circle fa-stack-2x menu_color"></i>
-		<i class="fa fa-{{user && 'user' || 'sign-in'}} fa-stack-1x"></i>
+	<span ng-show="!!user" ng-click="goto_user_home()" Xclass="fa-stack" style="cursor: pointer; margin-left: 20px">
+		<!-- <i class="fa fa-circle fa-stack-2x menu_color"></i> -->
+		<!-- <i class="fa fa-user fa-stack-1x"></i> -->
+		HOME
 	</span>
 </div>

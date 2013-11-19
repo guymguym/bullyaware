@@ -47,7 +47,7 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     letter-spacing: 0.11em;
 }
 .wide_text {
-    letter-spacing: 0.11em;
+    letter-spacing: 0.13em;
 }
 .bgblk {
     background-color: black;
@@ -85,8 +85,8 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
 .under_space {
     min-height: 100%;
     height: auto;
-    margin-bottom: -160px;
-    padding-bottom: 160px;
+    margin-bottom: -200px;
+    padding-bottom: 200px;
 }
 .lrpad {
     padding-left: 40px;

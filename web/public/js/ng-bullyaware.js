@@ -264,30 +264,30 @@
 			};
 		}
 
-		$scope.on_main = make_redirect('/');
-		$scope.on_signup = make_redirect('/signup');
-		$scope.on_create = make_redirect('/create');
-		$scope.on_dashboard = make_redirect('/dashboard');
-		$scope.on_login_redirect = make_redirect('/login');
-		$scope.on_logout = make_redirect('/api/user/logout');
+		$scope.goto_main = make_redirect('/');
+		$scope.goto_signup = make_redirect('/signup');
+		$scope.goto_create = make_redirect('/create');
+		$scope.goto_user_home = make_redirect('/home');
+		$scope.goto_login = make_redirect('/login');
+		$scope.goto_logout = make_redirect('/api/user/logout');
 
 		$scope.on_getstarted = function() {
 			if ($scope.user) {
-				$scope.on_dashboard();
+				$scope.goto_user_home();
 			} else {
-				$scope.on_signup();
+				$scope.goto_signup();
 			}
 		};
-		$scope.on_login = function() {
+		$scope.open_login = function() {
 			if ($scope.user) {
-				$scope.on_dashboard();
+				$scope.goto_user_home();
 				return;
 			}
 			var m = $('#login_modal');
 			if (m.length && typeof m.modal === 'function') {
 				m.modal();
 			} else {
-				$scope.on_login_redirect();
+				$scope.goto_login();
 			}
 		};
 
@@ -365,7 +365,7 @@
 				}
 			}).then(function(res) {
 				console.log('USER LOGIN DONE', res);
-				$scope.on_dashboard();
+				$scope.goto_user_home();
 			}, function(err) {
 				console.error('USER LOGIN FAILED', err);
 				alert('Login failed. Please check your password and try again later');
@@ -409,7 +409,7 @@
 			}).then(function(res) {
 				console.log('USER CREATED', res);
 				loading.remove();
-				$scope.on_create();
+				$scope.goto_create();
 			}, function(err) {
 				console.error('USER CREATE FAILED', err);
 				loading.remove();
@@ -476,7 +476,7 @@
 			}).then(function(res) {
 				loading.remove();
 				if (res) {
-					return $scope.on_dashboard();
+					return $scope.goto_user_home();
 				}
 			}, function(err) {
 				loading.remove();
