@@ -21,7 +21,7 @@
 
 	<div ng-controller="SettingsCtrl" class="show_on_load hide_on_unload" style="height: 100%">
 
-		<div class="col-sm-6 col-md-4" style="height: 100%; padding: 0">
+		<div class="col-sm-5 col-md-4" style="height: 100%; padding: 0">
 
 			<div class="under_space bgc lrpad">
 
@@ -48,7 +48,7 @@
 								</a>
 							</li>
 							<li>
-								<a href="#" ng-click="on_create()">Create...</a>
+								<a href="#" ng-click="on_create()">Add...</a>
 							</li>
 						</ul>
 					</li>
@@ -68,7 +68,7 @@
 			</div>
 		</div>
 
-		<div class="col-sm-6 col-md-8" style="min-height: 100%; padding: 0; background-color: white">
+		<div class="col-sm-7 col-md-8" style="min-height: 100%; padding: 0; background-color: white">
 			<div ng-view class="view-animate"></div>
 		</div>
 
@@ -98,7 +98,7 @@
 			<div ng-if="person">
 				<h2>
 					<i class="fa fa-user fa-fw"></i>
-					{{person.name}}
+					Edit {{person.name}}
 				</h2>
 
 				<hr/>

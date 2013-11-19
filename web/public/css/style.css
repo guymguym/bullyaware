@@ -46,6 +46,9 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
     font-size: 21px;
     letter-spacing: 0.11em;
 }
+.wide_text {
+    letter-spacing: 0.11em;
+}
 .bgblk {
     background-color: black;
 }
