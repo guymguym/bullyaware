@@ -2,19 +2,13 @@
 	<span ng-click="goto_main()" style="cursor: pointer; font-size: 15px">
 		<b class="menu_color">Bully</b><b style="color: white">Aware</b>
 	</span>
-	<span ng-click="on_whatis()" Xclass="fa-stack" style="cursor: pointer; margin-left: 20px">
-		<!-- <i class="fa fa-circle fa-stack-2x menu_color"></i> -->
-		<!-- <i class="fa fa-info fa-stack-1x"></i> -->
+	<button ng-click="on_whatis()" class="btn btn-info btn-sm" style="cursor: pointer">
 		INFO
-	</span>
-	<span ng-show="!user" ng-click="open_login()" Xclass="fa-stack" style="cursor: pointer; margin-left: 20px">
-		<!-- <i class="fa fa-circle fa-stack-2x menu_color"></i> -->
-		<!-- <i class="fa fa-sign-in fa-stack-1x"></i> -->
+	</button>
+	<button ng-show="!user" ng-click="open_login()" class="btn btn-primary btn-sm" style="cursor: pointer">
 		LOGIN
-	</span>
-	<span ng-show="!!user" ng-click="goto_user_home()" Xclass="fa-stack" style="cursor: pointer; margin-left: 20px">
-		<!-- <i class="fa fa-circle fa-stack-2x menu_color"></i> -->
-		<!-- <i class="fa fa-user fa-stack-1x"></i> -->
+	</button>
+	<button ng-show="!!user" ng-click="goto_user_home()" class="btn btn-primary btn-sm" style="cursor: pointer">
 		HOME
-	</span>
+	</button>
 </div>
