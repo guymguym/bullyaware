@@ -291,50 +291,50 @@
 			}
 		};
 
-		$scope.on_features = make_redirect('/features');
-		$scope.on_whatis = make_redirect('/whatis');
-		$scope.on_about = make_redirect('/about');
-		$scope.on_contact_us = make_redirect('/contact');
-		$scope.on_demo = make_redirect('/demo');
+		$scope.goto_features = make_redirect('/features');
+		$scope.goto_whatis = make_redirect('/whatis');
+		$scope.goto_about = make_redirect('/about');
+		$scope.goto_contact_us = make_redirect('/contact');
+		$scope.goto_demo = make_redirect('/demo');
 
 
 
-		$scope.on_yahoo_hackathon = function() {
+		$scope.goto_yahoo_hackathon = function() {
 			event_log('yahoo_hackathon');
 			var url = 'http://yahoodevelopers.tumblr.com/post/64404445568/yahoo-hack-israel-winning-hacks';
 			$window.open(url, '_blank');
 		};
 
-		$scope.on_send_mail = function() {
+		$scope.goto_send_mail = function() {
 			event_log('send_mail');
 			var url = 'mailto:info@bullyaware.co?subject=Request for info';
 			$window.open(url, '_blank');
 		};
 
-		$scope.on_support_call = function() {
+		$scope.goto_support_call = function() {
 			event_log('support_call');
 			var url = 'mailto:info@bullyaware.co?subject=Support call';
 			$window.open(url, '_blank');
 		};
 
-		$scope.on_follow_facebook = function() {
+		$scope.goto_follow_facebook = function() {
 			event_log('follow_facebook');
 			var url = 'https://www.facebook.com/Bullyaware.co';
 			$window.open(url, '_blank');
 		};
 
-		$scope.on_follow_twitter = function() {
+		$scope.goto_follow_twitter = function() {
 			event_log('follow_twitter');
 			var url = 'https://twitter.com/bullyawareco';
 			$window.open(url, '_blank');
 		};
 
-		$scope.on_terms_of_use = function() {
+		$scope.goto_terms_of_use = function() {
 			event_log('terms_of_use');
 			alert('The terms of use are being finalized and will soon be available');
 		};
 
-		$scope.on_privacy_policy = function() {
+		$scope.goto_privacy_policy = function() {
 			event_log('privacy_policy');
 			alert('The privacy policy is being finalized and will soon be available');
 		};
