@@ -270,6 +270,12 @@
 		$scope.goto_user_home = make_redirect('/home');
 		$scope.goto_login = make_redirect('/login');
 		$scope.goto_logout = make_redirect('/api/user/logout');
+		$scope.goto_info = make_redirect('/info');
+		$scope.goto_contact_us = make_redirect('/contact');
+		$scope.goto_whatis = make_redirect('/info#/whatis');
+		$scope.goto_features = make_redirect('/info#/features');
+		$scope.goto_about = make_redirect('/info#/about');
+		$scope.goto_demo = make_redirect('/info#/demo');
 
 		$scope.on_getstarted = function() {
 			if ($scope.user) {
@@ -290,14 +296,6 @@
 				$scope.goto_login();
 			}
 		};
-
-		$scope.goto_features = make_redirect('/features');
-		$scope.goto_whatis = make_redirect('/whatis');
-		$scope.goto_about = make_redirect('/about');
-		$scope.goto_contact_us = make_redirect('/contact');
-		$scope.goto_demo = make_redirect('/demo');
-
-
 
 		$scope.goto_yahoo_hackathon = function() {
 			event_log('yahoo_hackathon');
@@ -569,9 +567,13 @@
 			// console.log('USER', $scope.user, 'DATA', $scope.server_data);
 
 			// start animations on page load
-			$('.show_on_load').fadeIn(400);
+			$('.show_on_load').fadeIn(100);
 
 			event_log('page', $location.absUrl());
+
+			$scope.$on('$locationChangeSuccess', function(event) {
+				console.log('$locationChangeSuccess', event);
+			});
 
 			// init_intercom_io($scope.user);
 		}
@@ -580,30 +582,14 @@
 
 
 
-	bullyaware_app.config(['$routeProvider', '$locationProvider',
-		function($routeProvider, $locationProvider) {
-			$routeProvider.when('/person/:person_id', {
-				templateUrl: '/person.html',
-				controller: ['$scope', '$routeParams',
-					function($scope, $routeParams) {
-						$scope.person_id = $routeParams.person_id;
-						$scope.person = $scope.user_info ?
-							$scope.user_info.person_map[$scope.person_id] : null;
-					}
-				]
-			}).when('/preferences', {
-				templateUrl: '/prefs.html'
-			}).when('/', {
-				templateUrl: '/status.html'
-			});
-		}
+
+
+
+	bullyaware_app.controller('UserHomeCtrl', [
+		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', '$route', UserHomeCtrl
 	]);
 
-	bullyaware_app.controller('SettingsCtrl', [
-		'$scope', '$http', '$q', '$timeout', '$window', '$location', 'event_log', '$route', SettingsCtrl
-	]);
-
-	function SettingsCtrl($scope, $http, $q, $timeout, $window, $location, event_log, $route) {
+	function UserHomeCtrl($scope, $http, $q, $timeout, $window, $location, event_log, $route) {
 
 		function show_loading() {
 			$('#loading_panel').show();

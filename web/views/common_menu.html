@@ -1,14 +1,16 @@
-<div class="text-center wide_text menu_color" style="font-size: 14px">
-	<span ng-click="goto_main()" style="cursor: pointer; font-size: 15px">
+<div class="text-left wide_text menu_color" style="font-size: 14px">
+	<div ng-click="goto_main()" style="display: inline-block; cursor: pointer; font-size: 15px">
 		<b class="menu_color">Bully</b><b style="color: white">Aware</b>
-	</span>
-	<button ng-click="goto_whatis()" class="btn btn-info btn-sm" style="cursor: pointer">
-		INFO
-	</button>
-	<button ng-show="!user" ng-click="open_login()" class="btn btn-primary btn-sm" style="cursor: pointer">
-		LOGIN
-	</button>
-	<button ng-show="!!user" ng-click="goto_user_home()" class="btn btn-primary btn-sm" style="cursor: pointer">
-		HOME
-	</button>
+	</div>
+	<div class="pull-right">
+		<a ng-click="goto_info()" class="btn btn-link btn-sm" style="cursor: pointer">
+			INFO
+		</a>
+		<a ng-show="!user" ng-click="open_login()" class="btn btn-link btn-sm" style="cursor: pointer">
+			LOGIN
+		</a>
+		<a ng-show="!!user" ng-click="goto_user_home()" class="btn btn-link btn-sm" style="cursor: pointer">
+			HOME
+		</a>
+	</div>
 </div>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html ng-app="bullyaware_app">
+
+<head>
+	<?# def.include( 'common_head.html') ?>
+
+		<style type="text/css">
+		html, body {
+			height: 100%;
+		}
+		</style>
+</head>
+
+<body ng-controller="MainCtrl" ng-cloak>
+
+	<!-- <div class="show_on_load hide_on_unload poster1 poster-fixed"></div> -->
+
+	<div class="show_on_load hide_on_unload" style="height: 100%">
+
+		<div class="col-sm-5 col-md-4 leftbar">
+
+			<div class="under_space bgc lrpad">
+
+				<div class="gap-10">
+					<?# def.include( 'common_menu.html') ?>
+				</div>
+
+				<div class="gap-60"></div>
+				<!-- 
+				<div Xclass="lead" style="color: #aaa">
+					<i class="fa fa-info-circle fa-fw"></i>
+					Information
+				</div>
+				<div class="gap-10"></div>
+				 -->
+				<div style="padding-left: 25px">
+					<ul class="list-unstyled sidebar">
+						<li class="{{active_link_hash('#/whatis')}}">
+							<a href="#/whatis" class="btn btn-link btn-lg">
+								What is Bullyaware
+							</a>
+						</li>
+						<li class="{{active_link_hash('#/features')}}">
+							<a href="#/features" class="btn btn-link btn-lg">
+								Features
+							</a>
+						</li>
+						<li class="{{active_link_hash('#/about')}}">
+							<a href="#/about" class="btn btn-link btn-lg">
+								About
+							</a>
+						</li>
+						<li class="{{active_link_hash('#/demo')}}">
+							<a href="#/demo" class="btn btn-link btn-lg">
+								Demo
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="gap-40"></div>
+				<div class="text-center">
+				<!-- 
+					<button class="btn btn-primary btn-lg btn-block" ng-click="on_getstarted()">
+						<b>Get Started For Free</b>
+						<i class="fa fa-angle-right"></i>
+					</button>
+				 -->
+				</div>
+			</div>
+
+			<div class="lrpad gap-10">
+				<?# def.include( 'common_foot.html') ?>
+			</div>
+		</div>
+
+		<div class="col-sm-7 col-md-8" style="min-height: 100%; padding: 0; background-color: white">
+			<div ng-view class="view-animate"></div>
+		</div>
+
+		<div class="clearfix"></div>
+
+	</div>
+
+
+	<div>
+		<?# def.include( 'common_scripts.html') ?>
+	</div>
+
+	<script src="/public/js/d3.v3.min.js" charset="utf-8"></script>
+
+	<script type="text/javascript">
+	(function() {
+		'use strict';
+		var bullyaware_app = angular.module('bullyaware_app');
+		// define page routes
+		bullyaware_app.config(['$routeProvider', '$locationProvider',
+			function($routeProvider, $locationProvider) {
+				$routeProvider.when('/whatis', {
+					templateUrl: '/whatis'
+				}).when('/features', {
+					templateUrl: '/features'
+				}).when('/about', {
+					templateUrl: '/about'
+				}).when('/demo', {
+					templateUrl: '/demo'
+				}).otherwise({
+					redirectTo: '/whatis'
+				});
+			}
+		]);
+	})();
+	</script>
+
+</body>
+
+</html>

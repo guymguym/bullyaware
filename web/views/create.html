@@ -17,7 +17,7 @@
 
 	<div class="show_on_load hide_on_unload" style="height: 100%">
 
-		<div class="col-sm-5 col-md-4" style="height: 100%; padding: 0">
+		<div class="col-sm-5 col-md-4 leftbar">
 
 			<div class="under_space bgc lrpad">
 
@@ -28,34 +28,35 @@
 				<div class="gap-60"></div>
 				<form name="form" role="form" novalidate class="css-form">
 
-					<p class="H3">
+					<h3>
 						Enter child name
-					</p>
+					</h3>
 					<div class="form-group Xinput-group-lg">
 						<input class="form-control" type="text" placeholder="Child Name" required ng-model="create_person_name" id="create_person_name" />
 					</div>
 
 					<div class="gap-20"></div>
 
-					<p class="H3">
+					<h3>
 						<i class="fa fa-twitter fa-lg" style="color: #0cf"></i>
 						Twitter account chooser
-					</p>
+					</h3>
 					<div class="form-group Xinput-group-lg">
 						<input nb-twitter-chooser="set_twitter_identity($item)" class="form-control" type="text" placeholder="Twitter Chooser" required id="create_twitter_identity" />
 						<span class="twitter-chooser-spin" style="opacity: 0">
 							<i class="fa fa-spinner fa-spin"></i>
 						</span>
 					</div>
-
-					<p class="H3">
+<!-- 
+					<h3>
 						Which networks interest you
-					</p>
+					</h3>
 					<div class="form-group">
 						<span ng-repeat="type in account_types" title="{{type.name}}" ng-click="on_click_account_type(type, $event)" style="cursor: pointer">
 							<i style="color: {{(type.checked || type.hover) && type.color || '#d0d0d0'}}" class="fa {{type.icon}} fa-2x fa-fw" ng-mouseenter="type.hover = true" ng-mouseleave="type.hover = false"></i>
 						</span>
 					</div>
+ -->
 
 					<div class="gap-20"></div>
 

@@ -3,6 +3,62 @@
 
 <head>
 	<?# def.include( 'common_head.html') ?>
+
+		<style type="text/css">
+		html, body {
+			height: 100%;
+			/*min-height: 100%;*/
+		}
+		</style>
+</head>
+
+<body ng-controller="MainCtrl" ng-cloak>
+
+	<div class="show_on_load hide_on_unload poster1 poster-fixed"></div>
+
+	<div class="show_on_load hide_on_unload" style="height: 100%">
+
+		<div class="col-sm-5 col-md-4" style="height: 100%; padding: 0">
+
+			<div class="under_space bgco lrpad">
+				<div class="gap-10">
+					<?# def.include( 'common_menu.html') ?>
+				</div>
+
+				<div class="gap-60"></div>
+
+				<div class="text-center">
+					<h3>
+						<i class="fa fa-bug fa-4x"></i>
+					</h3>
+					<h3>We're getting reports that this page cannot be found.</h3>
+					<h3>Stay tuned as this crisis unfolds.</h3>
+				</div>
+				
+				<div ng-show="false" class="lead">
+					<?! it.err ?>
+				</div>
+			</div>
+
+			<div class="lrpad gap-10">
+				<?# def.include( 'common_foot.html') ?>
+			</div>
+		</div>
+	</div>
+
+	<div>
+		<?# def.include( 'common_scripts.html') ?>
+	</div>
+
+</body>
+
+</html>
+
+<!DOCTYPE html>
+<html ng-app="bullyaware_app">
+
+<head>
+	<?# def.include( 'common_head.html') ?>
 </head>
 
 <body ng-controller="MainCtrl">

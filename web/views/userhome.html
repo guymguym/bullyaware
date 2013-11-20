@@ -19,9 +19,9 @@
 		<i class="fa fa-spinner fa-spin"></i>
 	</div>
 
-	<div ng-controller="SettingsCtrl" class="show_on_load hide_on_unload" style="height: 100%">
+	<div ng-controller="UserHomeCtrl" class="show_on_load hide_on_unload" style="height: 100%">
 
-		<div class="col-sm-5 col-md-4" style="height: 100%; padding: 0">
+		<div class="col-sm-5 col-md-4 leftbar">
 
 			<div class="under_space bgc lrpad">
 
@@ -30,29 +30,70 @@
 				</div>
 
 				<div class="gap-60"></div>
-				<ul class="list-group" style="color: black">
-					<li class="list-group-item">
-						<a href="#"><b>Status</b></a>
-					</li>
-					<li ng-if="false" class="list-group-item" href="#">
-						<a href="#/preferences"><b>Preferences</b></a>
-					</li>
-					<li class="list-group-item">
-						<b>Children</b>
-						<div class="gap-10"></div>
-						<ul class="nav nav-pills nav-stacked">
-							<li ng-repeat="person in user_info.persons | orderBy:return_id:false" class="{{active_link_hash('#/person/'+return_id(person))}}">
-								<a href="#/person/{{return_id(person)}}">
-									<i class="fa fa-user fa-fw"></i>
-									{{person.name}}
-								</a>
-							</li>
-							<li>
-								<a href="#" ng-click="goto_create()">Add...</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
+				<div style="color: #aaa">
+					<i class="fa fa-bar-chart-o fa-fw"></i>
+					Reports
+				</div>
+				<div class="gap-10"></div>
+				<div style="margin-left: 25px">
+					<ul class="list-unstyled sidebar">
+						<li class="{{active_link_hash('#/current')}}">
+							<a href="#/report" class="btn btn-link">
+								Current report
+							</a>
+						</li>
+						<li class="{{active_link_hash('#/prev')}}">
+							<a href="#/prev" class="btn btn-link">
+								Previous reports
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="gap-10"></div>
+				<div style="color: #aaa">
+					<i class="fa fa-user fa-fw"></i>
+					Children
+				</div>
+				<div class="gap-10"></div>
+				<div style="padding-left: 25px">
+					<ul class="list-unstyled sidebar">
+						<li ng-repeat="person in user_info.persons | orderBy:return_id:false" class="{{active_link_hash('#/person/'+return_id(person))}}">
+							<a href="#/person/{{return_id(person)}}" class="btn btn-link">
+								<!-- <i class="fa fa-pencil fa-fw fa-rotate-270"></i> -->
+								{{person.name}}
+							</a>
+						</li>
+						<li>
+							<a href="#" class="btn btn-link" ng-click="goto_create()">
+								<!-- <i class="fa fa-plus fa-fw"></i> -->
+								Add...
+							</a>
+						</li>
+					</ul>
+				</div>
+
+
+				<div class="gap-10"></div>
+				<div style="color: #aaa">
+					<i class="fa fa-cog fa-fw"></i>
+					Settings
+				</div>
+				<div class="gap-10"></div>
+				<div style="padding-left: 25px">
+					<ul class="list-unstyled sidebar">
+						<li class="{{active_link_hash('#/preferences')}}">
+							<a href="#/preferences" class="btn btn-link">
+								Preferences
+							</a>
+						</li>
+						<li>
+							<a ng-click="goto_logout()" href="#" class="btn btn-link">
+								Logout
+							</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 
 			<div class="lrpad gap-10">
@@ -70,30 +111,56 @@
 
 
 	<div>
-		<?='<script type="text/ng-template" id="/status.html">' ?>
+		<?='<script type="text/ng-template" id="/current">' ?>
 			<div>
-				<h1>STATUS</h1>
+				<div class="page-header">
+					<h1>
+						<i class="fa fa-bar-chart-o fa-fw"></i>
+						Current Report
+					</h1>
+				</div>
+				<h3>coming soon...</h3>
 			</div>
 			<?='</script>' ?>
 	</div>
 
 	<div>
-		<?='<script type="text/ng-template" id="/prefs.html">' ?>
+		<?='<script type="text/ng-template" id="/prev">' ?>
 			<div>
-				<h1>PREFS</h1>
+				<div class="page-header">
+					<h1>
+						<i class="fa fa-bar-chart-o fa-fw"></i>
+						Previous Reports
+					</h1>
+				</div>
+				<h3>coming soon...</h3>
 			</div>
 			<?='</script>' ?>
 	</div>
 
 	<div>
-		<?='<script type="text/ng-template" id="/person.html">' ?>
+		<?='<script type="text/ng-template" id="/prefs">' ?>
+			<div>
+				<div class="page-header">
+					<h1>
+						<i class="fa fa-cog fa-fw"></i>
+						Preferences
+					</h1>
+				</div>
+				<h3>coming soon...</h3>
+			</div>
+			<?='</script>' ?>
+	</div>
+
+	<div>
+		<?='<script type="text/ng-template" id="/person">' ?>
 			<div ng-if="person">
-				<h2>
-					<i class="fa fa-user fa-fw"></i>
-					Edit {{person.name}}
-				</h2>
-
-				<hr/>
+				<div class="page-header">
+					<h1>
+						<i class="fa fa-user fa-fw"></i>
+						Edit {{person.name}}
+					</h1>
+				</div>
 
 				<div ng-repeat="identity_id in person.identities | orderBy:return_arg:false" ng-init="identity=user_info.identity_map[identity_id]">
 					<div class="row">
@@ -175,6 +242,36 @@
 	<div>
 		<?# def.include( 'common_scripts.html') ?>
 	</div>
+
+	<script type="text/javascript">
+	(function() {
+		'use strict';
+		var bullyaware_app = angular.module('bullyaware_app');
+		// define page routes
+		bullyaware_app.config(['$routeProvider', '$locationProvider',
+			function($routeProvider, $locationProvider) {
+				$routeProvider.when('/person/:person_id', {
+					templateUrl: '/person',
+					controller: ['$scope', '$routeParams',
+						function($scope, $routeParams) {
+							$scope.person_id = $routeParams.person_id;
+							$scope.person = $scope.user_info ?
+								$scope.user_info.person_map[$scope.person_id] : null;
+						}
+					]
+				}).when('/preferences', {
+					templateUrl: '/prefs'
+				}).when('/current', {
+					templateUrl: '/current'
+				}).when('/prev', {
+					templateUrl: '/prev'
+				}).otherwise({
+					redirectTo: '/current'
+				});
+			}
+		]);
+	})();
+	</script>
 
 </body>
 
