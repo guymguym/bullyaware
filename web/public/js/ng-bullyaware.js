@@ -572,7 +572,7 @@
 			event_log('page', $location.absUrl());
 
 			$scope.$on('$locationChangeSuccess', function(event) {
-				console.log('$locationChangeSuccess', event);
+				event_log('page', $location.absUrl());
 			});
 
 			// init_intercom_io($scope.user);
