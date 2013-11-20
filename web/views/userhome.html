@@ -29,9 +29,13 @@
 					<?# def.include( 'common_menu.html') ?>
 				</div>
 
-				<div class="gap-60"></div>
+				<div class="gap-50"></div>
 				<div style="color: #aaa">
-					<i class="fa fa-bar-chart-o fa-fw"></i>
+					{{user.first_name}} {{user.last_name}} - {{user.email}}
+				</div>
+				<div class="gap-10"></div>
+				<div style="color: #aaa">
+					<!-- <i class="fa fa-bar-chart-o fa-fw"></i> -->
 					Reports
 				</div>
 				<div class="gap-10"></div>
@@ -39,11 +43,13 @@
 					<ul class="list-unstyled sidebar">
 						<li class="{{active_link_hash('#/current')}}">
 							<a href="#/report" class="btn btn-link">
+								<i class="fa fa-bar-chart-o fa-fw"></i>
 								Current report
 							</a>
 						</li>
 						<li class="{{active_link_hash('#/prev')}}">
 							<a href="#/prev" class="btn btn-link">
+								<i class="fa fa-calendar fa-fw"></i>
 								Previous reports
 							</a>
 						</li>
@@ -52,7 +58,7 @@
 
 				<div class="gap-10"></div>
 				<div style="color: #aaa">
-					<i class="fa fa-user fa-fw"></i>
+					<!-- <i class="fa fa-user fa-fw"></i> -->
 					Children
 				</div>
 				<div class="gap-10"></div>
@@ -60,13 +66,14 @@
 					<ul class="list-unstyled sidebar">
 						<li ng-repeat="person in user_info.persons | orderBy:return_id:false" class="{{active_link_hash('#/person/'+return_id(person))}}">
 							<a href="#/person/{{return_id(person)}}" class="btn btn-link">
+								<i class="fa fa-user fa-fw"></i>
 								<!-- <i class="fa fa-pencil fa-fw fa-rotate-270"></i> -->
 								{{person.name}}
 							</a>
 						</li>
 						<li>
 							<a href="#" class="btn btn-link" ng-click="goto_create()">
-								<!-- <i class="fa fa-plus fa-fw"></i> -->
+								<i class="fa fa-plus fa-fw"></i>
 								Add...
 							</a>
 						</li>
@@ -76,7 +83,7 @@
 
 				<div class="gap-10"></div>
 				<div style="color: #aaa">
-					<i class="fa fa-cog fa-fw"></i>
+					<!-- <i class="fa fa-cog fa-fw"></i> -->
 					Settings
 				</div>
 				<div class="gap-10"></div>
@@ -84,11 +91,13 @@
 					<ul class="list-unstyled sidebar">
 						<li class="{{active_link_hash('#/preferences')}}">
 							<a href="#/preferences" class="btn btn-link">
+								<i class="fa fa-cog fa-fw"></i>
 								Preferences
 							</a>
 						</li>
 						<li>
 							<a ng-click="goto_logout()" href="#" class="btn btn-link">
+								<i class="fa fa-power-off fa-fw"></i>
 								Logout
 							</a>
 						</li>
