@@ -284,6 +284,7 @@
 				$scope.goto_signup();
 			}
 		};
+
 		$scope.open_login = function() {
 			if ($scope.user) {
 				$scope.goto_user_home();
@@ -371,6 +372,7 @@
 		};
 
 		$scope.do_signup = function() {
+			/*
 			if (!$scope.signup_first_name) {
 				$("#signup_first_name").effect(HIGHLIGHT_EFFECT).focus();
 				return;
@@ -379,6 +381,7 @@
 				$("#signup_last_name").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
+			*/
 			if (!$scope.signup_email) {
 				$("#signup_email").effect(HIGHLIGHT_EFFECT).focus();
 				return;
@@ -387,10 +390,12 @@
 				$("#signup_password").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
+			/*
 			if (!$scope.signup_password2 || $scope.signup_password2 !== $scope.signup_password) {
 				$("#signup_password2").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
+			*/
 			var btn = $(window.event.target);
 			var loading = $('<i class="fa fa-spinner fa-spin fa-lg">').appendTo(btn);
 			// send action log async
@@ -399,19 +404,23 @@
 				method: 'POST',
 				url: '/api/user/signup',
 				data: {
-					first_name: $scope.signup_first_name,
-					last_name: $scope.signup_last_name,
+					// first_name: $scope.signup_first_name,
+					// last_name: $scope.signup_last_name,
 					email: $scope.signup_email,
 					password: $scope.signup_password
 				}
 			}).then(function(res) {
-				console.log('USER CREATED', res);
+				console.log('SIGNUP', res);
 				loading.remove();
 				$scope.goto_create();
 			}, function(err) {
-				console.error('USER CREATE FAILED', err);
+				console.error('SIGNUP FAILED', err);
 				loading.remove();
-				alert('Signup failed. Please try again later');
+				if (err.status === 409) {
+					alert('Email already exists. Please try to login');
+				} else {
+					alert('Signup failed. Please try again later');
+				}
 			});
 		};
 

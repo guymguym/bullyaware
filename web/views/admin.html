@@ -23,7 +23,7 @@
 		</a>
 		<div id="users_list" class="collapse">
 			<div ng-repeat="user in data.users | orderBy:return_id:true">
-				USER - {{user.first_name}} {{user.last_name}} - {{user.email}}
+				USER - {{user.email}}
 				<div ng-repeat="person in persons[return_id(user)]" style="padding-left: 30px">
 					{{person.name}}
 					<div ng-repeat="identity in person.identities" style="padding-left: 30px">

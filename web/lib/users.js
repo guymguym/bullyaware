@@ -77,13 +77,8 @@ function save_user_in_session(req, user) {
 exports.signup = function(req, res) {
 	console.log('SIGNUP', req.body);
 	var user = new User();
-	user.first_name = req.body.first_name;
-	user.last_name = req.body.last_name;
 	user.email = req.body.email;
 	user.password = req.body.password;
-	// user.role = req.body.role;
-
-	// TODO check for duplicate email?
 
 	return async.waterfall([
 
@@ -91,6 +86,13 @@ exports.signup = function(req, res) {
 		function(next) {
 			console.log('SAVE USER', user);
 			user.save(function(err) {
+				if (err) {
+					if (err.code === 11000) { // duplicate key
+						return next({
+							status: 409 // conflict
+						});
+					}
+				}
 				return next(err);
 			});
 		},
