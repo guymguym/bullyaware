@@ -30,7 +30,7 @@
 				</div>
 
 				<div class="gap-50"></div>
-				<div class="menu_color" Xstyle="color: #aaa">
+				<div class="lead menu_color">
 					{{user.email}}
 				</div>
 				<div class="gap-10"></div>
@@ -42,13 +42,13 @@
 				<div style="margin-left: 25px">
 					<ul class="list-unstyled sidebar">
 						<li class="{{active_link_hash('#/current')}}">
-							<a href="#/report" class="btn btn-link">
+							<a href="#/report" class="btn btn-link btn-lg">
 								<i class="fa fa-bar-chart-o fa-fw"></i>
 								Current report
 							</a>
 						</li>
 						<li class="{{active_link_hash('#/prev')}}">
-							<a href="#/prev" class="btn btn-link">
+							<a href="#/prev" class="btn btn-link btn-lg">
 								<i class="fa fa-calendar fa-fw"></i>
 								Previous reports
 							</a>
@@ -65,14 +65,14 @@
 				<div style="padding-left: 25px">
 					<ul class="list-unstyled sidebar">
 						<li ng-repeat="person in user_info.persons | orderBy:return_id:false" class="{{active_link_hash('#/person/'+return_id(person))}}">
-							<a href="#/person/{{return_id(person)}}" class="btn btn-link">
+							<a href="#/person/{{return_id(person)}}" class="btn btn-link btn-lg">
 								<i class="fa fa-user fa-fw"></i>
 								<!-- <i class="fa fa-pencil fa-fw fa-rotate-270"></i> -->
 								{{person.name}}
 							</a>
 						</li>
 						<li>
-							<a href="#" class="btn btn-link" ng-click="goto_create()">
+							<a href="#" class="btn btn-link btn-lg" ng-click="goto_create()">
 								<i class="fa fa-plus fa-fw"></i>
 								Add...
 							</a>
@@ -90,13 +90,13 @@
 				<div style="padding-left: 25px">
 					<ul class="list-unstyled sidebar">
 						<li class="{{active_link_hash('#/preferences')}}">
-							<a href="#/preferences" class="btn btn-link">
+							<a href="#/preferences" class="btn btn-link btn-lg">
 								<i class="fa fa-cog fa-fw"></i>
 								Preferences
 							</a>
 						</li>
 						<li>
-							<a ng-click="goto_logout()" href="#" class="btn btn-link">
+							<a ng-click="goto_logout()" href="#" class="btn btn-link btn-lg">
 								<i class="fa fa-power-off fa-fw"></i>
 								Logout
 							</a>
@@ -174,18 +174,13 @@
 				<div ng-repeat="identity_id in person.identities | orderBy:return_arg:false" ng-init="identity=user_info.identity_map[identity_id]">
 					<div class="row">
 						<div class="col-xs-8">
-							<h5>
-								<i class="fa fa-fw fa-twitter fa-lg text-info"></i>
-								<span class="lead">
-									{{ identity_account_name(identity) }}
-								</span>
-							</h5>
+							<a class="btn btn-link btn-lg" style="color: black" target="_blank" ng-href="//{{identity_link(identity)}}" title="{{identity_link(identity)}}">
+								<i class="fa fa-fw fa-twitter fa-lg twitter_color"></i>
+								{{ identity_account_name(identity) }}
+							</a>
 						</div>
 						<div class="col-xs-4 text-right">
-							<a class="btn btn-link btn-sm" ng-href="//{{identity_link(identity)}}" title="{{identity_link(identity)}}" target="_blank">
-								<i class="fa fa-external-link" style="color: black"></i>
-							</a>
-							<a class="btn btn-link btn-sm" ng-click="del_identity(person,identity)" title="Remove {{identity_account_name(identity)}}...">
+							<a class="btn btn-link" ng-click="del_identity(person,identity)" title="Remove {{identity_account_name(identity)}}...">
 								<i class="fa fa-trash-o" style="color: black"></i>
 							</a>
 						</div>

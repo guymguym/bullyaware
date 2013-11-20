@@ -83,6 +83,9 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
 .menu_color {
     color: #09d;
 }
+.twitter_color {
+    color: #0cf;
+}
 .feature-row {
     margin-bottom: 50px;
 }
