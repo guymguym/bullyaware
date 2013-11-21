@@ -243,6 +243,10 @@ exports.read_user = function(req, res) {
 
 	return async.waterfall([
 
+		// function(next) {
+		// 	setTimeout(next, 1000);
+		// },
+
 		validate_user(req),
 
 		function(next) {
@@ -401,6 +405,8 @@ exports.del_person = function(req, res) {
 		validate_user(req),
 
 		// TODO check if we want to remove related identities from the db completely
+
+		// TODO VERIFY THAT PERSON IS OWNED BY CURRENT USER!!!
 
 		function(next) {
 			user_id = req.session.user.id;

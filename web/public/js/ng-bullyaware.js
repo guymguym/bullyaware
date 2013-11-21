@@ -565,6 +565,13 @@
 			});
 		};
 
+		$scope.show_loading = function() {
+			$('#loading_panel').show();
+		};
+
+		$scope.hide_loading = function() {
+			$('#loading_panel').hide();
+		};
 
 		if (!$scope.page_loaded) {
 			$scope.page_loaded = true;
@@ -600,13 +607,6 @@
 
 	function UserHomeCtrl($scope, $http, $q, $timeout, $window, $location, event_log, $route) {
 
-		function show_loading() {
-			$('#loading_panel').show();
-		}
-
-		function hide_loading() {
-			$('#loading_panel').hide();
-		}
 
 		function reset_person_route() {
 			if (!$route.current) {
@@ -619,22 +619,22 @@
 		}
 
 		function reload_user_info() {
-			show_loading();
+			$scope.show_loading();
 			return $scope.get_user_info().then(function() {
 				reset_person_route();
-				hide_loading();
+				$scope.hide_loading();
 			});
 		}
 
 		reset_person_route();
-		reload_user_info();
+		$scope.load_user_info_promise = reload_user_info();
 
 		$scope.add_person = function(name) {
 			if (!name) {
 				$("#new_person").effect(HIGHLIGHT_EFFECT).focus();
 				return;
 			}
-			show_loading();
+			$scope.show_loading();
 			event_log('add_person', name);
 			$http({
 				method: 'POST',
@@ -648,7 +648,7 @@
 				return reload_user_info();
 			}, function(err) {
 				console.error('FAILED ADD PERSON', err);
-				hide_loading();
+				$scope.hide_loading();
 			});
 		};
 
@@ -658,7 +658,7 @@
 			if (!window.confirm(q)) {
 				return;
 			}
-			show_loading();
+			$scope.show_loading();
 			return $http({
 				method: 'DELETE',
 				url: '/api/person/' + person._id
@@ -667,7 +667,7 @@
 				return reload_user_info();
 			}, function(err) {
 				console.error('FAILED DEL PERSON', err);
-				hide_loading();
+				$scope.hide_loading();
 			});
 		};
 
@@ -714,7 +714,7 @@
 		};
 
 		$scope.add_twit_identity = function(person, twit_identity) {
-			show_loading();
+			$scope.show_loading();
 			event_log('add_twit_id', twit_identity.screen_name);
 			$http({
 				method: 'POST',
@@ -729,7 +729,7 @@
 				return reload_user_info();
 			}, function(err) {
 				console.error('FAILED ADD IDENTITY', err);
-				hide_loading();
+				$scope.hide_loading();
 			});
 		};
 
@@ -738,7 +738,7 @@
 			if (!window.confirm(q)) {
 				return;
 			}
-			show_loading();
+			$scope.show_loading();
 			return $http({
 				method: 'DELETE',
 				url: '/api/person/' + person._id + '/identity/' + identity._id
@@ -747,28 +747,65 @@
 				return reload_user_info();
 			}, function(err) {
 				console.error('FAILED DEL IDENTITY', err);
-				hide_loading();
+				$scope.hide_loading();
 			});
 		};
 
-		$scope.do_report = function(person) {
-			show_loading();
+		$scope.do_report = function(person, days) {
 			return $http({
 				method: 'POST',
-				url: '/api/person/' + person._id + '/report'
+				url: '/api/person/' + person._id + '/report',
+				data: {
+					days: days
+				}
 			}).then(function(res) {
 				console.log('MAKE REPORT', res);
-				person.report = res.data;
-				hide_loading();
+				return res;
 			}, function(err) {
 				console.error('FAILED MAKE REPORT', err);
-				hide_loading();
+				throw err;
 			});
+		};
+
+
+		$scope.load_reports = function(reports, days) {
+			var set_report = function(person_id, res) {
+				reports[person_id] = res.data;
+			};
+			$scope.load_user_info_promise.then(function() {
+				for (var i = 0; i < $scope.user_info.persons.length; i++) {
+					var person = $scope.user_info.persons[i];
+					$scope.do_report(person, 1).then(set_report.bind(null, person._id));
+				}
+			});
+		};
+
+		$scope.keys_list = function(o) {
+			return _.keys(o).join(', ');
 		};
 	}
 
 
+	bullyaware_app.controller('ReportTodayCtrl', ['$scope',
+		function($scope) {
+			$scope.reports = {};
+			$scope.load_reports($scope.reports, 1);
+		}
+	]);
 
+	bullyaware_app.controller('ReportWeekCtrl', ['$scope',
+		function($scope) {
+			$scope.reports = {};
+			$scope.load_reports($scope.reports, 7);
+		}
+	]);
+
+	bullyaware_app.controller('ReportMonthCtrl', ['$scope',
+		function($scope) {
+			$scope.reports = {};
+			$scope.load_reports($scope.reports, 30);
+		}
+	]);
 
 
 

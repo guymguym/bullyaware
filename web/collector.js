@@ -56,12 +56,15 @@ function ingest_twit(twit, callback) {
 	var message = new Message();
 	message.type = 'twitter';
 	message.data = twit;
+	// convert twitter's created_at to js date
+	message.time = new Date(Date.parse(twit.created_at.replace(/( \+)/, ' UTC$1')));
 	message.sender = twit.user.id_str;
 
 	var mentions = _.pluck(twit.entities.user_mentions, 'id_str');
 	if (mentions) {
 		message.mentions = mentions;
 	}
+
 	return message.save(function(err) {
 		if (err) {
 			console.error('SAVE MESSAGE FAILED', err, message);
@@ -97,7 +100,7 @@ function collect_twits() {
 				stream.on('data', function(data) {
 					ingest_twit(data, function(err) {
 						if (err) {
-							console.log("Errpr in twit ingest:", err);
+							console.log("Error in twit ingest:", err);
 						}
 					});
 				});

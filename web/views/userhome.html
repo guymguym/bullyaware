@@ -15,13 +15,9 @@
 
 	<!-- <div class="show_on_load hide_on_unload poster1 poster-fixed"></div> -->
 
-	<div id="loading_panel" class="text-center" style="font-size: 80px; padding: 20px; z-index: 100; background-color: rgba(255,255,255,0.6); top: 0; left: 0; min-width: 100%; min-height: 100%; position: absolute; border-radius: 10px">
-		<i class="fa fa-spinner fa-spin"></i>
-	</div>
-
 	<div ng-controller="UserHomeCtrl" class="show_on_load hide_on_unload" style="height: 100%">
 
-		<div class="col-sm-5 col-md-4 leftbar">
+		<div class="col-sm-5 col-md-4 col-lg-3 leftbar">
 
 			<div class="under_space bgc lrpad">
 
@@ -29,11 +25,12 @@
 					<?# def.include( 'common_menu.html') ?>
 				</div>
 
-				<div class="gap-50"></div>
-				<div class="lead menu_color">
+				<div class="gap-20"></div>
+				<div class="lead text-right" style="padding-right: 10px">
 					{{user.email}}
 				</div>
-				<div class="gap-10"></div>
+
+				<div class="gap-0"></div>
 				<div style="color: #aaa">
 					<!-- <i class="fa fa-bar-chart-o fa-fw"></i> -->
 					Reports
@@ -41,16 +38,22 @@
 				<div class="gap-10"></div>
 				<div style="margin-left: 25px">
 					<ul class="list-unstyled sidebar">
-						<li class="{{active_link_hash('#/current')}}">
-							<a href="#/report" class="btn btn-link btn-lg">
+						<li class="{{active_link_hash('#/report_today')}}">
+							<a href="#/report_today" class="btn btn-link btn-lg">
 								<i class="fa fa-bar-chart-o fa-fw"></i>
-								Current report
+								Today
 							</a>
 						</li>
-						<li class="{{active_link_hash('#/prev')}}">
-							<a href="#/prev" class="btn btn-link btn-lg">
-								<i class="fa fa-calendar fa-fw"></i>
-								Previous reports
+						<li class="{{active_link_hash('#/report_week')}}">
+							<a href="#/report_week" class="btn btn-link btn-lg">
+								<i class="fa fa-bar-chart-o fa-fw"></i>
+								Last Week
+							</a>
+						</li>
+						<li class="{{active_link_hash('#/report_month')}}">
+							<a href="#/report_month" class="btn btn-link btn-lg">
+								<i class="fa fa-bar-chart-o fa-fw"></i>
+								Last Month
 							</a>
 						</li>
 					</ul>
@@ -67,7 +70,6 @@
 						<li ng-repeat="person in user_info.persons | orderBy:return_id:false" class="{{active_link_hash('#/person/'+return_id(person))}}">
 							<a href="#/person/{{return_id(person)}}" class="btn btn-link btn-lg">
 								<i class="fa fa-user fa-fw"></i>
-								<!-- <i class="fa fa-pencil fa-fw fa-rotate-270"></i> -->
 								{{person.name}}
 							</a>
 						</li>
@@ -110,7 +112,7 @@
 			</div>
 		</div>
 
-		<div class="col-sm-7 col-md-8" style="min-height: 100%; padding: 0; background-color: white">
+		<div class="col-sm-7 col-md-8 col-lg-9" style="min-height: 100%; padding: 0; background-color: white">
 			<div ng-view class="view-animate"></div>
 		</div>
 
@@ -120,29 +122,40 @@
 
 
 	<div>
-		<?='<script type="text/ng-template" id="/current">' ?>
+		<?='<script type="text/ng-template" id="/report">' ?>
 			<div>
 				<div class="page-header">
 					<h1>
 						<i class="fa fa-bar-chart-o fa-fw"></i>
-						Current Report
+						Report
 					</h1>
 				</div>
-				<h3>coming soon...</h3>
-			</div>
-			<?='</script>' ?>
-	</div>
-
-	<div>
-		<?='<script type="text/ng-template" id="/prev">' ?>
-			<div>
-				<div class="page-header">
-					<h1>
-						<i class="fa fa-bar-chart-o fa-fw"></i>
-						Previous Reports
-					</h1>
+				<div ng-repeat="person in user_info.persons | orderBy:return_id:false" class="col-md-6">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3>
+								{{person.name}}
+								<span ng-if="!reports[person._id]">
+									<i class="fa fa-spinner fa-spin"></i>
+								</span>
+							</h3>
+						</div>
+						<div class="panel-body" ng-if="!!reports[person._id]">
+							<div ng-init="report = reports[person._id]">
+								<h4>
+									Sent &nbsp; &nbsp;
+									<small>{{report.sent.num_msg}} messages</small>
+								</h4>
+								<p><b>Profanities found:</b> {{keys_list(report.sent.profanities)}}</p>
+								<h4>
+									Mentioned &nbsp; &nbsp;
+									<small>{{report.mention.num_msg}} messages</small>
+								</h4>
+								<p><b>Profanities found:</b> {{keys_list(report.mention.profanities)}}</p>
+							</div>
+						</div>
+					</div>
 				</div>
-				<h3>coming soon...</h3>
 			</div>
 			<?='</script>' ?>
 	</div>
@@ -207,32 +220,6 @@
 
 				<hr/>
 
-				<!-- 
-				<div>
-					<button class="btn btn-warning btn-lg" ng-click="do_report(person)">
-						<i class="fa fa-bar-chart-o"></i>
-						View Report
-					</button>
-					<div ng-show="!!person.report">
-						<div class="gap-10"></div>
-						<div class="panel panel-default">
-							<div class="panel-heading text-center">
-								<h2>
-									<i class="fa fa-bar-chart-o fa-lg"></i>
-									{{ person.name }}
-								</h2>
-							</div>
-							<div class="panel-body">
-								<p>Sent {{person.report.send_stats.num_msg}} messages</p>
-								<p>Mentioned in {{person.report.rcv_stats.num_msg}} messages</p>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<hr/>
-				 -->
-
 				<div>
 					<button class="btn btn-danger btn-lg" ng-click="del_person(person)">
 						<i class="fa fa-trash-o"></i>
@@ -248,6 +235,7 @@
 	<div>
 		<?# def.include( 'common_scripts.html') ?>
 	</div>
+
 
 	<script type="text/javascript">
 	(function() {
@@ -267,12 +255,17 @@
 					]
 				}).when('/preferences', {
 					templateUrl: '/prefs'
-				}).when('/current', {
-					templateUrl: '/current'
-				}).when('/prev', {
-					templateUrl: '/prev'
+				}).when('/report_today', {
+					templateUrl: '/report',
+					controller: 'ReportTodayCtrl'
+				}).when('/report_week', {
+					templateUrl: '/report',
+					controller: 'ReportWeekCtrl'
+				}).when('/report_month', {
+					templateUrl: '/report',
+					controller: 'ReportMonthCtrl'
 				}).otherwise({
-					redirectTo: '/current'
+					redirectTo: '/report_today'
 				});
 			}
 		]);

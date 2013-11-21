@@ -11,7 +11,6 @@ var models = require('./models');
 var Identity = models.Identity;
 var Person = models.Person;
 var Message = models.Message;
-var Report = models.Report;
 
 
 
@@ -48,47 +47,55 @@ function find_person(person_id, callback) {
 	return Person.findById(person_id, callback);
 }
 
-
-function find_related_messages(identities, callback) {
-	Identity.find({
+function find_identities(identity_ids, callback) {
+	return Identity.find({
 		_id: {
-			$in: identities
+			$in: identity_ids
 		}
-	}, function(err, identity_list) {
-		if (err) {
-			console.error('FAILED FIND IDENTITIES', err, identities);
-			return callback(err);
+	}, callback);
+}
+
+function find_related_messages(identities, days, callback) {
+	var sender_query = new Array(identities.length);
+	var mention_query = new Array(identities.length);
+	var j = 0;
+	for (var i = 0; i < identities.length; i++) {
+		var s = identities[i];
+		sender_query[j] = {
+			type: s.type,
+			sender: s.sid
+		};
+		mention_query[j] = {
+			type: s.type,
+			mentions: s.sid
+		};
+		j++;
+	}
+	if (j === 0) {
+		return callback(null, {
+			sender: [],
+			mentions: []
+		});
+	}
+	var since_date = new Date();
+	since_date.setDate(since_date.getDate() - days);
+	console.log('SINCE', since_date);
+	return async.parallel({
+		sender: function(next) {
+			return Message.find({
+				time: {
+					$gt: since_date
+				}
+			}).or(sender_query).exec(next);
+		},
+		mentions: function(next) {
+			return Message.find({
+				time: {
+					$gt: since_date
+				}
+			}).or(mention_query).exec(next);
 		}
-		var sender_query = new Array(identity_list.length);
-		var mention_query = new Array(identity_list.length);
-		var j = 0;
-		for (var i = 0; i < identity_list.length; i++) {
-			var s = identity_list[i];
-			sender_query[j] = {
-				type: s.type,
-				sender: s.sid
-			};
-			mention_query[j] = {
-				type: s.type,
-				mentions: s.sid
-			};
-			j++;
-		}
-		if (j === 0) {
-			return callback(null, {
-				sender: [],
-				mentions: []
-			});
-		}
-		return async.parallel({
-			sender: function(next) {
-				return Message.find().or(sender_query).exec(next);
-			},
-			mentions: function(next) {
-				return Message.find().or(mention_query).exec(next);
-			}
-		}, callback);
-	});
+	}, callback);
 }
 
 
@@ -100,76 +107,65 @@ function compute_list_score(list) {
 	}
 }
 
-function create_report(person, messages, callback) {
-	compute_list_score(messages.sender);
-	compute_list_score(messages.mentions);
-	var report = new Report();
-	report.user = person.user;
-	report.person = person.id;
-	report.person_name = person.name;
-	report.identities = person.identities;
-	report.send_stats.num_msg = messages.sender.length;
-	report.rcv_stats.num_msg = messages.mentions.length;
-	// TODO fill the report
-	return report.save(function(err) {
-		if (err) {
-			return callback(err);
-		}
-		return callback(null, report.toObject());
-	});
+function count_profanities(list) {
+	var profs = {};
+	for (var i = 0; i < list.length; i++) {
+		count_message_profanities(list[i], profs);
+	}
+	return profs;
 }
 
+function count_message_profanities(message) {}
 
-function make_report(person_id, callback) {
+
+exports.do_report = function(req, res) {
+	var person_id = req.params.person_id;
+	var days = parseInt(req.body.days || 1, 10);
+	console.log('REPORT', person_id, days);
 	var person;
+	var identities;
 	return async.waterfall([
+		function(next) {
+			setTimeout(next, 1000);
+		},
+
 		function(next) {
 			return find_person(person_id, next);
 		},
 
 		function(person_result, next) {
 			person = person_result;
-			return find_related_messages(person.identities, next);
+			console.log('REPORT - PERSON', person);
+			return find_identities(person.identities, next);
+		},
+
+		function(identities_result, next) {
+			identities = identities_result;
+			console.log('REPORT - IDENTITIES', identities.length,
+				_.pluck(_.pluck(identities, 'profile'), 'screen_name').join(','));
+			return find_related_messages(identities, days, next);
 		},
 
 		function(messages, next) {
-			return create_report(person, messages, next);
+			compute_list_score(messages.sender);
+			compute_list_score(messages.mentions);
+			var report = {
+				user: person.user,
+				person: person.id,
+				person_name: person.name,
+				identities: person.identities,
+				sent: {
+					num_msg: messages.sender.length,
+					profanities: count_profanities(messages.sender)
+				},
+				mention: {
+					num_msg: messages.mentions.length,
+					profanities: count_profanities(messages.mentions)
+				}
+			};
+			return next(null, report);
 		}
-	], callback);
-}
-
-function find_last_report(person_id, callback) {
-	// TODO
-	return callback(null, null);
-}
-
-
-function periodic_report(person_id, period_seconds, callback) {
-	return async.waterfall([
-		function(next) {
-			return find_last_report(person_id, next);
-		},
-
-		function(last_report, next) {
-			console.log('LAST REPORT', last_report);
-			var threshold_ms = (new Date()).getTime() - (1000 * period_seconds);
-			var report_still_valid = last_report &&
-				(last_report.id.getTimestamp().getTime() > threshold_ms);
-			if (report_still_valid) {
-				return next(last_report.toObject());
-			}
-			return make_report(person_id, next);
-		},
-
-	], callback);
-}
-
-
-exports.do_report = function(req, res) {
-	var person_id = req.params.person_id;
-	var period_seconds = parseInt(req.body.period_seconds || 0, 10);
-	return periodic_report(person_id, period_seconds,
-		common.reply_callback(req, res, 'REPORT ' + person_id));
+	], common.reply_callback(req, res, 'REPORT ' + person_id));
 };
 
 

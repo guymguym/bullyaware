@@ -45,32 +45,12 @@ var identity_schema = new mongoose.Schema({
 var message_schema = new mongoose.Schema({
 	type: String,
 	data: {},
+	time: Date,
 	sender: String, // sid from identity_schema
 	mentions: [String], // sid from identity_schema
 	owner: types.ObjectId, // User, or empty if received through public tapping
 });
 
-var report_schema = new mongoose.Schema({
-	user: types.ObjectId,
-	person: types.ObjectId,
-	person_name: String,
-	identities: [types.ObjectId],
-	insights: [{
-		msgs: [types.ObjectId],
-		level: String,
-		summary: String,
-	}],
-	send_stats: {
-		msgs: [types.ObjectId],
-		num_msg: Number,
-		num_users: Number,
-	},
-	rcv_stats: {
-		msgs: [types.ObjectId],
-		num_msg: Number,
-		num_users: Number,
-	}
-});
 
 
 /////////////
@@ -113,6 +93,12 @@ identity_schema.index({
 });
 
 message_schema.index({
+	time: 1
+}, {
+	unique: false
+});
+
+message_schema.index({
 	sender: 1
 }, {
 	unique: false
@@ -123,18 +109,6 @@ message_schema.index({
 }, {
 	unique: false,
 	sparse: true // dont include messages without target in the index
-});
-
-report_schema.index({
-	user: 1
-}, {
-	unique: false
-});
-
-report_schema.index({
-	person: 1
-}, {
-	unique: false
 });
 
 
@@ -148,7 +122,6 @@ var User = mongoose.model('User', user_schema);
 var Person = mongoose.model('Person', person_schema);
 var Identity = mongoose.model('Identity', identity_schema);
 var Message = mongoose.model('Message', message_schema);
-var Report = mongoose.model('Report', report_schema);
 
 
 module.exports = {
@@ -157,6 +130,5 @@ module.exports = {
 	User: User,
 	Person: Person,
 	Identity: Identity,
-	Message: Message,
-	Report: Report
+	Message: Message
 };
