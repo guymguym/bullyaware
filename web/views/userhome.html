@@ -31,29 +31,17 @@
 				</div>
 
 				<div class="gap-0"></div>
-				<div style="color: #aaa">
+				<div>
 					<!-- <i class="fa fa-bar-chart-o fa-fw"></i> -->
-					Reports
+					Status
 				</div>
 				<div class="gap-10"></div>
 				<div style="margin-left: 25px">
 					<ul class="list-unstyled sidebar">
-						<li class="{{active_link_hash('#/report_today')}}">
-							<a href="#/report_today" class="btn btn-link btn-lg">
+						<li class="{{active_link('/home/status')}}">
+							<a href="/home/status" class="btn btn-link btn-lg">
 								<i class="fa fa-bar-chart-o fa-fw"></i>
-								Today
-							</a>
-						</li>
-						<li class="{{active_link_hash('#/report_week')}}">
-							<a href="#/report_week" class="btn btn-link btn-lg">
-								<i class="fa fa-bar-chart-o fa-fw"></i>
-								Last Week
-							</a>
-						</li>
-						<li class="{{active_link_hash('#/report_month')}}">
-							<a href="#/report_month" class="btn btn-link btn-lg">
-								<i class="fa fa-bar-chart-o fa-fw"></i>
-								Last Month
+								Status
 							</a>
 						</li>
 					</ul>
@@ -67,8 +55,8 @@
 				<div class="gap-10"></div>
 				<div style="padding-left: 25px">
 					<ul class="list-unstyled sidebar">
-						<li ng-repeat="person in user_info.persons | orderBy:return_id:false" class="{{active_link_hash('#/person/'+return_id(person))}}">
-							<a href="#/person/{{return_id(person)}}" class="btn btn-link btn-lg">
+						<li ng-repeat="person in user_info.persons | orderBy:return_id:false" class="{{active_link('/home/person/'+return_id(person))}}">
+							<a href="/home/person/{{return_id(person)}}" class="btn btn-link btn-lg">
 								<i class="fa fa-user fa-fw"></i>
 								{{person.name}}
 							</a>
@@ -91,8 +79,8 @@
 				<div class="gap-10"></div>
 				<div style="padding-left: 25px">
 					<ul class="list-unstyled sidebar">
-						<li class="{{active_link_hash('#/preferences')}}">
-							<a href="#/preferences" class="btn btn-link btn-lg">
+						<li class="{{active_link('/home/preferences')}}">
+							<a href="/home/preferences" class="btn btn-link btn-lg">
 								<i class="fa fa-cog fa-fw"></i>
 								Preferences
 							</a>
@@ -122,37 +110,31 @@
 
 
 	<div>
-		<?='<script type="text/ng-template" id="/report">' ?>
+		<?='<script type="text/ng-template" id="/status">' ?>
 			<div>
-				<div class="page-header">
-					<h1>
-						<i class="fa fa-bar-chart-o fa-fw"></i>
-						Report
-					</h1>
+				<div class="text-center">
+					<i class="fa fa-thumbs-up fa-border" style="font-size: 250px; color: #00ff77"></i>
 				</div>
 				<div ng-repeat="person in user_info.persons | orderBy:return_id:false" class="col-md-6">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							<h3>
-								{{person.name}}
-								<span ng-if="!reports[person._id]">
-									<i class="fa fa-spinner fa-spin"></i>
-								</span>
-							</h3>
-						</div>
-						<div class="panel-body" ng-if="!!reports[person._id]">
-							<div ng-init="report = reports[person._id]">
-								<h4>
-									Sent &nbsp; &nbsp;
-									<small>{{report.sent.num_msg}} messages</small>
-								</h4>
-								<p><b>Profanities found:</b> {{keys_list(report.sent.profanities)}}</p>
-								<h4>
-									Mentioned &nbsp; &nbsp;
-									<small>{{report.mention.num_msg}} messages</small>
-								</h4>
-								<p><b>Profanities found:</b> {{keys_list(report.mention.profanities)}}</p>
-							</div>
+					<h3>
+						{{person.name}}
+						<span ng-if="!reports[person._id]">
+							<i class="fa fa-spinner fa-spin"></i>
+						</span>
+					</h3>
+					<hr style="margin-bottom: 0" />
+					<div ng-if="!!reports[person._id]">
+						<div ng-init="report = reports[person._id]">
+							<h4>
+								Sent &nbsp; &nbsp;
+								<small>{{report.sent.num_msg}} messages</small>
+							</h4>
+							<p><b>Profanities found:</b> {{keys_list(report.sent.profanities)}}</p>
+							<h4>
+								Mentioned &nbsp; &nbsp;
+								<small>{{report.mention.num_msg}} messages</small>
+							</h4>
+							<p><b>Profanities found:</b> {{keys_list(report.mention.profanities)}}</p>
 						</div>
 					</div>
 				</div>
@@ -244,7 +226,8 @@
 		// define page routes
 		bullyaware_app.config(['$routeProvider', '$locationProvider',
 			function($routeProvider, $locationProvider) {
-				$routeProvider.when('/person/:person_id', {
+				$locationProvider.html5Mode(true);
+				$routeProvider.when('/home/person/:person_id', {
 					templateUrl: '/person',
 					controller: ['$scope', '$routeParams',
 						function($scope, $routeParams) {
@@ -253,19 +236,12 @@
 								$scope.user_info.person_map[$scope.person_id] : null;
 						}
 					]
-				}).when('/preferences', {
+				}).when('/home/preferences', {
 					templateUrl: '/prefs'
-				}).when('/report_today', {
-					templateUrl: '/report',
-					controller: 'ReportTodayCtrl'
-				}).when('/report_week', {
-					templateUrl: '/report',
-					controller: 'ReportWeekCtrl'
-				}).when('/report_month', {
-					templateUrl: '/report',
-					controller: 'ReportMonthCtrl'
+				}).when('/home/status', {
+					templateUrl: '/status'
 				}).otherwise({
-					redirectTo: '/report_today'
+					redirectTo: '/home/status'
 				});
 			}
 		]);

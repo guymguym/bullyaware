@@ -35,23 +35,23 @@
 				 -->
 				<div style="padding-left: 25px">
 					<ul class="list-unstyled sidebar">
-						<li class="{{active_link_hash('#/whatis')}}">
-							<a href="#/whatis" class="btn btn-link btn-lg">
+						<li class="{{active_link('/info/whatis')}}">
+							<a href="/info/whatis" class="btn btn-link btn-lg">
 								What is Bullyaware
 							</a>
 						</li>
-						<li class="{{active_link_hash('#/features')}}">
-							<a href="#/features" class="btn btn-link btn-lg">
+						<li class="{{active_link('/info/features')}}">
+							<a href="/info/features" class="btn btn-link btn-lg">
 								Features
 							</a>
 						</li>
-						<li class="{{active_link_hash('#/about')}}">
-							<a href="#/about" class="btn btn-link btn-lg">
+						<li class="{{active_link('/info/about')}}">
+							<a href="/info/about" class="btn btn-link btn-lg">
 								About
 							</a>
 						</li>
-						<li class="{{active_link_hash('#/demo')}}">
-							<a href="#/demo" class="btn btn-link btn-lg">
+						<li class="{{active_link('/info/demo')}}">
+							<a href="/info/demo" class="btn btn-link btn-lg">
 								Demo
 							</a>
 						</li>
@@ -96,16 +96,17 @@
 		// define page routes
 		bullyaware_app.config(['$routeProvider', '$locationProvider',
 			function($routeProvider, $locationProvider) {
-				$routeProvider.when('/whatis', {
+				$locationProvider.html5Mode(true);
+				$routeProvider.when('/info/whatis', {
 					templateUrl: '/whatis'
-				}).when('/features', {
+				}).when('/info/features', {
 					templateUrl: '/features'
-				}).when('/about', {
+				}).when('/info/about', {
 					templateUrl: '/about'
-				}).when('/demo', {
+				}).when('/info/demo', {
 					templateUrl: '/demo'
 				}).otherwise({
-					redirectTo: '/whatis'
+					redirectTo: '/info/whatis'
 				});
 			}
 		]);

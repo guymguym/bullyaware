@@ -42,7 +42,7 @@ var dot_emc_app = dot_emc.init({
 	app: app
 });
 dot.templateSettings.strip = false;
-dot.templateSettings.cache = ('development' != app.get('env'));
+dot.templateSettings.cache = true; //('development' != app.get('env'));
 // replace dot regexp to use <? ?> to avoid collision with angular {{ }}
 for (var i in dot.templateSettings) {
 	var reg = dot.templateSettings[i];
@@ -255,13 +255,13 @@ app.get('/create', users.mk_session, function(req, res) {
 	}
 	return res.render('create.html', page_context(req));
 });
-app.get('/home', users.mk_session, function(req, res) {
+app.get('/home*', users.mk_session, function(req, res) {
 	if (!req.session.user) {
 		return res.redirect('/signup');
 	}
 	return res.render('userhome.html', page_context(req));
 });
-app.get('/info', users.mk_session, function(req, res) {
+app.get('/info*', users.mk_session, function(req, res) {
 	return res.render('info.html', page_context(req));
 });
 app.get('/whatis', users.mk_session, function(req, res) {

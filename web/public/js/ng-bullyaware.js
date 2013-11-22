@@ -779,33 +779,13 @@
 				}
 			});
 		};
+		$scope.reports = {};
+		$scope.load_reports($scope.reports, 7);
 
 		$scope.keys_list = function(o) {
 			return _.keys(o).join(', ');
 		};
 	}
-
-
-	bullyaware_app.controller('ReportTodayCtrl', ['$scope',
-		function($scope) {
-			$scope.reports = {};
-			$scope.load_reports($scope.reports, 1);
-		}
-	]);
-
-	bullyaware_app.controller('ReportWeekCtrl', ['$scope',
-		function($scope) {
-			$scope.reports = {};
-			$scope.load_reports($scope.reports, 7);
-		}
-	]);
-
-	bullyaware_app.controller('ReportMonthCtrl', ['$scope',
-		function($scope) {
-			$scope.reports = {};
-			$scope.load_reports($scope.reports, 30);
-		}
-	]);
 
 
 
