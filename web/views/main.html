@@ -18,26 +18,31 @@
 
 	<div class="show_on_load hide_on_unload" style="height: 100%">
 
-		<div class="col-sm-5 col-md-4 col-lg-3" style="height: 100%; padding: 0">
+		<div class="col-sm-6 col-md-5 col-lg-4" style="height: 100%; padding: 0">
 
-			<div class="under_space bgco lrpad">
+			<div class="under_space_main bgco lrpad">
 				<div class="gap-10">
 					<?# def.include( 'common_menu.html') ?>
 				</div>
 
 				<div class="gap-60"></div>
-				<p class="H3 text-center">
-					Bullyaware is keeping kids safe by monitoring social networks for cyber bullying.
-				</p>
-				<div class="gap-30"></div>
-				<p class="H3 text-center">
-					Get email alerts when your children are being bullied.
+				<h1 class="H1 text-center" style="color: white">
+					<b style="font-size: 1.3em">
+						<span class="menu_color">Bully</span>Aware
+					</b>
+				</h1>
+				<p class="H2 text-center" style="color: white">
+					<b style="font-size: 1.3em">Keeping kids safe</b>
 				</p>
 
+				<div class="gap-30"></div>
+				<p class="H3 text-center">
+					Bullyaware is monitoring social networks for cyber bullying, and sends email alerts when your children are being bullied.
+				</p>
 
 				<div class="gap-40"></div>
 				<div class="text-center">
-					<button class="btn btn-primary btn-lg btn-block" style="height: 55px" ng-click="on_getstarted()">
+					<button class="btn btn-primary btn-lg" style="height: 60px" ng-click="on_getstarted()">
 						<b>Get Started For Free</b>
 						&nbsp;
 						<i class="fa fa-angle-right"></i>
@@ -46,7 +51,8 @@
 			</div>
 
 			<div class="lrpad gap-10">
-				<?# def.include( 'common_foot.html') ?>
+				<?## def.justfoot=true #?>
+					<?# def.include( 'common_foot.html') ?>
 			</div>
 		</div>
 	</div>

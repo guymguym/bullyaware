@@ -23,15 +23,13 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
 
 /* our styes */
  .bgco {
-    background-color: rgba(50, 40, 50, 0.9);
-    color: white;
-}
-.bgco2 {
-    background-color: rgba(50, 100, 150, 0.9);
+    /*background-color: rgba(50, 40, 50, 0.95);*/
+    background-color: rgba(60, 60, 60, 0.95);
     color: white;
 }
 .bgc {
-    background-color: rgb(60, 50, 60) !important;
+    /*background-color: rgb(60, 50, 60) !important;*/
+    background-color: rgb(70, 70, 70) !important;
     color: white;
 }
 .H1 {
