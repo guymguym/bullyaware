@@ -25,7 +25,7 @@
 					<?# def.include( 'common_menu.html') ?>
 				</div>
 
-				<div class="gap-60"></div>
+				<div class="gap-40"></div>
 				<h1 class="H1 text-center" style="color: white">
 					<b style="font-size: 1.3em">
 						<span class="menu_color">Bully</span>Aware
@@ -42,7 +42,7 @@
 
 				<div class="gap-40"></div>
 				<div class="text-center">
-					<button class="btn btn-primary btn-lg" style="height: 60px" ng-click="on_getstarted()">
+					<button class="btn btn-primary btn-lg" ng-click="on_getstarted()">
 						Sign Up &nbsp; <i class="fa fa-angle-right fa-lg"></i>
 					</button>
 				</div>
@@ -56,7 +56,7 @@
 						<i>Currently monitoring:
 							<!-- <br/> -->
 							<i class="fa fa-twitter fa-fw fa-lg twitter_color"></i>
-						4 twitter accounts
+						{{ server_data.stats.num_twit_ids }} twitter accounts
 						</i>
 					</p>
 				</div>

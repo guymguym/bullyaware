@@ -237,6 +237,7 @@ function page_context(req, ctx) {
 	ctx = ctx || {};
 	ctx.session = req.session.session_id;
 	ctx.user = req.session.user;
+	ctx.stats = users.get_cached_stats();
 	return ctx;
 }
 

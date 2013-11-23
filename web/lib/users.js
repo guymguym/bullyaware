@@ -14,6 +14,7 @@ var EventLog = models.EventLog;
 var User = models.User;
 var Person = models.Person;
 var Identity = models.Identity;
+var Message = models.Message;
 
 function is_testing(req) {
 	var host = req.get('host');
@@ -476,4 +477,36 @@ exports.fetch_all = function(callback) {
 			return Identity.find().lean().exec(next);
 		}
 	}, callback);
+};
+
+var cached_stats = {
+	num_twit_ids: 4,
+	num_twits: 0
+};
+
+function update_cached_stats() {
+	// TODO group by identity and message type once we add more than just twitter
+	Identity.count().exec(function(err, num) {
+		if (err) {
+			console.log('FAILED UPDATE CACHED STATS - IDENTITY', err);
+			return;
+		}
+		console.log('UPDATE CACHED STATS - IDENTITY', num);
+		cached_stats.num_twit_ids = num;
+	});
+	Message.count().exec(function(err, num) {
+		if (err) {
+			console.log('FAILED UPDATE CACHED STATS - MESSAGE', err);
+			return;
+		}
+		console.log('UPDATE CACHED STATS - MESSAGE', num);
+		cached_stats.num_twits = num;
+	});
+}
+
+update_cached_stats();
+setInterval(update_cached_stats, 60000);
+
+exports.get_cached_stats = function() {
+	return cached_stats;
 };
