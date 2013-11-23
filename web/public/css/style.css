@@ -93,7 +93,6 @@ h1, h2, h3, h4, h5, h6, p, a, span, div, button {
 }
 @media all and (max-width: 768px) {
     .leftbar {
-        min-height: 100% !important;
         height: auto !important;
         padding: 0 !important;
     }
