@@ -16,41 +16,49 @@ if (process.env.MONGOHQ_URL) {
 
 
 function get_twitter_stream_filter(callback) {
-
 	//as documented in https://dev.twitter.com/docs/api/1.1/post/statuses/filter
-	var filter = {
-		'follow': [],
-		'track': []
-	};
-
+	var follow = [];
+	var track = [];
 	Identity.find({
 		type: 'twitter'
 	}, function(err, twitter_users) {
 		if (err) {
 			return callback(err);
 		}
-		if (!twitter_users || !twitter_users.length) {
-			return callback(null, []);
-		}
-
+		twitter_users = twitter_users || [];
 		_.each(twitter_users, function(tu) {
-			filter.follow.push(tu.sid);
-			filter.track.push(tu.profile.name);
-			filter.track.push(tu.profile.screen_name);
-		});
-
-		_.each(filter, function(v, k) {
-			if (filter[k].length > 0) {
-				filter[k] = filter[k].join();
+			follow.push(tu.sid);
+			if (tu.profile.name.split().join().length > 6) {
+				track.push(tu.profile.name);
 			} else {
-				delete filter[k];
+				console.log('IGNORE SHORT NAME', tu.profile.name, 'FOR', tu.sid);
+			}
+			if (tu.profile.screen_name.split().join().length > 6) {
+				track.push(tu.profile.screen_name);
+			} else {
+				console.log('IGNORE SHORT SCREEN NAME', tu.profile.screen_name, 'FOR', tu.sid);
 			}
 		});
-
-		return callback(null, filter);
-
+		var filter = {};
+		if (follow.length) {
+			filter.follow = follow.sort().join(',');
+		}
+		if (track.length) {
+			filter.track = track.sort().join(',');
+		}
+		if (_.isEmpty(filter)) {
+			// if the filter is empty put something for twitter to accept it
+			return callback(null, {
+				track: ['gumrrr'] // TEST ID
+				// track: ['SomeSKANKinMI'] // TEST ID
+				// 'locations': '-122.75,36.8,-121.75,37.8,-74,40,-73,41'
+			});
+		} else {
+			return callback(null, filter);
+		}
 	});
 }
+
 
 function ingest_twit(twit, callback) {
 	var message = new Message();
@@ -65,54 +73,70 @@ function ingest_twit(twit, callback) {
 		message.mentions = mentions;
 	}
 
+	// avoid saving during tests
+	if (process.env.DONT_SAVE_MESSAGES) {
+		console.log('UNSAVE MESSAGE', twit.user.screen_name,
+			'MENTION', _.pluck(twit.entities.user_mentions, 'screen_name').join(','));
+		return callback(null);
+	}
+
 	return message.save(function(err) {
 		if (err) {
 			console.error('SAVE MESSAGE FAILED', err, message);
 			return callback(err, null);
 		}
-		console.log('SAVED MESSAGE FROM', twit.user.name);
+		console.log('SAVED MESSAGE FROM', twit.user.screen_name,
+			'MENTION', _.pluck(twit.entities.user_mentions, 'screen_name').join(','));
 		return callback(null);
 	});
 }
 
-function collect_twits() {
+var active_filter;
+var active_stream;
+
+function connect_twitter_stream() {
 	async.waterfall([
 		function(next) {
-			get_twitter_stream_filter(next);
+			return get_twitter_stream_filter(next);
 		},
 		function(filter, next) {
-			console.log('filter: ', filter);
-
-			// TODO reload filters every few minutes
-
-			// TODO limit number of messages during tests
-
-			if (!_.keys(filter).length) {
-				filter = {
-					track: ['MileyCyrus'] // TEST ID
-					// track: ['SomeSKANKinMI'] // TEST ID
-					// 'locations': '-122.75,36.8,-121.75,37.8,-74,40,-73,41'
-				};
+			if (_.isEqual(filter, active_filter)) {
+				console.log('TWITTER FILTER UNCHANGED', filter);
+				return next(null);
 			}
-			console.log('filter: ', filter);
-
+			console.log('TWITTER FILTER: ', filter);
 			twitter.stream('statuses/filter', filter, function(stream) {
+				if (!stream) {
+					return next('no stream');
+				}
 				stream.on('data', function(data) {
-					ingest_twit(data, function(err) {
+					return ingest_twit(data, function(err) {
 						if (err) {
-							console.log("Error in twit ingest:", err);
+							console.error("FAILED INGEST TWIT", err);
 						}
 					});
 				});
 				stream.on('error', function(err) {
-					console.error('TWITTER STREAM ERROR', err);
-					console.log('TWITTER STREAM ERROR - FILTER', filter);
+					console.error('ERROR FROM TWITTER STREAM', err);
 				});
+				stream.on('end', function() {
+					setTimeout(connect_twitter_stream, 1000);
+				});
+				if (active_stream) {
+					active_stream.destroy();
+				}
+				active_stream = stream;
+				active_filter = filter;
+				return next(null);
 			});
 		}
-	], function(err, results) {
-
+	], function(err) {
+		if (err) {
+			console.error("FAILED COLLECT TWIT", err);
+			setTimeout(connect_twitter_stream, 1000);
+		}
 	});
 }
 
-// collect_twits();
+connect_twitter_stream();
+setInterval(connect_twitter_stream, 60000);
