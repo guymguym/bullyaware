@@ -364,7 +364,9 @@
 				}
 			}).then(function(res) {
 				console.log('USER LOGIN DONE', res);
-				$scope.goto_user_home();
+				$timeout(function() {
+					$scope.goto_user_home();
+				}, 1);
 			}, function(err) {
 				console.error('USER LOGIN FAILED', err);
 				alert('Login failed. Please check your password and try again later');
