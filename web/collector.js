@@ -61,20 +61,27 @@ function get_twitter_stream_filter(callback) {
 
 
 function ingest_twit(twit, callback) {
+	if (!twit || !twit.id || !twit.text) {
+		console.log('IGNORE TWIT CONTROL MESSAGE', twit);
+		return callback(null);
+	}
 	var message = new Message();
 	message.type = 'twitter';
 	message.data = twit;
-	// convert twitter's created_at to js date
 	if (twit.created_at) {
+		// convert twitter's created_at to js date
 		message.time = new Date(Date.parse(twit.created_at.replace(/( \+)/, ' UTC$1')));
 	} else {
 		message.time = new Date();
 	}
-	message.sender = twit.user.id_str;
-
-	var mentions = _.pluck(twit.entities.user_mentions, 'id_str');
-	if (mentions) {
-		message.mentions = mentions;
+	if (twit.user) {
+		message.sender = twit.user.id_str;
+	}
+	if (twit.entities && twit.entities.user_mentions) {	
+		var mentions = _.pluck(twit.entities.user_mentions, 'id_str');
+		if (mentions) {
+			message.mentions = mentions;
+		}
 	}
 
 	// avoid saving during tests
