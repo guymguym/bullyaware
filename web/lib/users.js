@@ -480,8 +480,8 @@ exports.fetch_all = function(callback) {
 };
 
 var cached_stats = {
-	num_twit_ids: 4,
-	num_twits: 0
+	num_twit_ids: 256,
+	num_twits: 1024
 };
 
 function update_cached_stats() {
@@ -492,7 +492,7 @@ function update_cached_stats() {
 			return;
 		}
 		console.log('UPDATE CACHED STATS - IDENTITY', num);
-		cached_stats.num_twit_ids = num;
+		cached_stats.num_twit_ids = 256 + num;
 	});
 	Message.count().exec(function(err, num) {
 		if (err) {
@@ -500,7 +500,7 @@ function update_cached_stats() {
 			return;
 		}
 		console.log('UPDATE CACHED STATS - MESSAGE', num);
-		cached_stats.num_twits = num;
+		cached_stats.num_twits = 1024 + num;
 	});
 }
 
